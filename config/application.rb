@@ -31,5 +31,6 @@ module Dineritos
 
     # Don't generate system test files.
     config.generators.system_tests = nil
+    Money.locale_backend = nil
   end
 end
