@@ -4,12 +4,19 @@
     <title>Dineritos</title>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, viewport-fit=cover">
 
     <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <link rel="stylesheet" type="text/css" href="https://cloud.typography.com/671958/7941412/css/fonts.css" />
     <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
   </head>
 
   <body>
-    <%= yield %>
+    <div class="bar-1"></div>
+    <div class="bar-2"></div>
+
+    <article>
+      <%= yield %>
+    </article>
   </body>
 </html>

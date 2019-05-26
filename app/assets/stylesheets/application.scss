@@ -1,0 +1,156 @@
+:root {
+    --bg-color: #E0E4EB;
+    --fg-color: #25272B;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--fg-color);
+  font-size: 16px;
+  font-family: "Gotham A", "Gotham B", "Helvetica Neue", Arial, sans-serif;
+  // font-family: "Whitney A", "Whitney B";
+  line-height: 1.2;
+}
+
+.bar-1, .bar-2 {
+  width: 100%;
+  height: 1.25rem;
+  background-color: #57BCF2;
+}
+
+.bar-2 {
+  height: 0.625rem;
+  background-color: #178DCC;
+}
+
+article {
+  width: calc(100% - 2em);
+  max-width: 30em;
+  margin: 0 auto;
+}
+
+header {
+  text-align: center;
+  margin: 2em 0;
+}
+
+h1 {
+  font-size: 2.5em;
+  font-weight: 800;
+  margin: 0;
+}
+
+.header-description {
+  text-transform: uppercase;
+  color: #767D95;
+  font-weight: 300;
+}
+
+table {
+  margin: 2rem auto;
+  width: 100%;
+}
+
+td {
+  color: #767D95;
+  padding: 0.25rem;
+}
+
+.account-name {
+  font-weight: bold;
+}
+.account-balance {
+  text-align: right;
+  font-weight: 300;
+}
+
+a {
+  color: #077DBE;
+  text-decoration: none;
+  text-transform: uppercase;
+  font-weight: 800;
+}
+
+.actions {
+  margin: 0 auto;
+  a {
+    display: block;
+    text-align: center;
+    padding: 0.25em;
+  }
+}
+
+.field {
+  margin: 1em auto;
+}
+
+label {
+  display: block;
+}
+
+input {
+  font-family: inherit;
+  font-size: 1em;
+  outline: none;
+
+  padding: 0.5em;
+
+  color: inherit;
+  background-color: transparent;
+  border: 0.0625em solid #ccc;
+}
+
+@media screen and (min-width: 25em) {
+  header, table {
+    margin: 3rem auto;
+  }
+
+  h1 {
+    font-size: 3em;
+  }
+
+  table {
+    font-size: 1.5em;
+  }
+}
+
+@media screen and (min-width: 40em) {
+  h1 {
+    font-size: 4em;
+  }
+}
+
+@media screen and (min-width: 64em) {
+  article {
+    max-width: 50em;
+  }
+
+  header, table {
+    margin: 4rem auto;
+  }
+  h1 {
+    font-size: 6em;
+  }
+  header .details {
+    font-size: 1.5em;
+  }
+  table {
+    font-size: 2em;
+    width: 40rem;
+  }
+  .account-balance {
+    font-size: 2.5rem;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg-color: #25272B;
+        --fg-color: #E0E4EB;
+    }
+}
