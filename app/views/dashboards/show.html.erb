@@ -1,4 +1,6 @@
+<% if @balance %>
 <%= render 'balances/balance' %>
+<% end %>
 
 <section class="actions">
   <%= link_to 'Agregar balances', new_balance_path %>
