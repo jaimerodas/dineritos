@@ -6,5 +6,10 @@
     <%= f.text_field :name %>
   </div>
 
+  <div class="field">
+    <%= f.label :currency %>
+    <%= f.select :currency, ["MXN", "USD"] %>
+  </div>
+
   <%= f.button %>
 <% end %>

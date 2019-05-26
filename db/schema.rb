@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_05_26_031131) do
+ActiveRecord::Schema.define(version: 2019_05_26_175128) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -39,6 +39,15 @@ ActiveRecord::Schema.define(version: 2019_05_26_031131) do
     t.index ["balance_date_id"], name: "index_balances_on_balance_date_id"
   end
 
+  create_table "currency_rates", force: :cascade do |t|
+    t.bigint "balance_date_id", null: false
+    t.string "currency", null: false
+    t.bigint "rate_subcents", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["balance_date_id"], name: "index_currency_rates_on_balance_date_id"
+  end
+
   create_table "totals", force: :cascade do |t|
     t.bigint "balance_date_id", null: false
     t.integer "amount_cents", null: false
@@ -49,5 +58,6 @@ ActiveRecord::Schema.define(version: 2019_05_26_031131) do
 
   add_foreign_key "balances", "accounts"
   add_foreign_key "balances", "balance_dates"
+  add_foreign_key "currency_rates", "balance_dates"
   add_foreign_key "totals", "balance_dates"
 end

@@ -1,0 +1,21 @@
+<%= form_for @balance, url: form_url do |f| %>
+  <div class="field">
+    <%= f.label :date %>
+    <%= f.date_select :date %>
+  </div>
+
+  <%= f.fields_for :balances do |g| %>
+    <div class="field">
+      <%= g.hidden_field :account_id %>
+      <%= g.label :amount, g.object.account.name %>
+      <%= g.number_field :amount,
+        min: 0,
+        pattern: '^\d*(\.\d{0,2})?$',
+        step: '0.01',
+        value: g.object.original_amount || g.object.amount %>
+      <%= g.object.account.currency if g.object.account.currency != "MXN" %>
+    </div>
+  <% end %>
+
+  <%= f.button 'Guardar' %>
+<% end %>
