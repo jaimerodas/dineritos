@@ -1,0 +1,10 @@
+<h1>Agregar cuenta</h1>
+
+<%= form_for @account do |f| %>
+  <div class="field">
+    <%= f.label :name %>
+    <%= f.text_field :name %>
+  </div>
+
+  <%= f.button %>
+<% end %>

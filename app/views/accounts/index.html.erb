@@ -1,0 +1,10 @@
+<h1>Cuentas</h1>
+
+<%= link_to 'Inicio', root_path %>
+<%= link_to 'Agregar cuenta', new_account_path %>
+
+<% if @accounts.any? %>
+<ul>
+  <%= render @accounts %>
+</ul>
+<% end %>
