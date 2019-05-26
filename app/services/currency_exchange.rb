@@ -5,8 +5,8 @@ class CurrencyExchange
     string = Net::HTTP.get(URI(url))
     object = JSON.parse(string)
 
-    raise unless object['success']
+    raise unless object["success"]
 
-    object['rates']['MXN'] / object['rates'][currency]
+    object["rates"]["MXN"] / object["rates"][currency]
   end
 end

@@ -49,8 +49,8 @@ class BalancesController < ApplicationController
     {
       date: params.require(:balance_date)
         .permit(:date).to_h
-        .map { |k,v| k.ends_with?('1i)') ? v : v.rjust(2, "0") }
-        .join('-')
+        .map { |k, v| k.ends_with?("1i)") ? v : v.rjust(2, "0") }
+        .join("-"),
     }
   end
 
@@ -62,7 +62,7 @@ class BalancesController < ApplicationController
   def create_or_modify_balance
     @balance_date = BalanceDate.find_or_create_by(balance_date_params)
     @balance_date.balances.destroy_all
-    @balance_date.total.destroy if @balance_date.total
+    @balance_date.total&.destroy
 
     balances_params.each do |key, balance_params|
       @balance_date.balances.create(balance_params)
