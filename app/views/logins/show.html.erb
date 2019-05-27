@@ -1,0 +1,10 @@
+<header>
+  <h1>Hola</h1>
+
+  <%= form_with scope: :session, data: {remote: false}  do |f| %>
+    <div class="field">
+      <%= f.email_field :email, placeholder: "tu@example.com" %>
+    </div>
+    <%= f.button "Entrar" %>
+  <% end %>
+</header>

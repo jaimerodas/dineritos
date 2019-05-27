@@ -1,4 +1,5 @@
 class BalancesController < ApplicationController
+  before_action :auth
   before_action :balance, only: %i[show edit]
 
   def index

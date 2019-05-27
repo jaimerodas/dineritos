@@ -1,4 +1,6 @@
 class AccountsController < ApplicationController
+  before_action :auth
+
   def index
     @accounts = Account.order(active: :desc, id: :asc)
   end
