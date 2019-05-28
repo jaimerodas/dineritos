@@ -1,14 +1,9 @@
 <header>
   <span class="header-description">Valor Acumulado</span>
-  <h1><%= number_with_delimiter @report.total.amount %></h1>
+  <h1><%= number_to_currency @report.total.amount, unit: '' %></h1>
   <section class="details">
     <%= @report.date %>
-
-    <% if @report.total.diff %>
-    <span class="diff <%= "neg" if @report.total.diff.negative? %>">
-      <%= number_with_delimiter @report.total.diff %>
-    </span>
-    <% end %>
+    <%= diff(@report.total.diff) %>
   </section>
 </header>
 
@@ -18,15 +13,8 @@
     <tr class="account-item">
       <td class="account-name"><%= account.name %></td>
       <td class="account-balance">
-        <%= number_with_delimiter account.amount %><br>
-
-        <% if account.diff %>
-        <span class="diff <%= "neg" if account.diff.negative? %>">
-          <%= number_with_delimiter account.diff %>
-        </span>
-        <% else %>
-        <span class="diff">-</span>
-        <% end %>
+        <%= number_to_currency account.amount, unit: '' %><br>
+        <%= diff(account.diff) %>
       </td>
     </tr>
     <% end %>
