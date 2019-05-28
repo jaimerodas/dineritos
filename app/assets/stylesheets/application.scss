@@ -35,7 +35,7 @@ article {
 }
 
 header {
-  text-align: center;
+  text-align: right;
   margin: 2em 0;
 }
 
@@ -48,7 +48,7 @@ h1 {
 .header-description {
   text-transform: uppercase;
   color: #767D95;
-  font-weight: 300;
+  font-weight: 400;
 }
 
 table {
@@ -70,15 +70,16 @@ td {
 }
 
 .account-name {
-  font-weight: bold;
+  font-weight: 400;
 }
 .account-balance {
   text-align: right;
-  font-weight: 300;
+  font-weight: bold;
 
   .diff {
     display: block;
-    font-size: 1rem;
+    font-weight: 400;
+    font-size: 0.75em;
   }
 }
 
@@ -153,7 +154,7 @@ input {
 
 @media screen and (min-width: 64em) {
   article {
-    max-width: 50em;
+    max-width: 42em;
   }
 
   header, table {
@@ -167,7 +168,6 @@ input {
   }
   table {
     font-size: 2em;
-    width: 40rem;
   }
   .account-balance {
     font-size: 2.5rem;
