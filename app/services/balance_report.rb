@@ -18,8 +18,10 @@ class BalanceReport
       Total.joins(:balance_date).where("balance_dates.id": dates).select(<<~SQL
         totals.amount_cents,
         (
-          totals.amount_cents - lag(totals.amount_cents, -1) over (
-            order by balance_dates.date desc
+          coalesce(
+            totals.amount_cents - lag(totals.amount_cents, -1)
+              over (order by balance_dates.date desc),
+            totals.amount_cents
           )
         ) / 100.0 diff,
         balance_dates.id bid,
@@ -37,8 +39,10 @@ class BalanceReport
           accounts.name,
           balances.amount_cents,
           (
-            balances.amount_cents - lag(balances.amount_cents, -1) over (
-              partition by accounts.name order by balance_dates.date desc
+            coalesce(
+              balances.amount_cents - lag(balances.amount_cents, -1)
+                over (partition by accounts.name order by balance_dates.date desc),
+              balances.amount_cents
             )
           ) / 100.0 diff,
           balance_dates.id bid
