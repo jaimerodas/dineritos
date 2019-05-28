@@ -19,6 +19,10 @@ class AccountsController < ApplicationController
     end
   end
 
+  def show
+    @report = BalanceReport.new(BalanceDate.id_range)
+  end
+
   private
 
   def account_params

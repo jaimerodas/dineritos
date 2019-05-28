@@ -1,0 +1,19 @@
+<header>
+  <h1><%= @report.account(params[:id]).first.name %></h1>
+</header>
+
+<table>
+  <tbody>
+    <% @report.account(params[:id]).each do |account| %>
+    <%= render 'balances/balance_row',
+      name: account.date, amount: account.amount, diff: account.diff,
+      date: account.date
+    %>
+    <% end %>
+  </tbody>
+</table>
+
+<section class="actions">
+  <%= link_to 'Inicio', root_path %>
+  <%= link_to 'Historial', balances_path %>
+</section>

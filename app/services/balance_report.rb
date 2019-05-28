@@ -22,28 +22,25 @@ class BalanceReport
   end
 
   def totals
-    @totals ||= Total.joins(:balance_date).where("balance_dates.id": dates).select(total_sql)
+    @totals ||= Total.joins(:balance_date)
+      .where("balance_dates.id": dates)
+      .select(total_sql)
+      .order("balance_dates.date": :desc)
   end
 
   def accounts
     @accounts ||= Balance.select("*").from(
       Balance.joins(:balance_date, :account)
         .where("balance_dates.id": dates)
-        .select(<<~SQL
-          accounts.name,
-          balances.amount_cents,
-          (
-            coalesce(
-              balances.amount_cents - lag(balances.amount_cents, -1)
-                over (partition by accounts.name order by balance_dates.date desc),
-              balances.amount_cents
-            )
-          ) / 100.0 diff,
-          balance_dates.id bid,
-          accounts.id aid
-        SQL
-               )
+        .select(account_sql)
     ).where("bid = ?", dates.first).order(aid: :asc)
+  end
+
+  def account(account_id)
+    @account ||= Balance.joins(:balance_date, :account)
+      .where("accounts.id": account_id)
+      .select(account_sql)
+      .order("balance_dates.date": :desc)
   end
 
   private
@@ -60,6 +57,23 @@ class BalanceReport
       ) / 100.0 diff,
       balance_dates.id bid,
       balance_dates.date
+    SQL
+  end
+
+  def account_sql
+    <<~SQL
+      accounts.name,
+      balances.amount_cents,
+      (
+        coalesce(
+          balances.amount_cents - lag(balances.amount_cents, -1)
+            over (partition by accounts.name order by balance_dates.date desc),
+          balances.amount_cents
+        )
+      ) / 100.0 diff,
+      balance_dates.id bid,
+      balance_dates.date,
+      accounts.id aid
     SQL
   end
 end

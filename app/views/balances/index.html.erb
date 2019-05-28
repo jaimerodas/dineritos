@@ -1,10 +1,15 @@
 <header>
-  <h1>Histórico</h1>
+  <h1>Historial</h1>
 </header>
 
 <table>
   <tbody>
-    <%= render @report.totals %>
+    <% @report.totals.each do |total| %>
+    <%= render 'balances/balance_row',
+      name: total.date, amount: total.amount, diff: total.diff,
+      date: total.date
+    %>
+    <% end %>
   </tbody>
 </table>
 

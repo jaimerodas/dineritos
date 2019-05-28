@@ -11,7 +11,11 @@
   <tbody>
     <% @report.accounts.each do |account| %>
     <tr class="account-item">
-      <td class="account-name"><%= account.name %></td>
+      <td class="account-name">
+        <%= link_to account_path(account.aid) do %>
+          <%= account.name %>
+        <% end %>
+      </td>
       <td class="account-balance">
         <%= number_to_currency account.amount, unit: '' %><br>
         <%= diff(account.diff) %>
