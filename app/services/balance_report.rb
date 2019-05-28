@@ -45,9 +45,10 @@ class BalanceReport
               balances.amount_cents
             )
           ) / 100.0 diff,
-          balance_dates.id bid
+          balance_dates.id bid,
+          accounts.id aid
         SQL
                )
-    ).where("bid = ?", dates.first).order(name: :asc)
+    ).where("bid = ?", dates.first).order(aid: :asc)
   end
 end
