@@ -3,9 +3,12 @@
   <h1><%= number_with_delimiter @report.total.amount %></h1>
   <section class="details">
     <%= @report.date %>
+
+    <% if @report.total.diff %>
     <span class="diff <%= "neg" if @report.total.diff.negative? %>">
       <%= number_with_delimiter @report.total.diff %>
     </span>
+    <% end %>
   </section>
 </header>
 
@@ -16,9 +19,14 @@
       <td class="account-name"><%= account.name %></td>
       <td class="account-balance">
         <%= number_with_delimiter account.amount %><br>
+
+        <% if account.diff %>
         <span class="diff <%= "neg" if account.diff.negative? %>">
           <%= number_with_delimiter account.diff %>
         </span>
+        <% else %>
+        <span class="diff">-</span>
+        <% end %>
       </td>
     </tr>
     <% end %>
