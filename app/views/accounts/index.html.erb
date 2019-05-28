@@ -1,10 +1,14 @@
-<h1>Cuentas</h1>
-
-<%= link_to 'Inicio', root_path %>
-<%= link_to 'Agregar cuenta', new_account_path %>
+<header>
+  <h1>Cuentas</h1>
+</header>
 
 <% if @accounts.any? %>
 <ul>
   <%= render @accounts %>
 </ul>
 <% end %>
+
+<section class="actions">
+  <%= link_to 'Inicio', root_path %>
+  <%= link_to 'Agregar cuenta', new_account_path %>
+</section>

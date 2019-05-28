@@ -59,6 +59,14 @@ table {
 td {
   color: #767D95;
   padding: 0.25rem;
+
+  a {
+    color: inherit;
+    text-decoration: none;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
 }
 
 .account-name {
@@ -81,19 +89,25 @@ td {
   }
 }
 
-a {
-  color: #077DBE;
-  text-decoration: none;
-  text-transform: uppercase;
-  font-weight: 800;
-}
-
 .actions {
-  margin: 0 auto;
+  text-align: center;
+  margin: 1em auto;
+  max-width: 40em;
+
   a {
-    display: block;
-    text-align: center;
-    padding: 0.25em;
+    color: #077DBE;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-weight: 800;
+
+    display: inline-block;
+    padding: 0.25em 0;
+    margin: 0 0.25em 0.25em;
+
+    &:hover {
+      border-bottom: 0.25em solid #077DBE;
+      margin-bottom: 0;
+    }
   }
 }
 
