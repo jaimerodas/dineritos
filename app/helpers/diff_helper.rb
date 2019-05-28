@@ -4,7 +4,7 @@ module DiffHelper
     classes = "diff"
 
     if number
-      text = number_to_currency(number, unit: '')
+      text = number_to_currency(number, unit: "")
       number.negative? ? classes += " neg" : text = "+#{text}"
     end
 

@@ -1,14 +1,13 @@
 class BalancesController < ApplicationController
   before_action :auth
-  before_action :balance, only: %i[show edit]
+  before_action :balance, only: %i[edit]
 
   def index
-    dates = BalanceDate.select(:id).order(date: :desc).map(&:id)
-    puts dates
-    @report = BalanceReport.new(dates)
+    @report = BalanceReport.new(BalanceDate.id_range)
   end
 
   def show
+    @report = BalanceReport.new(BalanceDate.id_range_from(params[:date]))
   end
 
   def new

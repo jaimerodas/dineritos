@@ -9,6 +9,10 @@ class BalanceReport
 
   attr_reader :dates
 
+  def valid?
+    !total.nil?
+  end
+
   def date
     @date ||= total.date
   end

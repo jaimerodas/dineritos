@@ -8,4 +8,14 @@ class BalanceDate < ApplicationRecord
   def to_param
     date
   end
+
+  def self.id_range
+    select(:id)
+      .order(date: :desc)
+  end
+
+  def self.id_range_from(date, limit: 2)
+    id_range.where('date <= ?', date)
+      .limit(limit)
+  end
 end
