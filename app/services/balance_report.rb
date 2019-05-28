@@ -14,21 +14,11 @@ class BalanceReport
   end
 
   def total
-    @total ||= Total.select("*").from(
-      Total.joins(:balance_date).where("balance_dates.id": dates).select(<<~SQL
-        totals.amount_cents,
-        (
-          coalesce(
-            totals.amount_cents - lag(totals.amount_cents, -1)
-              over (order by balance_dates.date desc),
-            totals.amount_cents
-          )
-        ) / 100.0 diff,
-        balance_dates.id bid,
-        balance_dates.date
-      SQL
-                                                                        )
-    ).find_by("bid = ?", dates.first)
+    @total ||= Total.select("*").from(totals).find_by("bid = ?", dates.first)
+  end
+
+  def totals
+    @totals ||= Total.joins(:balance_date).where("balance_dates.id": dates).select(total_sql)
   end
 
   def accounts
@@ -50,5 +40,22 @@ class BalanceReport
         SQL
                )
     ).where("bid = ?", dates.first).order(aid: :asc)
+  end
+
+  private
+
+  def total_sql
+    <<~SQL
+      totals.amount_cents,
+      (
+        coalesce(
+          totals.amount_cents - lag(totals.amount_cents, -1)
+            over (order by balance_dates.date desc),
+          totals.amount_cents
+        )
+      ) / 100.0 diff,
+      balance_dates.id bid,
+      balance_dates.date
+    SQL
   end
 end

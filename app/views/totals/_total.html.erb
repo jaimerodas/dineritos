@@ -1,0 +1,8 @@
+<tr class="account-item">
+  <td class="account-name"><%= total.date %></td>
+  <td class="account-balance">
+    <%= number_with_delimiter total.amount %><br>
+    <%= diff(total.diff) %>
+  </td>
+  <td><%= link_to 'Ver', balance_path(total.date) %></td>
+</tr>

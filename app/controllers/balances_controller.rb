@@ -3,7 +3,9 @@ class BalancesController < ApplicationController
   before_action :balance, only: %i[show edit]
 
   def index
-    @balances = BalanceDate.includes(:total).order(date: :desc)
+    dates = BalanceDate.select(:id).order(date: :desc).map(&:id)
+    puts dates
+    @report = BalanceReport.new(dates)
   end
 
   def show
