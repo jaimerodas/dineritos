@@ -67,6 +67,18 @@ td {
 .account-balance {
   text-align: right;
   font-weight: 300;
+
+  .diff {
+    display: block;
+    font-size: 1rem;
+  }
+}
+
+.diff {
+  color: #479047;
+  &.neg {
+    color: #be2b56;
+  }
 }
 
 a {
@@ -145,6 +157,10 @@ input {
   }
   .account-balance {
     font-size: 2.5rem;
+    .diff {
+      font-size: 1.5rem;
+      font-weight: 400;
+    }
   }
 }
 

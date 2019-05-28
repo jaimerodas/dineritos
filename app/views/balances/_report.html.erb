@@ -1,0 +1,26 @@
+<header>
+  <span class="header-description">Valor Acumulado</span>
+  <h1><%= number_with_delimiter @report.total.amount %></h1>
+  <section class="details">
+    <%= @report.date %>
+    <span class="diff <%= "neg" if @report.total.diff.negative? %>">
+      <%= number_with_delimiter @report.total.diff %>
+    </span>
+  </section>
+</header>
+
+<table>
+  <tbody>
+    <% @report.accounts.each do |account| %>
+    <tr class="account-item">
+      <td class="account-name"><%= account.name %></td>
+      <td class="account-balance">
+        <%= number_with_delimiter account.amount %><br>
+        <span class="diff <%= "neg" if account.diff.negative? %>">
+          <%= number_with_delimiter account.diff %>
+        </span>
+      </td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>
