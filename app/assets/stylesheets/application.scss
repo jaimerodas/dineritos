@@ -1,6 +1,7 @@
 :root {
     --bg-color: #E0E4EB;
     --fg-color: #25272B;
+    --mid-color: #767D95;
 }
 
 html, body {
@@ -24,7 +25,18 @@ article {
 
 header {
   text-align: right;
-  margin: 2em 0;
+  margin: 2em 0 1em;
+  padding: 0 0 2em;
+  border-bottom: 0.0625rem solid #b4bad1;
+
+  &.simple {
+    text-align: left;
+
+    .header-details {
+      display: block;
+      text-transform: none;
+    }
+  }
 
   .diff {
     font-size: 1.5em;
@@ -34,6 +46,7 @@ header {
 h1 {
   font-size: 2.5em;
   font-weight: 800;
+  line-height: 1;
   margin: 0;
 }
 
@@ -47,7 +60,7 @@ h1 {
 }
 
 table {
-  margin: 2rem auto;
+  margin: 0 auto;
   width: 100%;
 }
 
@@ -153,7 +166,7 @@ input {
 }
 
 @media screen and (min-width: 45em) {
-  .header-details, table {
+  table {
     font-size: 1.75em;
   }
 
@@ -175,5 +188,9 @@ input {
     :root {
         --bg-color: #25272B;
         --fg-color: #E0E4EB;
+    }
+
+    header {
+      border-bottom-color: #424657;
     }
 }
