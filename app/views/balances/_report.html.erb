@@ -1,10 +1,11 @@
 <header>
-  <span class="header-description">Valor Acumulado</span>
-  <h1><%= number_to_currency @report.total.amount, unit: '' %></h1>
-  <section class="details">
+  <section class="header-details">
     <%= @report.date %>
-    <%= diff(@report.total.diff) %>
+    <span class="header-description">Total</span>
   </section>
+
+  <h1><%= number_to_currency @report.total.amount, unit: '' %></h1>
+  <%= diff(@report.total.diff) %>
 </header>
 
 <table>

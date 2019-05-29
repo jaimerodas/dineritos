@@ -13,30 +13,22 @@ body {
   color: var(--fg-color);
   font-size: 16px;
   font-family: "Gotham A", "Gotham B", "Helvetica Neue", Arial, sans-serif;
-  // font-family: "Whitney A", "Whitney B";
   line-height: 1.2;
-}
-
-.bar-1, .bar-2 {
-  width: 100%;
-  height: 1.25rem;
-  background-color: #57BCF2;
-}
-
-.bar-2 {
-  height: 0.625rem;
-  background-color: #178DCC;
 }
 
 article {
   width: calc(100% - 2em);
-  max-width: 30em;
+  max-width: 43em;
   margin: 0 auto;
 }
 
 header {
   text-align: right;
   margin: 2em 0;
+
+  .diff {
+    font-size: 1.5em;
+  }
 }
 
 h1 {
@@ -45,10 +37,13 @@ h1 {
   margin: 0;
 }
 
-.header-description {
+.header-details {
+  display: flex;
+  justify-content: space-between;
   text-transform: uppercase;
   color: #767D95;
   font-weight: 400;
+  font-size: 1em;
 }
 
 table {
@@ -58,7 +53,7 @@ table {
 
 td {
   color: #767D95;
-  padding: 0.25rem;
+  padding: 0.4em 0;
 
   a {
     color: inherit;
@@ -74,12 +69,13 @@ td {
 }
 .account-balance {
   text-align: right;
+  font-size: 1.25em;
   font-weight: bold;
 
   .diff {
     display: block;
     font-weight: 400;
-    font-size: 0.75em;
+    font-size: 0.625em;
   }
 }
 
@@ -133,8 +129,8 @@ input {
 }
 
 @media screen and (min-width: 25em) {
-  header, table {
-    margin: 3rem auto;
+  .header-details {
+    font-size: 1.25em;
   }
 
   h1 {
@@ -142,37 +138,34 @@ input {
   }
 
   table {
-    font-size: 1.5em;
+    font-size: 1.25em;
   }
 }
 
 @media screen and (min-width: 40em) {
+  .header-details, table {
+    font-size: 1.5em;
+  }
+
   h1 {
-    font-size: 4em;
+    font-size: 3em;
   }
 }
 
-@media screen and (min-width: 64em) {
-  article {
-    max-width: 42em;
+@media screen and (min-width: 45em) {
+  .header-details, table {
+    font-size: 1.75em;
   }
 
-  header, table {
-    margin: 4rem auto;
-  }
-  h1 {
-    font-size: 6em;
-  }
-  header .details {
-    font-size: 1.5em;
-  }
-  table {
+  header .diff {
     font-size: 2em;
   }
+
+  h1 {
+    font-size: 4em;
+  }
   .account-balance {
-    font-size: 2.5rem;
     .diff {
-      font-size: 1.5rem;
       font-weight: 400;
     }
   }
