@@ -2,6 +2,9 @@
     --bg-color: #E0E4EB;
     --fg-color: #25272B;
     --mid-color: #767D95;
+
+    --border-color: #b4bad1;
+    --disabled-color: #9da5bf;
 }
 
 html, body {
@@ -27,7 +30,7 @@ header {
   text-align: right;
   margin: 2em 0 1em;
   padding: 0 0 2em;
-  border-bottom: 0.0625rem solid #b4bad1;
+  border-bottom: 0.0625rem solid var(--border-color);
 
   &.simple {
     text-align: left;
@@ -67,6 +70,10 @@ table {
 td {
   color: #767D95;
   padding: 0.4em 0;
+
+  &.disabled {
+    color: var(--disabled-color);
+  }
 
   a {
     color: inherit;
@@ -188,9 +195,8 @@ input {
     :root {
         --bg-color: #25272B;
         --fg-color: #E0E4EB;
-    }
 
-    header {
-      border-bottom-color: #424657;
+        --border-color: #424657;
+        --disabled-color: #4e556a;
     }
 }

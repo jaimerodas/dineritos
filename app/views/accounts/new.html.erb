@@ -1,4 +1,6 @@
-<h1>Agregar cuenta</h1>
+<header class="simple">
+  <h1>Agregar Cuenta</h1>
+</header>
 
 <%= form_for @account do |f| %>
   <div class="field">
@@ -13,3 +15,7 @@
 
   <%= f.button %>
 <% end %>
+
+<section class="actions">
+  <%= link_to 'Cancelar', accounts_path %>
+</section>

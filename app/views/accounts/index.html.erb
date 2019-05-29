@@ -1,11 +1,13 @@
-<header>
+<header class="simple">
   <h1>Cuentas</h1>
 </header>
 
 <% if @accounts.any? %>
-<ul>
-  <%= render @accounts %>
-</ul>
+<table>
+  <tbody>
+    <%= render @accounts %>
+  </tbody>
+</table>
 <% end %>
 
 <section class="actions">
