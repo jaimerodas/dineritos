@@ -327,6 +327,7 @@ select option {
 
 @media screen and (min-width: 40em) {
   nav {
+    position: absolute;
     font-size: 1em;
     bottom: auto;
     top: 0;
@@ -345,7 +346,7 @@ select option {
   }
 
   article {
-    padding: 3.5em 0 0;
+    padding: 3.5em 0 1em;
   }
 
   .header-details, table {
