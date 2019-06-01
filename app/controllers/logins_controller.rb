@@ -1,4 +1,6 @@
 class LoginsController < ApplicationController
+  layout "login"
+
   def show
   end
 
