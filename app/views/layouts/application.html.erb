@@ -15,5 +15,12 @@
     <article>
       <%= yield %>
     </article>
+
+    <nav>
+      <%= link_to "Inicio", root_path %>
+      <%= link_to "Historial", balances_path %>
+      <%= link_to "Cuentas", accounts_path %>
+      <%= link_to "Agregar", new_balance_path %>
+    </nav>
   </body>
 </html>

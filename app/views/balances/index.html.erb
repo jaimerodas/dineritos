@@ -10,7 +10,7 @@
   <tbody>
     <% @report.totals.each do |total| %>
     <%= render 'balances/balance_row',
-      name: pretty_date(total.date), 
+      name: pretty_date(total.date),
       amount: total.amount,
       diff: total.diff,
       date: total.date
@@ -18,8 +18,3 @@
     <% end %>
   </tbody>
 </table>
-
-<section class="actions">
-  <%= link_to 'Inicio', root_path %>
-  <%= link_to 'Agregar balances', new_balance_path %>
-</section>

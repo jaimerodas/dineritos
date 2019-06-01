@@ -18,18 +18,49 @@ body {
   font-size: 16px;
   font-family: "Gotham A", "Gotham B", "Helvetica Neue", Arial, sans-serif;
   line-height: 1.2;
+  position: relative;
+  min-height: 100vh;
 }
 
 article {
   width: calc(100% - 4em);
   max-width: 41em;
   margin: 0 auto;
+  padding: 0 0 4em;
+}
+
+nav {
+  display: flex;
+  box-sizing: border-box;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+
+  background-color: #222;
+  font-size: 0.75em;
+
+  position: fixed;
+  bottom: 0;
+  left: 0;
+
+  a {
+    display: block;
+    color: white;
+    padding: 1.5rem 1rem;
+
+    font-weight: bold;
+    text-decoration: none;
+
+    &:hover {
+      color: #ddd;
+    }
+  }
 }
 
 header {
   text-align: right;
-  margin: 2em 0 1em;
-  padding: 0 0 2em;
+  margin: 0 0 1em;
+  padding: 2em 0 2em;
   border-bottom: 0.0625rem solid var(--border-color);
 
   &.simple {
@@ -160,6 +191,20 @@ input {
 }
 
 @media screen and (min-width: 40em) {
+  nav {
+    bottom: auto;
+    top: 0;
+    font-size: 1em;
+
+    a {
+      padding: 1em;
+    }
+  }
+
+  article {
+    padding: 3em 0 0;
+  }
+
   .header-details, table {
     font-size: 1.5em;
   }
@@ -190,7 +235,7 @@ input {
 
 @media (prefers-color-scheme: dark) {
     :root {
-        --bg-color: #25272B;
+        --bg-color: #2c2e32;
         --fg-color: #E0E4EB;
 
         --border-color: #424657;
