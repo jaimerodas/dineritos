@@ -1,3 +1,5 @@
 <tr>
-  <td class="<%= 'disabled' unless account.active %>"><%= account.name %></td>
+  <td class="<%= 'disabled' unless account.active %>">
+    <%= link_to account.name, account_path(account) %>
+  </td>
 </tr>

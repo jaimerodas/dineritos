@@ -15,7 +15,7 @@ class BalanceDate < ApplicationRecord
   end
 
   def self.id_range_from(date, limit: 2)
-    id_range.where('date <= ?', date)
+    id_range.where("date <= ?", date)
       .limit(limit)
   end
 end
