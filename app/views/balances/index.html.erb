@@ -10,7 +10,9 @@
   <tbody>
     <% @report.totals.each do |total| %>
     <%= render 'balances/balance_row',
-      name: total.date, amount: total.amount, diff: total.diff,
+      name: pretty_date(total.date), 
+      amount: total.amount,
+      diff: total.diff,
       date: total.date
     %>
     <% end %>

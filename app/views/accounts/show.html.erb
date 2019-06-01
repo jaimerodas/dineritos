@@ -9,7 +9,9 @@
   <tbody>
     <% @report.account(params[:id]).each do |account| %>
     <%= render 'balances/balance_row',
-      name: account.date, amount: account.amount, diff: account.diff,
+      name: pretty_date(account.date),
+      amount: account.amount,
+      diff: account.diff,
       date: account.date
     %>
     <% end %>
