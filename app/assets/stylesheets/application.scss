@@ -26,7 +26,7 @@ article {
   width: calc(100% - 4em);
   max-width: 41em;
   margin: 0 auto;
-  padding: 0 0 4em;
+  padding: 0 0 4.5em;
 }
 
 nav {
@@ -44,15 +44,31 @@ nav {
   left: 0;
 
   a {
-    display: block;
-    color: white;
-    padding: 1.5rem 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
-    font-weight: bold;
+    color: white;
+    padding: 0.75rem 1rem;
+
     text-decoration: none;
+
+    span {
+      display: none;
+      margin-left: 0.25em;
+    }
+
+    svg {
+      width: 2.5em;
+      fill: white;
+    }
 
     &:hover {
       color: #ddd;
+
+      svg {
+        fill: #ddd;
+      }
     }
   }
 }
@@ -192,17 +208,25 @@ input {
 
 @media screen and (min-width: 40em) {
   nav {
+    font-size: 1em;
     bottom: auto;
     top: 0;
-    font-size: 1em;
 
     a {
       padding: 1em;
+
+      svg {
+        width: 1.5em;
+      }
+
+      span {
+        display: inline-block;
+      }
     }
   }
 
   article {
-    padding: 3em 0 0;
+    padding: 3.5em 0 0;
   }
 
   .header-details, table {
