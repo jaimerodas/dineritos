@@ -1,4 +1,6 @@
 class LoginsController < ApplicationController
+  before_action :reverse_auth
+
   layout "login"
 
   def show
@@ -21,5 +23,9 @@ class LoginsController < ApplicationController
 
   def valid_email?
     params.require(:session).permit(:email)[:email] == Rails.application.credentials[:email]
+  end
+
+  def reverse_auth
+    redirect_to root_path if logged_in?
   end
 end
