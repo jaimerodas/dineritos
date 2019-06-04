@@ -33,3 +33,17 @@ es:
     formats:
       short: "%e de %B"
       short_year: "%e/%B/%Y"
+  activerecord:
+    attributes:
+      balance_date:
+        date: "Fecha"
+      account:
+        name: "Nombre"
+        currency: "Moneda"
+    models:
+      account: "Cuenta"
+  helpers:
+    submit:
+      create: Crear %{model}
+      submit: Guardar %{model}
+      update: Actualizar %{model}

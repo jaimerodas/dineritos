@@ -73,6 +73,8 @@ GEM
       activesupport (>= 4.2.0)
     i18n (1.6.0)
       concurrent-ruby (~> 1.0)
+    i18n-debug (1.2.0)
+      i18n (< 2)
     jaro_winkler (1.5.2)
     jbuilder (2.9.1)
       activesupport (>= 4.2.0)
@@ -225,6 +227,7 @@ DEPENDENCIES
   bcrypt
   bootsnap (>= 1.4.2)
   byebug
+  i18n-debug
   jbuilder (~> 2.5)
   letter_opener
   listen (>= 3.0.5, < 3.2)
