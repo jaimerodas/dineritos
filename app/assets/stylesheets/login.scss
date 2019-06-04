@@ -1,11 +1,4 @@
-:root {
-    --bg-color: #E0E4EB;
-    --fg-color: #25272B;
-    --mid-color: #767D95;
-
-    --border-color: #b4bad1;
-    --disabled-color: #9da5bf;
-}
+@import "colors";
 
 html, body {
   margin: 0;
@@ -106,16 +99,6 @@ button {
       0 0.125em 0.125em rgba(0,0,0,0),
       inset 0 0.125em 0.25em rgba(0,0,0,0.3);
   }
-}
-
-@media (prefers-color-scheme: dark) {
-    :root {
-        --bg-color: #2c2e32;
-        --fg-color: #E0E4EB;
-
-        --border-color: #424657;
-        --disabled-color: #4e556a;
-    }
 }
 
 @media screen and (min-width: 24em) {
