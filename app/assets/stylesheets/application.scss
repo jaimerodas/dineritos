@@ -29,7 +29,7 @@ nav {
   align-items: center;
   justify-content: center;
 
-  background-color: #222;
+  background-color: var(--nav-color);
   font-size: 0.75em;
 
   position: fixed;
@@ -90,7 +90,7 @@ h1 {
   font-size: 2.5em;
   font-weight: 800;
   line-height: 1;
-  margin: 0;
+  margin: 0.1em 0;
 }
 
 .header-details {
@@ -128,6 +128,7 @@ td {
   text-align: right;
   font-size: 1.25em;
   font-weight: bold;
+  color: var(--fg-color);
 
   .diff {
     display: block;
@@ -137,9 +138,9 @@ td {
 }
 
 .diff {
-  color: #479047;
+  color: var(--positive-color);
   &.neg {
-    color: #be2b56;
+    color: var(--negative-color);
   }
 }
 
@@ -321,12 +322,12 @@ select option {
 @media screen and (min-width: 40em) {
   nav {
     position: absolute;
-    font-size: 1em;
+    font-size: 0.875rem;
     bottom: auto;
     top: 0;
 
     a {
-      padding: 1em;
+      padding: 1em 1.5em;
 
       svg {
         width: 1.5em;
@@ -342,7 +343,7 @@ select option {
     padding: 3.5em 0 1em;
   }
 
-  .header-details, table {
+  table {
     font-size: 1.5em;
   }
 
@@ -352,12 +353,12 @@ select option {
 }
 
 @media screen and (min-width: 45em) {
-  table {
-    font-size: 1.75em;
+  nav {
+    font-size: 1rem;
   }
 
-  header .diff {
-    font-size: 2em;
+  table {
+    font-size: 1.75em;
   }
 
   h1 {
