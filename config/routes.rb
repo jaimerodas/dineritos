@@ -6,7 +6,7 @@ Rails.application.routes.draw do
     resources :balances, path: "saldos", param: :date
     resource :login, path: "ingresar", only: [:show, :create]
   end
-  
+
   # Rutas directas
   get "/historial", to: "balances#index", as: "historic"
   get "/iniciar_sesion/:token", to: "sessions#create", as: "create_session"
