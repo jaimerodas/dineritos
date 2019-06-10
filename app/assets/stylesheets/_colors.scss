@@ -11,6 +11,17 @@
     --negative-color: #da1b10;
 }
 
+.it-1 { background-color: #845EC2; }
+.it-2 { background-color: #D65DB1; }
+.it-3 { background-color: #FF6F91; }
+.it-4 { background-color: #FF9671; }
+.it-5 { background-color: #FFC75F; }
+.it-6 { background-color: #008F7A; }
+.it-7 { background-color: #008E9B; }
+.it-8 { background-color: #0089BA; }
+.it-9 { background-color: #0081CF; }
+.it-0 { background-color: #2C73D2; }
+
 @media (prefers-color-scheme: dark) {
     :root {
         --bg-color: #222222;

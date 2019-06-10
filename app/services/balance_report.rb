@@ -29,7 +29,7 @@ class BalanceReport
   end
 
   def accounts
-    @accounts ||= Balance.select("*").from(
+    @accounts ||= Balance.select(all_fields_and_percent).from(
       Balance.joins(:balance_date, :account)
         .where("balance_dates.id": dates)
         .select(account_sql)
@@ -44,6 +44,13 @@ class BalanceReport
   end
 
   private
+
+  def all_fields_and_percent
+    <<~SQL
+      *,
+      amount_cents * 1.00 / sum(amount_cents) over () percent
+    SQL
+  end
 
   def total_sql
     <<~SQL

@@ -8,6 +8,6 @@ module DiffHelper
       number.negative? ? classes += " neg" : text = "+#{text}"
     end
 
-    content_tag(:span, text, class: classes)
+    tag.span text, class: classes
   end
 end

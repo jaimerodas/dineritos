@@ -13,19 +13,25 @@ body {
   line-height: 1.2;
   position: relative;
   min-height: 100vh;
+  padding-bottom: 4rem;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
 }
 
 article {
+  flex: 1;
   width: calc(100% - 4em);
   max-width: 41em;
   margin: 0 auto;
-  padding: 0 0 4.5em;
+  padding: 0;
 }
 
 nav {
   display: flex;
   box-sizing: border-box;
   width: 100%;
+  height: 4rem;
   align-items: center;
   justify-content: center;
 
@@ -37,6 +43,7 @@ nav {
   left: 0;
 
   a {
+    height: 4rem;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -304,6 +311,36 @@ select option {
     font-weight:normal;
 }
 
+.graph-report {
+  --height: 10rem;
+  display: flex;
+  width: 100%;
+  height: var(--height);
+  margin: 2em 0 0;
+  background-color: #555;
+  position: relative;
+
+  .graph-account {
+    box-sizing: border-box;
+    width: var(--percent);
+    height: 100%;
+
+    &:hover span {
+      opacity: 1;
+    }
+  }
+
+  span {
+    display: inline-block;
+    padding: 0.5rem 0;
+    font-size: 0.75em;
+    position: absolute;
+    right: 0.5rem;
+    bottom: var(--height);
+    opacity: 0;
+    transition: 0.2s ease all;
+  }
+}
 
 @media screen and (min-width: 25em) {
   .header-details {
@@ -339,8 +376,8 @@ select option {
     }
   }
 
-  article {
-    padding: 3.5em 0 1em;
+  body {
+    padding: 4rem 0 0;
   }
 
   table {
