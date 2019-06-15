@@ -10,7 +10,7 @@ class Balance < ApplicationRecord
   private
 
   def convert_currency
-    rate = balance_date.currency_rates.find_or_create_by(currency: account.currency).rate_subcents
+    rate = CurrencyRate.find_or_create_by(date: balance_date.date, currency: account.currency).rate_subcents
     self.original_amount_cents = amount_cents
     self.amount_cents = (original_amount_cents * rate / 1000000.0).to_i
   end
