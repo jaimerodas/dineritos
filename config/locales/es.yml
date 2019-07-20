@@ -1,6 +1,7 @@
 es:
   date:
     abbr_month_names:
+      -
       - ene
       - feb
       - mar
@@ -14,6 +15,7 @@ es:
       - nov
       - dic
     month_names:
+      -
       - enero
       - febrero
       - marzo
