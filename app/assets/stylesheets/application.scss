@@ -129,22 +129,23 @@ td {
 }
 
 .account-name {
+  font-size: 0.875em;
   font-weight: 400;
 }
 .account-balance {
   text-align: right;
-  font-size: 1.25em;
+  font-size: 1em;
   font-weight: bold;
   color: var(--fg-color);
-
-  .diff {
-    display: block;
-    font-weight: 400;
-    font-size: 0.625em;
-  }
 }
 
-.diff {
+.account-diff {
+    text-align: right;
+    font-weight: 400;
+    font-size: 0.75em;
+  }
+
+.diff, .account-diff {
   color: var(--positive-color);
   &.neg {
     color: var(--negative-color);

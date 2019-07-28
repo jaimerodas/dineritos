@@ -16,9 +16,11 @@
           <%= account.name %>
         <% end %>
       </td>
+      <td class="account-diff <%= 'neg' if account.diff.negative? %>">
+        <%= number_to_currency account.diff, unit: '' %>
+      </td>
       <td class="account-balance">
-        <%= number_to_currency account.amount, unit: '' %><br>
-        <%= diff(account.diff) %>
+        <%= number_to_currency account.amount, unit: '' %>
       </td>
     </tr>
     <% end %>
