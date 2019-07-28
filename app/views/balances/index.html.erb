@@ -8,13 +8,14 @@
 
 <table>
   <tbody>
-    <% @report.totals.each do |total| %>
+    <% @report.rows.each do |total| %>
     <%= render 'balances/balance_row',
       name: pretty_date(total.date),
       amount: total.amount,
-      diff: total.diff,
       date: total.date
     %>
     <% end %>
   </tbody>
 </table>
+
+<%= will_paginate @report.rows, page_links: false %>

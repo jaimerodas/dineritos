@@ -2,6 +2,6 @@ class DashboardsController < ApplicationController
   before_action :auth
 
   def show
-    @report = BalanceReport.latest
+    @report = AccountDetailReport.latest
   end
 end

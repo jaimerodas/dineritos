@@ -3,11 +3,11 @@ class BalancesController < ApplicationController
   before_action :balance, only: %i[edit]
 
   def index
-    @report = BalanceReport.new(BalanceDate.id_range)
+    @report = BalanceReport.new(page: params[:page])
   end
 
   def show
-    @report = BalanceReport.new(BalanceDate.id_range_from(params[:date]))
+    @report = AccountDetailReport.new(BalanceDate.id_range_from(params[:date]))
   end
 
   def new

@@ -20,7 +20,7 @@ class AccountsController < ApplicationController
   end
 
   def show
-    @report = BalanceReport.new(BalanceDate.id_range)
+    @report = BalanceReport.new(account: params[:id], page: params[:page])
   end
 
   private

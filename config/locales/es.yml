@@ -49,3 +49,6 @@ es:
       create: Crear %{model}
       submit: Guardar %{model}
       update: Actualizar %{model}
+  will_paginate:
+    next_label: ">"
+    previous_label: "<"

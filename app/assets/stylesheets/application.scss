@@ -343,6 +343,34 @@ select option {
   }
 }
 
+.pagination {
+  margin: 1em 0 2em;
+  display: flex;
+
+  & > * {
+    flex: 1;
+    padding: 1rem;
+
+    font-size: 1.5em;
+    text-align: center;
+    text-decoration: none;
+    background-color: var(--border-color);
+    color: var(--bg-color);
+    border-radius: 0.25rem;
+  }
+
+  .disabled {
+    background-color: var(--bg-color);
+  }
+
+  .previous_page {
+    margin-right: 0.5em;
+  }
+  .next_page {
+    margin-left: 0.5em;
+  }
+}
+
 @media screen and (min-width: 25em) {
   .header-details {
     font-size: 1.25em;
