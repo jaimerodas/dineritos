@@ -3,7 +3,7 @@
     <span class="header-description">Saldos al <%= pretty_date(@report.date) %></span>
   </section>
 
-  <h1><%= number_to_currency @report.total.amount, unit: '' %></h1>
+  <h1><%= currency @report.total.amount %></h1>
   <%= diff(@report.total.diff) %>
 </header>
 
@@ -17,10 +17,10 @@
         <% end %>
       </td>
       <td class="account-diff <%= 'neg' if account.diff.negative? %>">
-        <%= number_to_currency account.diff, unit: '' %>
+        <%= diff account.diff %>
       </td>
       <td class="account-balance">
-        <%= number_to_currency account.amount, unit: '' %>
+        <%= currency account.amount %>
       </td>
     </tr>
     <% end %>

@@ -150,6 +150,10 @@ td {
   &.neg {
     color: var(--negative-color);
   }
+
+  &.zero {
+    color: var(--disabled-color);
+  }
 }
 
 .actions {
