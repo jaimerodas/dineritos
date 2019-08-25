@@ -189,6 +189,7 @@ form {
 
 label {
   display: block;
+  padding: 0 0 0.25em;
 }
 
 input {
@@ -222,6 +223,23 @@ input {
   &[type=number]::-webkit-outer-spin-button {
     -webkit-appearance: none;
     margin: 0;
+  }
+}
+
+.input-field {
+  position: relative;
+
+  span {
+    position: absolute;
+    top: 0.75em;
+    left: 1em;
+    display: inline-block;
+    color: #aaa;
+    margin-right: 0.25em;
+  }
+
+  input {
+    padding-left: 4em;
   }
 }
 

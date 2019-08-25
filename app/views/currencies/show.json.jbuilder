@@ -1,1 +1,1 @@
-json.currencyRate @currencyRate.rate
+json.currencyRate @currency_rate.rate
