@@ -375,6 +375,18 @@ select option {
   }
 }
 
+#formTotal {
+  display: none;
+  padding: 1em;
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.2em;
+
+  &.active {
+    display: block;
+  }
+}
+
 @media screen and (min-width: 25em) {
   .header-details {
     font-size: 1.25em;

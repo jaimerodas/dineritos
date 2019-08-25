@@ -12,8 +12,6 @@ class CalculateTotal
       amount_cents: total
     )
 
-    puts balance_total.inspect
-
     balance_total.save
   end
 end

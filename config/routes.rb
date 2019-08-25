@@ -5,6 +5,7 @@ Rails.application.routes.draw do
     resources :accounts, path: "cuentas", only: %i[index new create show]
     resources :balances, path: "saldos", param: :date
     resource :login, path: "ingresar", only: [:show, :create]
+    resource :currency, path: "tipo_de_cambio", only: [:show]
   end
 
   # Rutas directas

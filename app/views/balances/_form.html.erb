@@ -1,7 +1,17 @@
-<%= form_for @balance, url: form_url do |f| %>
-  <div class="field">
+<%= form_for @balance,
+  url: form_url,
+  data: {
+    controller: "form",
+    "form-currency-url": currency_path(format: :json)
+  } do |f| %>
+  <div class="field" data-target="form.dateField">
     <%= f.label :date %>
-    <%= f.date_select :date %>
+    <%= f.date_select :date,
+      {
+        start_year: Date.today.year - 1,
+        end_year: Date.today.year,
+      },
+      data: { action: 'change->form#updateTargetDate' } %>
   </div>
 
   <%= f.fields_for :balances do |g| %>
@@ -12,10 +22,19 @@
         min: 0,
         pattern: '^\d*(\.\d{0,2})?$',
         step: '0.01',
-        value: g.object.original_amount || g.object.amount %>
+        value: g.object.original_amount || g.object.amount,
+        data: {
+          action: 'change->form#recalculate keyup->form#recalculate',
+          target: 'form.balance',
+          currency: g.object.account.currency
+        } %>
       <%= g.object.account.currency if g.object.account.currency != "MXN" %>
     </div>
   <% end %>
+
+  <section id="formTotal">
+    <div data-target="form.total"></div>
+  </section>
 
   <%= f.button 'Guardar' %>
 <% end %>
