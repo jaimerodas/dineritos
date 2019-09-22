@@ -4,7 +4,7 @@ class CalculateTotal
       .balances
       .group(:balance_date_id)
       .select("SUM(amount_cents) as total")
-      .order(nil)
+      .order(:balance_date_id)
       .first.total
 
     balance_total = Total.new(
