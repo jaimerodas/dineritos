@@ -10,6 +10,6 @@ Rails.application.routes.draw do
 
   # Rutas directas
   get "/historial", to: "balances#index", as: "historic"
-  get "/iniciar_sesion/:token", to: "sessions#create", as: "create_session"
+  get "/iniciar_sesion", to: "sessions#create", as: "create_session"
   get "/salir", to: "sessions#destroy", as: "logout"
 end

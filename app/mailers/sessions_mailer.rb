@@ -4,8 +4,9 @@ class SessionsMailer < ApplicationMailer
   #
   #   en.sessions_mailer.login.subject
   #
-  def login(token:)
+  def login(user:, token:)
     @token = token
-    mail to: Rails.application.credentials[:email]
+    @user = user
+    mail to: user.email
   end
 end

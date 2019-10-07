@@ -10,19 +10,24 @@ class LoginsController < ApplicationController
     if valid_email?
       token = SecureRandom.urlsafe_base64
 
-      Session.create(
+      @user.sessions.create(
         token: BCrypt::Password.create(token),
         valid_until: 15.minutes.from_now
       )
 
-      SessionsMailer.login(token: token).deliver_now
+      SessionsMailer.login(user: @user, token: token).deliver_now
     end
   end
 
   private
 
   def valid_email?
-    params.require(:session).permit(:email)[:email] == Rails.application.credentials[:email]
+    @user = User.find_by(email: params_email)
+    @user
+  end
+
+  def params_email
+    params.require(:session).permit(:email)[:email]
   end
 
   def reverse_auth
