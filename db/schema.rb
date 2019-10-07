@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_06_15_191512) do
+ActiveRecord::Schema.define(version: 2019_10_07_171738) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -21,11 +21,15 @@ ActiveRecord::Schema.define(version: 2019_06_15_191512) do
     t.boolean "active", default: true, null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.bigint "user_id", null: false
+    t.index ["user_id"], name: "index_accounts_on_user_id"
   end
 
   create_table "balance_dates", force: :cascade do |t|
     t.date "date", null: false
+    t.bigint "user_id", null: false
     t.index ["date"], name: "index_balance_dates_on_date", unique: true
+    t.index ["user_id"], name: "index_balance_dates_on_user_id"
   end
 
   create_table "balances", force: :cascade do |t|
@@ -52,7 +56,9 @@ ActiveRecord::Schema.define(version: 2019_06_15_191512) do
     t.string "token", null: false
     t.datetime "valid_until", null: false
     t.datetime "claimed_at"
+    t.bigint "user_id", null: false
     t.index ["token"], name: "index_sessions_on_token", unique: true
+    t.index ["user_id"], name: "index_sessions_on_user_id"
   end
 
   create_table "totals", force: :cascade do |t|
@@ -63,7 +69,19 @@ ActiveRecord::Schema.define(version: 2019_06_15_191512) do
     t.index ["balance_date_id"], name: "index_totals_on_balance_date_id"
   end
 
+  create_table "users", force: :cascade do |t|
+    t.string "email"
+    t.string "uid"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["email"], name: "index_users_on_email", unique: true, where: "(email IS NOT NULL)"
+    t.index ["uid"], name: "index_users_on_uid", unique: true, where: "(uid IS NOT NULL)"
+  end
+
+  add_foreign_key "accounts", "users"
+  add_foreign_key "balance_dates", "users"
   add_foreign_key "balances", "accounts"
   add_foreign_key "balances", "balance_dates"
+  add_foreign_key "sessions", "users"
   add_foreign_key "totals", "balance_dates"
 end

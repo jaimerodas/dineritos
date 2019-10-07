@@ -1,4 +1,5 @@
 class BalanceDate < ApplicationRecord
+  belongs_to :user
   has_many :balances
   has_many :currency_rates
   has_one :total
