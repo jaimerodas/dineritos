@@ -3,29 +3,30 @@ class BalancesController < ApplicationController
   before_action :balance, only: %i[edit]
 
   def index
-    @report = BalanceReport.new(page: params[:page])
+    @report = BalanceReport.new(user: current_user, page: params[:page])
   end
 
   def show
-    @report = AccountDetailReport.new(BalanceDate.id_range_from(params[:date]))
+    @report = AccountDetailReport.new(current_user.balance_dates.id_range_from(params[:date]))
   end
 
   def new
-    latest_balance = BalanceDate.includes(balances: :account).order(date: :desc).limit(1).first
-    @balance = BalanceDate.new(date: Date.today)
+    latest_balance = current_user.balance_dates.includes(balances: :account)
+      .order(date: :desc).limit(1).first
+    @balance = current_user.balance_dates.new(date: Date.today)
 
     if latest_balance
       latest_balance.balances.each do |b|
         next if b.amount == 0
         @balance.balances.build(account: b.account, amount: b.original_amount || b.amount)
       end
-      Account.where(active: true)
+      current_user.accounts.where(active: true)
         .where.not(id: latest_balance.balances.map(&:account_id))
         .each do |account|
         @balance.balances.build(account: account, amount: 0)
       end
     else
-      Account.where(active: true).each do |account|
+      current_user.accounts.where(active: true).each do |account|
         @balance.balances.build(account: account, amount: 0)
       end
     end
@@ -62,7 +63,7 @@ class BalancesController < ApplicationController
   end
 
   def create_or_modify_balance
-    @balance_date = BalanceDate.find_or_create_by(balance_date_params)
+    @balance_date = current_user.balance_dates.find_or_create_by(balance_date_params)
     @balance_date.balances.destroy_all
     @balance_date.total&.destroy
 
@@ -77,6 +78,6 @@ class BalancesController < ApplicationController
   end
 
   def balance
-    @balance = BalanceDate.includes(:total, balances: :account).find_by(date: params[:date])
+    @balance = current_user.balance_dates.includes(:total, balances: :account).find_by(date: params[:date])
   end
 end

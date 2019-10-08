@@ -2,15 +2,15 @@ class AccountsController < ApplicationController
   before_action :auth
 
   def index
-    @accounts = Account.order(active: :desc, id: :asc)
+    @accounts = current_user.accounts.order(active: :desc, id: :asc)
   end
 
   def new
-    @account = Account.new
+    @account = current_user.accounts.build
   end
 
   def create
-    @account = Account.new(account_params)
+    @account = current_user.accounts.build(account_params)
 
     if @account.save
       redirect_to accounts_path
@@ -20,7 +20,7 @@ class AccountsController < ApplicationController
   end
 
   def show
-    @report = BalanceReport.new(account: params[:id], page: params[:page])
+    @report = BalanceReport.new(account: params[:id], user: current_user, page: params[:page])
   end
 
   private

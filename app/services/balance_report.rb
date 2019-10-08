@@ -1,26 +1,25 @@
 class BalanceReport
-  def initialize(account: "all", page: 1)
+  def initialize(user:, account: "all", page: 1)
+    @user = user
     @account_id = account
     @page = page
   end
 
-  attr_reader :account_id, :page
+  attr_reader :account_id, :user, :page
 
   def rows
-    model = account_id == "all" ? Total : Balance
+    model = (account_id == "all" ? :total : :balances)
+    report = user.balance_dates.select(:amount_cents, :date).joins(model)
 
     unless account_id == "all"
-      model = model.where(account: account)
+      report = report.where("balances.account_id": account_id)
     end
 
-    model.select(:amount_cents, "balance_dates.date")
-      .joins(:balance_date)
-      .paginate(page: page)
-      .order(date: :desc)
+    report.paginate(page: page).order(date: :desc)
   end
 
   def account
-    @account ||= Account.find(account_id)
+    @account ||= user.accounts.find(account_id)
   end
 
   def account_name

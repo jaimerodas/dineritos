@@ -1,6 +1,6 @@
 class AccountDetailReport
-  def self.latest
-    new(BalanceDate.select(:id).order(date: :desc).limit(2).map(&:id))
+  def self.latest_for(user)
+    new(user.balance_dates.select(:id).order(date: :desc).limit(2).map(&:id))
   end
 
   def initialize(dates)

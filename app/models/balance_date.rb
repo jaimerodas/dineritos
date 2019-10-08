@@ -19,4 +19,9 @@ class BalanceDate < ApplicationRecord
     id_range.where("date <= ?", date)
       .limit(limit)
   end
+
+  def amount
+    return unless amount_cents
+    Money.new(amount_cents)
+  end
 end
