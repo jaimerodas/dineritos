@@ -8,14 +8,8 @@ class LoginsController < ApplicationController
 
   def create
     if valid_email?
-      token = SecureRandom.urlsafe_base64
-
-      @user.sessions.create(
-        token: BCrypt::Password.create(token),
-        valid_until: 15.minutes.from_now
-      )
-
-      SessionsMailer.login(user: @user, token: token).deliver_now
+      session = @user.sessions.create
+      SessionsMailer.login(user: @user, token: session.token).deliver_now
     end
   end
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_10_07_171738) do
+ActiveRecord::Schema.define(version: 2019_10_08_154543) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -53,11 +53,12 @@ ActiveRecord::Schema.define(version: 2019_10_07_171738) do
   end
 
   create_table "sessions", force: :cascade do |t|
-    t.string "token", null: false
-    t.datetime "valid_until", null: false
-    t.datetime "claimed_at"
     t.bigint "user_id", null: false
-    t.index ["token"], name: "index_sessions_on_token", unique: true
+    t.string "token_digest", null: false
+    t.string "remember_digest"
+    t.datetime "expires_at", null: false
+    t.index ["remember_digest"], name: "index_sessions_on_remember_digest", unique: true, where: "(remember_digest IS NOT NULL)"
+    t.index ["token_digest"], name: "index_sessions_on_token_digest", unique: true
     t.index ["user_id"], name: "index_sessions_on_user_id"
   end
 

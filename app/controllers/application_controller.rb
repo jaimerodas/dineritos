@@ -3,15 +3,35 @@ class ApplicationController < ActionController::Base
 
   def auth
     return if logged_in?
-    logout
+    log_out
   end
 
-  def logout
-    session.delete(:auth)
+  def log_in(user)
+    session[:user_id] = user.id
+  end
+
+  def log_out
+    session.delete(:user_id)
+    Session.find_by(id: cookies.signed[:session_id])&.destroy
+    cookies.delete(:session_id)
+    cookies.delete(:remember_token)
+    @current_user = nil
     redirect_to login_path
   end
 
   def logged_in?
-    session[:auth] == Rails.application.credentials[:auth_secret]
+    !current_user.nil?
+  end
+
+  def current_user
+    if (user_id = session[:user_id])
+      @current_user ||= User.find(user_id)
+    elsif (session_id = cookies.signed[:session_id])
+      session = Session.find_by(id: session_id)
+      if session&.authenticated?(cookies[:remember_token])
+        log_in(session.user)
+        @current_user = session.user
+      end
+    end
   end
 end

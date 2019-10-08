@@ -6,16 +6,18 @@ class SessionsController < ApplicationController
   end
 
   def destroy
-    logout
+    log_out
   end
 
   private
 
   def create_session_for(user)
-    user.sessions.where("valid_until > ?", Time.current).where(claimed_at: nil).each do |s|
-      next unless BCrypt::Password.new(s.token) == params[:token]
-      session[:auth] = Rails.application.credentials[:auth_secret]
-      s.update_attribute(:claimed_at, Time.current)
+    user.sessions.available.each do |s|
+      next unless s.token_matches? params[:token]
+      s.remember
+      log_in(user)
+      cookies.permanent.signed[:session_id] = s.id
+      cookies.permanent[:remember_token] = s.remember_token
       break
     end
   end
