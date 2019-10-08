@@ -23,11 +23,10 @@ class LoginsController < ApplicationController
 
   def valid_email?
     @user = User.find_by(email: params_email)
-    @user
   end
 
   def params_email
-    params.require(:session).permit(:email)[:email]
+    params.require(:session).permit(:email)[:email]&.downcase
   end
 
   def reverse_auth
