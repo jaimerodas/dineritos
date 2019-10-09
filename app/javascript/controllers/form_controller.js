@@ -1,12 +1,3 @@
-// Visit The Stimulus Handbook for more details
-// https://stimulusjs.org/handbook/introduction
-//
-// This example controller works with specially annotated HTML like:
-//
-// <div data-controller="hello">
-//   <h1 data-target="hello.output"></h1>
-// </div>
-
 import { Controller } from "stimulus"
 
 export default class extends Controller {
@@ -49,19 +40,10 @@ export default class extends Controller {
   }
 
   updateTargetDate() {
-    var date = []
-
-    this.dateFieldTarget.querySelectorAll('select').forEach((el, i) => {
-      var segment = el.value
-      if (segment.length === 1) { segment = "0" + segment }
-      date.push(segment)
-    })
-
-    date = date.reverse().join('-')
-
-    if (Date.parse(date) > Date.now()) {
-      throw "Invalid Date"
-    }
+    var today = new Date()
+    var day = today.getDate().toString().padStart(2, "0")
+    var month = (today.getMonth() + 1).toString().padStart(2, "0")
+    var date = `${today.getFullYear()}-${month}-${day}`
 
     this.data.set('date', date)
     this.updateExchangeRate('USD')

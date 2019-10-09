@@ -1,13 +1,13 @@
 class BitsoService
   BASE_URL = "https://api.bitso.com"
 
-  def self.current_balance_for(user)
-    new(user).run
+  def self.current_balance_for(account)
+    new(account).run
   end
 
-  def initialize(user)
-    @key = user.settings["bitso_key"]
-    @secret = user.settings["bitso_secret"]
+  def initialize(account)
+    @key = account.settings["bitso_key"]
+    @secret = account.settings["bitso_secret"]
   end
 
   attr_reader :key, :secret

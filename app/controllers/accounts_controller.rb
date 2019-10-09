@@ -26,6 +26,6 @@ class AccountsController < ApplicationController
   private
 
   def account_params
-    params.require(:account).permit(:name, :currency)
+    params.require(:account).permit(:name, :currency, :account_type, settings: {})
   end
 end

@@ -42,6 +42,10 @@ es:
       account:
         name: "Nombre"
         currency: "Moneda"
+        account_type: "Tipo de Cuenta"
+        account_types:
+          default: "Normal"
+          bitso: "Bitso"
     models:
       account: "Cuenta"
   helpers:

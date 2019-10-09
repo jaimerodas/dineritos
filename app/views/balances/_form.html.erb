@@ -4,15 +4,10 @@
     controller: "form",
     "form-currency-url": currency_path(format: :json)
   } do |f| %>
-  <div class="field" data-target="form.dateField">
-    <%= f.label :date %>
-    <%= f.date_select :date,
-      {
-        start_year: Date.today.year - 1,
-        end_year: Date.today.year,
-      },
-      data: { action: 'change->form#updateTargetDate' } %>
-  </div>
+
+  <% if @bitsos&.any? %>
+  <%= @bitsos.count > 2 ? "Las cuentas" : "La cuenta" %> <b><%= @bitsos.map(&:name).join(", ") %></b> se <%= @bitsos.count > 2 ? "actualizan solas" : "actualiza sola" %>.
+  <% end %>
 
   <%= f.fields_for :balances do |g| %>
     <div class="field">

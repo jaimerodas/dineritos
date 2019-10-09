@@ -7,7 +7,7 @@ class Balance < ApplicationRecord
 
   self.per_page = 10
 
-  before_save :convert_currency, if: proc { account.currency != "MXN" }
+  before_save :convert_currency, if: proc { account.currency != "MXN" && account.default? }
 
   private
 
