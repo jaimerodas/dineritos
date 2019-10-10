@@ -27,4 +27,6 @@
   </tbody>
 </table>
 
+<%= balance_navigation(@report.next_date, @report.prev_date) %>
+
 <% content_for :graph, percentage_graph_from(@report.accounts) %>

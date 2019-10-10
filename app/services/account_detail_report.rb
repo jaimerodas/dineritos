@@ -17,6 +17,14 @@ class AccountDetailReport
     @date ||= total.date
   end
 
+  def next_date
+    @next_date ||= BalanceDate.where("date > ?", date).order(date: :asc).limit(1)&.first&.date
+  end
+
+  def prev_date
+    @prev_date ||= BalanceDate.where("date < ?", date).order(date: :desc).limit(1)&.first&.date
+  end
+
   def total
     @total ||= Total.select("*").from(totals).find_by("bid = ?", dates.first)
   end
