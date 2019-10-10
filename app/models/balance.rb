@@ -5,8 +5,6 @@ class Balance < ApplicationRecord
   monetize :amount_cents
   monetize :original_amount_cents, allow_nil: true
 
-  self.per_page = 10
-
   before_save :convert_currency, if: proc { account.currency != "MXN" && account.default? }
 
   private

@@ -15,7 +15,7 @@ class BalanceReport
       report = report.where("balances.account_id": account_id)
     end
 
-    report.paginate(page: page).order(date: :desc)
+    report.paginate(page: page, per_page: 10).order(date: :desc)
   end
 
   def account
