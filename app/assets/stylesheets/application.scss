@@ -369,7 +369,7 @@ select option {
 .navigation {
   text-align: center;
   margin: 1em 0 0;
-  & > a {
+  & > a, & > span {
     display: inline-block;
     width: 4em;
     padding: 0;
@@ -378,33 +378,9 @@ select option {
   svg {
     fill: var(--border-color);
   }
-}
-
-.pagination {
-  margin: 1em 0 2em;
-  display: flex;
-
-  & > * {
-    flex: 1;
-    padding: 1rem;
-
-    font-size: 1.5em;
-    text-align: center;
-    text-decoration: none;
-    background-color: var(--border-color);
-    color: var(--bg-color);
-    border-radius: 0.25rem;
-  }
 
   .disabled {
-    background-color: var(--bg-color);
-  }
-
-  .previous_page {
-    margin-right: 0.5em;
-  }
-  .next_page {
-    margin-left: 0.5em;
+    display: none;
   }
 }
 
@@ -489,7 +465,7 @@ select option {
 @media screen and (min-width: 55em) {
   .navigation {
     margin: 0;
-    & > a {
+    & > a, & > span {
       position: absolute;
       top: 3.5em;
       width: 5em;

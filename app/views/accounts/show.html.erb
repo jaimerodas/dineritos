@@ -17,4 +17,4 @@
   </tbody>
 </table>
 
-<%= will_paginate @report.rows, page_links: false %>
+<%= will_paginate @report.rows, page_links: false, renderer: DineritosNavRenderer %>
