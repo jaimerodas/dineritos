@@ -23,7 +23,7 @@ class BitsoService
       next balance[:amount] if balance[:currency] == "mxn"
       exchange_rate = HTTParty.get(BASE_URL + "/v3/ticker/?book=#{balance[:currency]}_mxn")
         .dig("payload", "vwap")
-      balance[:amount] * BigDecimal(exchange_rate)
+      (balance[:amount] * BigDecimal(exchange_rate)).round(2)
     end
   end
 

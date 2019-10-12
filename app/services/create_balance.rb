@@ -34,10 +34,16 @@ class CreateBalance
   end
 
   def create_balances_on_bitso_accounts
-    user.accounts.bitso.where(active: true).each do |account|
+    user.accounts.bitso.each do |account|
+      amount = BitsoService.current_balance_for(account)
+      next if amount.zero? && !account.active?
+
       @balance_date.balances.create(
-        account_id: account.id, amount: BitsoService.current_balance_for(account)
+        account_id: account.id,
+        amount: amount
       )
+
+      account.update_attribute(:active, true) if !amount.zero? && !account.active?
     end
   end
 end
