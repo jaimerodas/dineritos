@@ -4,11 +4,12 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby "2.6.5"
 
 gem "bcrypt"
-gem "postmark-rails"
+gem "lockbox"
 gem "money-rails"
 gem "httparty"
 gem "rails", "~> 6.0"
 gem "pg", ">= 0.18", "< 2.0"
+gem "postmark-rails"
 gem "puma", "~> 3.11"
 gem "sass-rails", "~> 5"
 gem "turbolinks", "~> 5"
