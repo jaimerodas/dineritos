@@ -13,6 +13,7 @@ gem "postmark-rails"
 gem "puma", "~> 3.11"
 gem "sass-rails", "~> 5"
 gem "turbolinks", "~> 5"
+gem "watir"
 gem "webpacker", "~> 4.0"
 gem "will_paginate", "~> 3.1"
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
