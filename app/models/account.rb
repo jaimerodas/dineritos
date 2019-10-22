@@ -3,7 +3,7 @@ class Account < ApplicationRecord
   has_many :balances
 
   enum account_type: %i[default bitso]
-  encrypts :settings, type: :json, migrating: true
+  encrypts :settings, type: :json
 
   validates :name, presence: true
 end
