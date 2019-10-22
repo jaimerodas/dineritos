@@ -1,0 +1,56 @@
+<%= form_for @account, data: { controller: "account" } do |f| %>
+
+  <div class="field">
+    <%= f.label :account_type %>
+    <%= f.select :account_type,
+      Account.account_types.map { |type, i|
+        [t("activerecord.attributes.account.account_types.#{type}"), type]
+      }, {}, data: { target: "account.type", action: "change->account#change" } %>
+  </div>
+
+  <div class="field">
+    <%= f.label :name %>
+    <%= f.text_field :name %>
+  </div>
+
+  <div class="field" id="account_currency_field">
+    <%= f.label :currency %>
+    <%= f.select :currency, ["MXN", "USD"], {}, data: { target: "account.currency" } %>
+  </div>
+
+  <div class="field" id="bitso_account_settings_field" style="display: none;">
+    <label for="account_settings_bitso_key">API Key</label>
+    <input type="text"
+           name="account[settings][bitso_key]"
+           id="account_settings_bitso_key"
+           data-target="account.apiKey"
+           value="<%= @account.settings&.fetch("bitso_key", nil) %>"
+           disabled>
+    <label for="account_settings_bitso_secret">API Secret</label>
+    <input type="text"
+           name="account[settings][bitso_secret]"
+           id="account_settings_bitso_secret"
+           data-target="account.apiSecret"
+           value="<%= @account.settings&.fetch("bitso_secret", nil) %>"
+           disabled>
+  </div>
+
+  <div class="field" id="account_settings_credentials_field" style="display: none;">
+    <label for="account_settings_username">Usuario</label>
+    <input type="text"
+           name="account[settings][username]"
+           id="account_settings_username"
+           data-target="account.username"
+           value="<%= @account.settings&.fetch("username", nil) %>"
+           disabled>
+    <label for="account_settings_password">Contraseña</label>
+    <input type="text"
+           name="account[settings][password]"
+           id="account_settings_password"
+           data-target="account.password"
+           value="<%= @account.settings&.fetch("password", nil) %>"
+           disabled>
+  </div>
+
+  <%= f.button %>
+<% end %>

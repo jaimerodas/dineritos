@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   root "dashboards#show"
 
   scope path_names: {new: "nuevo", edit: "editar"} do
-    resources :accounts, path: "cuentas", only: %i[index new create show]
+    resources :accounts, path: "cuentas", only: %i[index new create show edit update]
     resources :balances, path: "saldos", param: :date, except: [:edit, :update]
     resource :login, path: "ingresar", only: [:show, :create]
     resource :currency, path: "tipo_de_cambio", only: [:show]

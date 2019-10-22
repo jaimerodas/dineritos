@@ -19,6 +19,20 @@ class AccountsController < ApplicationController
     end
   end
 
+  def edit
+    @account = current_user.accounts.find(params[:id])
+  end
+
+  def update
+    @account = current_user.accounts.find(params[:id])
+
+    if @account.update(account_params)
+      redirect_to account_path(@account)
+    else
+      render :edit
+    end
+  end
+
   def show
     @report = BalanceReport.new(account: params[:id], user: current_user, page: params[:page])
   end

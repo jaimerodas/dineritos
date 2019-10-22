@@ -11,7 +11,7 @@ class BalancesController < ApplicationController
   end
 
   def new
-    latest_balance = current_user.balance_dates.includes(balances: :account).where("accounts.account_type": 0)
+    latest_balance = current_user.balance_dates.includes(balances: :account).where.not("accounts.account_type": 1)
       .order(date: :desc).limit(1).first
     @balance = current_user.balance_dates.new(date: Date.today)
 

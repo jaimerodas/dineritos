@@ -46,6 +46,7 @@ es:
         account_types:
           default: "Normal"
           bitso: "Bitso"
+          yotepresto: "Yo Te Presto"
     models:
       account: "Cuenta"
   helpers:
