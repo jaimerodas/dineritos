@@ -23,6 +23,7 @@ class UpdatesController < ApplicationController
         "briq" => BriqService,
         "afluenta" => AfluentaService,
         "latasa" => LaTasaService,
+        "cetesdirecto" => CetesDirectoService,
       }.fetch(a.account_type).current_balance_for(a)
     end
   end

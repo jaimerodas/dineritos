@@ -2,7 +2,7 @@ class Account < ApplicationRecord
   belongs_to :user
   has_many :balances
 
-  UPDATEABLE = %i[yotepresto briq afluenta latasa]
+  UPDATEABLE = %i[yotepresto briq afluenta latasa cetesdirecto]
   NOT_UPDATEABLE = %i[default bitso]
 
   enum account_type: (NOT_UPDATEABLE + UPDATEABLE)

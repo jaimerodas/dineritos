@@ -50,6 +50,7 @@ es:
           briq: "Briq.mx"
           afluenta: "Afluenta"
           latasa: "La Tasa"
+          cetesdirecto: "CetesDirecto"
     models:
       account: "Cuenta"
   helpers:
