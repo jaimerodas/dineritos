@@ -17,8 +17,16 @@ class UpdatesController < ApplicationController
   end
 
   def get_balance_for(a)
-    Rails.cache.fetch("accounts/#{a.id}/balance", expires_in: 12.hours) do
+    Rails.cache.fetch(
+      "accounts/#{a.id}/balance",
+      expires_in: 12.hours,
+      force: flush_cache?
+    ) do
       YtpService.current_balance_for(a)
     end
+  end
+
+  def flush_cache?
+    params[:force] == "true"
   end
 end
