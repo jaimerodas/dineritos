@@ -47,6 +47,7 @@ es:
           default: "Normal"
           bitso: "Bitso"
           yotepresto: "Yo Te Presto"
+          briq: "Briq.mx"
     models:
       account: "Cuenta"
   helpers:

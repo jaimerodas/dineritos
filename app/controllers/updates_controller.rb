@@ -13,16 +13,17 @@ class UpdatesController < ApplicationController
   private
 
   def account
-    @account ||= current_user.accounts.where(account_type: :yotepresto).find(params[:account_id])
+    @account ||= current_user.accounts
+      .where(account_type: %i[yotepresto briq])
+      .find(params[:account_id])
   end
 
   def get_balance_for(a)
-    Rails.cache.fetch(
-      "accounts/#{a.id}/balance",
-      expires_in: 12.hours,
-      force: flush_cache?
-    ) do
-      YtpService.current_balance_for(a)
+    Rails.cache.fetch("accounts/#{a.id}/balance", expires_in: 12.hours, force: flush_cache?) do
+      {
+        "yotepresto" => YtpService,
+        "briq" => BriqService,
+      }.fetch(a.account_type).current_balance_for(a)
     end
   end
 

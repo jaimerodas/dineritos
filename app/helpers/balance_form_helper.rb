@@ -10,7 +10,7 @@ module BalanceFormHelper
       data: {
         action: "change->form#recalculate keyup->form#recalculate",
         target: "form.balance",
-        updateable: account.yotepresto?,
+        updateable: account.updateable?,
         account: account.id,
         currency: currency,
       })

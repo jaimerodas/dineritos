@@ -87,5 +87,8 @@ export default class extends Controller {
         account.value = result.balance
         account.dispatchEvent(new Event("change"))
       })
+      .catch(error => {
+        status.setAttribute("class", "refresh failed")
+      })
   }
 }
