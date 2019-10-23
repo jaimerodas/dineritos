@@ -48,6 +48,7 @@ es:
           bitso: "Bitso"
           yotepresto: "Yo Te Presto"
           briq: "Briq.mx"
+          afluenta: "Afluenta"
     models:
       account: "Cuenta"
   helpers:

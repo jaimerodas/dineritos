@@ -14,7 +14,7 @@ class UpdatesController < ApplicationController
 
   def account
     @account ||= current_user.accounts
-      .where(account_type: %i[yotepresto briq])
+      .where(account_type: %i[yotepresto briq afluenta])
       .find(params[:account_id])
   end
 
@@ -23,6 +23,7 @@ class UpdatesController < ApplicationController
       {
         "yotepresto" => YtpService,
         "briq" => BriqService,
+        "afluenta" => AfluentaService,
       }.fetch(a.account_type).current_balance_for(a)
     end
   end
