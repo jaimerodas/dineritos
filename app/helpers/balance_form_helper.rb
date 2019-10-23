@@ -1,6 +1,7 @@
 module BalanceFormHelper
   def amount_field(field)
-    currency = field.object.account.currency
+    account = field.object.account
+    currency = account.currency
     input = field.number_field(:amount,
       min: 0,
       pattern: '^\d*(\.\d{0,2})?$',
@@ -9,6 +10,8 @@ module BalanceFormHelper
       data: {
         action: "change->form#recalculate keyup->form#recalculate",
         target: "form.balance",
+        updateable: account.yotepresto?,
+        account: account.id,
         currency: currency,
       })
 

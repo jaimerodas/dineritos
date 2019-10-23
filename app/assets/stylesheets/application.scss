@@ -185,8 +185,37 @@ form {
 }
 
 .field {
+  position: relative;
   margin: 1em auto;
 }
+
+.refresh {
+  position: absolute;
+  right: -1.5em;
+  bottom: 1em;
+
+  display: block;
+  width: 0.75em;
+  height: 0.75em;
+  border-radius: 0.5em;
+
+  &.working {
+    background-color: var(--disabled-color);
+
+    animation-name: breathe;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+  }
+
+  &.succeeded {
+    background-color: var(--positive-color);
+  }
+
+  &.failed {
+    background-color: var(--negative-color);
+  }
+}
+
 
 label {
   display: block;
@@ -476,5 +505,19 @@ select option {
     .previous_page {
       left: -6em;
     }
+  }
+}
+
+@keyframes breathe {
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(0.75);
+  }
+
+  100% {
+    transform: scale(1);
   }
 }
