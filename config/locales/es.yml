@@ -49,6 +49,7 @@ es:
           yotepresto: "Yo Te Presto"
           briq: "Briq.mx"
           afluenta: "Afluenta"
+          latasa: "La Tasa"
     models:
       account: "Cuenta"
   helpers:

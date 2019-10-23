@@ -2,12 +2,16 @@ class Account < ApplicationRecord
   belongs_to :user
   has_many :balances
 
-  enum account_type: %i[default bitso yotepresto briq afluenta]
+  UPDATEABLE = %i[yotepresto briq afluenta latasa]
+  NOT_UPDATEABLE = %i[default bitso]
+
+  enum account_type: (NOT_UPDATEABLE + UPDATEABLE)
   encrypts :settings, type: :json
+  scope :updateable, -> { where(account_type: UPDATEABLE) }
 
   validates :name, presence: true
 
   def updateable?
-    %w[yotepresto briq afluenta].include? account_type
+    UPDATEABLE.include? account_type.to_sym
   end
 end
