@@ -17,7 +17,7 @@ class YtpService
     login
     value = browser.strong(class: "account_value").text
     logout
-    BigDecimal(value.tr("^0-9.", ""))
+    BigDecimal(value.tr("^0-9.", "")).round(2)
   ensure
     browser.close
   end
