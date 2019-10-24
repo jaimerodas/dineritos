@@ -15,8 +15,8 @@ class CetesDirectoService
   def run
     browser.goto "https://www.cetesdirecto.com/SSOSVD_wls/"
     login
-    browser.div(id: "portafolioMenu").click
-    value = browser.div(class: %w[totalInstrumentosNumeros tituloInstrumento]).child.text
+    value = get_value
+    logout
     BigDecimal(value.tr("^0-9.", "")).round(2)
   ensure
     browser.close
@@ -28,5 +28,15 @@ class CetesDirectoService
     browser.button(id: "continuarBtn").click
     form.text_field(id: "pwdId").set(password)
     browser.button(id: "accederBtn").click
+  end
+
+  def logout
+    browser.button(data_target: "#menuLateralWeb").click
+    browser.div(class: %w[bloqueMenuLateral subMenuLateralWeb], data_name: "cerrarSesion").click
+  end
+
+  def get_value
+    browser.div(id: "portafolioMenu").click
+    browser.div(class: %w[totalInstrumentosNumeros tituloInstrumento]).child.text
   end
 end
