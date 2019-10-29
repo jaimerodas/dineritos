@@ -3,7 +3,7 @@ class UpdatesController < ApplicationController
   rescue_from ActiveRecord::RecordNotFound, with: :not_found
 
   def show
-    @balance = get_balance_for(account)
+    @balance = account.latest_balance(force: flush_cache?)
   end
 
   def not_found
@@ -14,18 +14,6 @@ class UpdatesController < ApplicationController
 
   def account
     @account ||= current_user.accounts.updateable.find(params[:account_id])
-  end
-
-  def get_balance_for(a)
-    Rails.cache.fetch("accounts/#{a.id}/balance", expires_in: 12.hours, force: flush_cache?) do
-      {
-        "yotepresto" => YtpService,
-        "briq" => BriqService,
-        "afluenta" => AfluentaService,
-        "latasa" => LaTasaService,
-        "cetesdirecto" => CetesDirectoService,
-      }.fetch(a.account_type).current_balance_for(a)
-    end
   end
 
   def flush_cache?
