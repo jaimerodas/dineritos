@@ -8,6 +8,7 @@ class Account < ApplicationRecord
   enum account_type: (NOT_UPDATEABLE + UPDATEABLE)
   encrypts :settings, type: :json
   scope :updateable, -> { where(account_type: UPDATEABLE) }
+
   monetize :last_balance_cents
 
   validates :name, presence: true
@@ -18,7 +19,7 @@ class Account < ApplicationRecord
 
   def update_service
     UPDATEABLE.zip([
-      YtpService, BriqService, AfluentaService, LaTasaService, CetesDirectoService
+      YtpService, BriqService, AfluentaService, LaTasaService, CetesDirectoService,
     ]).to_h.fetch(account_type.to_sym)
   end
 

@@ -24,11 +24,15 @@ class BalanceReaderService
 
   private
 
-  def login_url; end
+  def login_url
+  end
 
-  def login; end
+  def login
+  end
 
-  def get_raw_value; end
+  def get_raw_value
+  end
 
-  def logout; end
+  def logout
+  end
 end
