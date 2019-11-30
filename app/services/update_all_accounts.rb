@@ -23,7 +23,7 @@ class UpdateAllAccounts
       begin
         {
           name: name,
-          previous_balance: account.last_balance,
+          previous_balance: BigDecimal(account.last_balance.to_d),
           current_balance: account.latest_balance(force: true),
         }
       rescue

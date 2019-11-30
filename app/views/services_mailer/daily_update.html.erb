@@ -16,7 +16,7 @@
     <% if account[:error] %>
     <tr>
       <td style="padding: 5px 10px;"><%= account[:name] %></td>
-      <td colspan="3" style="padding: 5px 10px;">Sin información</td>
+      <td colspan="3" style="padding: 5px 10px; text-align: center;">Hubo un error al descargar</td>
     </tr>
     <% else %>
     <% total_anterior += account[:previous_balance]; total_nuevo += account[:current_balance] %>
