@@ -1,0 +1,41 @@
+<h1>Última actualización</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th style="padding: 5px 10px;">Cuenta</th>
+      <th style="padding: 5px 10px;">Balance Anterior</th>
+      <th style="padding: 5px 10px;">Balance Nuevo</th>
+      <th style="padding: 5px 10px;">Diferencia</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% total_anterior = BigDecimal(0); total_nuevo = BigDecimal(0) %>
+    <% @summary.each do |account| %>
+    <% if account[:error] %>
+    <tr>
+      <td style="padding: 5px 10px;"><%= account[:name] %></td>
+      <td colspan="3" style="padding: 5px 10px;">Sin información</td>
+    </tr>
+    <% else %>
+    <% total_anterior += account[:previous_balance]; total_nuevo += account[:current_balance] %>
+    <tr>
+      <td style="padding: 5px 10px;"><%= account[:name] %></td>
+      <td style="text-align: right; padding: 5px 10px"><%= currency account[:previous_balance] %></td>
+      <td style="text-align: right; padding: 5px 10px"><%= currency account[:current_balance] %></td>
+      <td style="text-align: right; padding: 5px 10px"><%= currency(account[:previous_balance] - account[:current_balance]) %></td>
+    </tr>
+    <% end %>
+    <% end %>
+  </tbody>
+
+  <tfoot>
+    <tr>
+      <th style="text-align: right; padding: 5px 10px;">Total</th>
+      <th style="text-align: right; padding: 5px 10px"><%= currency total_anterior %></th>
+      <th style="text-align: right; padding: 5px 10px"><%= currency total_nuevo %></th>
+      <th style="text-align: right; padding: 5px 10px"><%= currency(total_anterior - total_nuevo) %></th>
+    </tr>
+  </tfoot>
+</table>
