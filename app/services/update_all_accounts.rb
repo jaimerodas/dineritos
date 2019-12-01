@@ -7,8 +7,7 @@ class UpdateAllAccounts
   end
 
   def run
-    process_accounts
-      .then { |summary| send_report(summary) }
+    process_accounts.then { |summary| send_report(summary) }
   end
 
   private
@@ -17,18 +16,29 @@ class UpdateAllAccounts
     @accounts ||= Account.updateable
   end
 
+  def last_recorded_balance_date
+    @last_recorded_balance_date ||= BalanceDate.order(date: :desc).limit(1).first
+  end
+
+  def last_recorded_balance_from(account)
+    account.balances.find_by(balance_date: last_recorded_balance_date).amount.to_d
+  end
+
   def process_accounts
     accounts.map do |account|
-      name = account.name
+      response = {
+        name: account.name,
+        last_recorded_balance: BigDecimal(last_recorded_balance_from(account)),
+        previous_balance: BigDecimal(account.last_balance.to_d),
+      }
+
       begin
-        {
-          name: name,
-          previous_balance: BigDecimal(account.last_balance.to_d),
-          current_balance: account.latest_balance(force: true),
-        }
+        response[:current_balance] = account.latest_balance(force: true)
       rescue
-        {name: name, error: true}
+        response[:error] = true
       end
+
+      response
     end
   end
 

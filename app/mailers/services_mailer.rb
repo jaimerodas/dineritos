@@ -7,7 +7,6 @@ class ServicesMailer < ApplicationMailer
   #   en.services_mailer.daily_update.subject
   #
   def daily_update(summary)
-    pp summary
     @summary = summary
     mail to: User.first.email, subject: "Actualización de Saldos #{Date.today}"
   end

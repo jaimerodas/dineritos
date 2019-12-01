@@ -3,28 +3,40 @@
 <table>
   <thead>
     <tr>
-      <th style="padding: 5px 10px;">Cuenta</th>
-      <th style="padding: 5px 10px;">Balance Anterior</th>
-      <th style="padding: 5px 10px;">Balance Nuevo</th>
-      <th style="padding: 5px 10px;">Diferencia</th>
+      <th style="padding: 5px 10px;">cuenta</th>
+      <th style="padding: 5px 10px;">reporte</th>
+      <th style="padding: 5px 10px;">última descarga</th>
+      <th style="padding: 5px 10px;">nueva descarga</th>
+      <th style="padding: 5px 10px;">vs reporte</th>
+      <th style="padding: 5px 10px;">vs descarga</th>
     </tr>
   </thead>
 
   <tbody>
-    <% total_anterior = BigDecimal(0); total_nuevo = BigDecimal(0) %>
+    <% total_reporte = BigDecimal(0); total_anterior = BigDecimal(0); total_nuevo = BigDecimal(0) %>
     <% @summary.each do |account| %>
     <% if account[:error] %>
     <tr>
       <td style="padding: 5px 10px;"><%= account[:name] %></td>
+      <td style="text-align: right; padding: 5px 10px; color: #bbb;">
+        <%= currency account[:last_recorded_balance] %></td>
+      <td style="text-align: right; padding: 5px 10px; color: #bbb">
+        <%= currency account[:previous_balance] %></td>
       <td colspan="3" style="padding: 5px 10px; text-align: center;">Hubo un error al descargar</td>
     </tr>
     <% else %>
-    <% total_anterior += account[:previous_balance]; total_nuevo += account[:current_balance] %>
+    <%
+      total_reporte += account[:last_recorded_balance]
+      total_anterior += account[:previous_balance]
+      total_nuevo += account[:current_balance]
+    %>
     <tr>
       <td style="padding: 5px 10px;"><%= account[:name] %></td>
+      <td style="text-align: right; padding: 5px 10px"><%= currency account[:last_recorded_balance] %></td>
       <td style="text-align: right; padding: 5px 10px"><%= currency account[:previous_balance] %></td>
       <td style="text-align: right; padding: 5px 10px"><%= currency account[:current_balance] %></td>
-      <td style="text-align: right; padding: 5px 10px"><%= currency(account[:previous_balance] - account[:current_balance]) %></td>
+      <td style="text-align: right; padding: 5px 10px"><%= currency(account[:current_balance] - account[:last_recorded_balance]) %></td>
+      <td style="text-align: right; padding: 5px 10px"><%= currency(account[:current_balance] - account[:previous_balance]) %></td>
     </tr>
     <% end %>
     <% end %>
@@ -33,9 +45,11 @@
   <tfoot>
     <tr>
       <th style="text-align: right; padding: 5px 10px;">Total</th>
+      <th style="text-align: right; padding: 5px 10px"><%= currency total_reporte %></th>
       <th style="text-align: right; padding: 5px 10px"><%= currency total_anterior %></th>
       <th style="text-align: right; padding: 5px 10px"><%= currency total_nuevo %></th>
-      <th style="text-align: right; padding: 5px 10px"><%= currency(total_anterior - total_nuevo) %></th>
+      <th style="text-align: right; padding: 5px 10px"><%= currency(total_nuevo - total_reporte)%></th>
+      <th style="text-align: right; padding: 5px 10px"><%= currency(total_nuevo - total_anterior) %></th>
     </tr>
   </tfoot>
 </table>
