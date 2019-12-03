@@ -1,4 +1,4 @@
-class BriqService < BalanceReaderService
+class Scrapers::Briq < BaseScraper
   private
 
   def login_url
@@ -11,7 +11,7 @@ class BriqService < BalanceReaderService
     browser.form(action: "/users/sign_in").submit
   end
 
-  def get_raw_value
+  def raw_value
     browser.div(id: "global-portfolio").children[3].children[1].text
   end
 end

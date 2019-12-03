@@ -1,4 +1,4 @@
-class BalanceReaderService
+class BaseScraper
   def self.current_balance_for(account)
     new(account).run
   end
@@ -15,7 +15,7 @@ class BalanceReaderService
   def run
     browser.goto login_url
     login
-    value = get_raw_value
+    value = raw_value
     logout
     BigDecimal(value.tr("^0-9.", "")).round(2)
   ensure
@@ -30,7 +30,7 @@ class BalanceReaderService
   def login
   end
 
-  def get_raw_value
+  def raw_value
   end
 
   def logout

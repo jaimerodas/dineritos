@@ -1,4 +1,4 @@
-class AfluentaService < BalanceReaderService
+class Scrapers::Afluenta < BaseScraper
   private
 
   def login_url
@@ -12,7 +12,7 @@ class AfluentaService < BalanceReaderService
     form.submit
   end
 
-  def get_raw_value
+  def raw_value
     browser.goto "https://www.afluenta.mx/render/controlpanel/lender_account_summary"
     browser.div(id: "content").child.child.child.children[1].child.child.children[1].text
   end

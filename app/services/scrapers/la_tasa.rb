@@ -1,4 +1,4 @@
-class LaTasaService < BalanceReaderService
+class Scrapers::LaTasa < BaseScraper
   private
 
   def login_url
@@ -12,7 +12,7 @@ class LaTasaService < BalanceReaderService
     form.submit
   end
 
-  def get_raw_value
+  def raw_value
     browser.dt(text: /Valor de la cuenta/).following_sibling.child.text
   end
 end

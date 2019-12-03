@@ -1,4 +1,4 @@
-class CetesDirectoService < BalanceReaderService
+class Scrapers::CetesDirecto < BaseScraper
   private
 
   def login_url
@@ -18,7 +18,7 @@ class CetesDirectoService < BalanceReaderService
     browser.div(class: %w[bloqueMenuLateral subMenuLateralWeb], data_name: "cerrarSesion").click
   end
 
-  def get_raw_value
+  def raw_value
     browser.div(id: "portafolioMenu").click
     browser.div(class: %w[totalInstrumentosNumeros tituloInstrumento]).child.text
   end

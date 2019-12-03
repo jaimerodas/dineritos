@@ -1,4 +1,4 @@
-class YtpService < BalanceReaderService
+class Scrapers::YoTePresto < BaseScraper
   private
 
   def login_url
@@ -11,7 +11,7 @@ class YtpService < BalanceReaderService
     browser.form(action: "/sign_in").submit
   end
 
-  def get_raw_value
+  def raw_value
     browser.strong(class: "account_value").text
   end
 

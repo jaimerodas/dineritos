@@ -18,9 +18,10 @@ class Account < ApplicationRecord
   end
 
   def update_service
-    UPDATEABLE.zip([
-      YtpService, BriqService, AfluentaService, LaTasaService, CetesDirectoService,
-    ]).to_h.fetch(account_type.to_sym)
+    UPDATEABLE
+      .zip(%w[YoTePresto Briq Afluenta LaTasa CetesDirecto]).to_h
+      .fetch(account_type.to_sym)
+      .then { |name| "Scrapers::#{name}".constantize }
   end
 
   def latest_balance(force: false)
