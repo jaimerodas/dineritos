@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_10_29_223715) do
+ActiveRecord::Schema.define(version: 2019_12_29_035418) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -38,13 +38,13 @@ ActiveRecord::Schema.define(version: 2019_10_29_223715) do
 
   create_table "balances", force: :cascade do |t|
     t.bigint "account_id", null: false
-    t.bigint "balance_date_id", null: false
     t.integer "amount_cents", null: false
     t.integer "original_amount_cents"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.date "date", null: false
     t.index ["account_id"], name: "index_balances_on_account_id"
-    t.index ["balance_date_id"], name: "index_balances_on_balance_date_id"
+    t.index ["date", "account_id"], name: "index_balances_on_date_and_account_id", unique: true
   end
 
   create_table "currency_rates", force: :cascade do |t|
@@ -67,11 +67,11 @@ ActiveRecord::Schema.define(version: 2019_10_29_223715) do
   end
 
   create_table "totals", force: :cascade do |t|
-    t.bigint "balance_date_id", null: false
     t.integer "amount_cents", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["balance_date_id"], name: "index_totals_on_balance_date_id"
+    t.date "date", null: false
+    t.index ["date"], name: "index_totals_on_date", unique: true
   end
 
   create_table "users", force: :cascade do |t|
@@ -87,7 +87,5 @@ ActiveRecord::Schema.define(version: 2019_10_29_223715) do
   add_foreign_key "accounts", "users"
   add_foreign_key "balance_dates", "users"
   add_foreign_key "balances", "accounts"
-  add_foreign_key "balances", "balance_dates"
   add_foreign_key "sessions", "users"
-  add_foreign_key "totals", "balance_dates"
 end
