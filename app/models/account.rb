@@ -30,6 +30,8 @@ class Account < ApplicationRecord
 
   def latest_balance(force: false)
     return last_amount if last_amount.date == Date.today && !force
-    balances.create(date: Date.today, amount: update_service.current_balance_for(self))
+    balance = balances.find_or_initialize_by(date: Date.today)
+    balance.update(amount: update_service.current_balance_for(self))
+    BigDecimal(balance.amount.to_d)
   end
 end

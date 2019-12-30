@@ -16,20 +16,18 @@ class UpdateAllAccounts
     @accounts ||= Account.updateable
   end
 
-  def last_recorded_balance_date
-    @last_recorded_balance_date ||= BalanceDate.order(date: :desc).limit(1).first
-  end
-
-  def last_recorded_balance_from(account)
-    account.balances.find_by(balance_date: last_recorded_balance_date).amount.to_d
+  def last_recorded_total_from(account)
+    date = account.user.totals.order(date: :desc).limit(1).first&.date
+    return 0 unless date
+    account.balances.find_by(date: date)&.amount&.to_d || 0
   end
 
   def process_accounts
     accounts.map do |account|
       response = {
         name: account.name,
-        last_recorded_balance: BigDecimal(last_recorded_balance_from(account)),
-        previous_balance: BigDecimal(account.last_balance.to_d),
+        last_recorded_balance: BigDecimal(last_recorded_total_from(account)),
+        previous_balance: BigDecimal(account.last_amount.amount.to_d),
       }
 
       begin
