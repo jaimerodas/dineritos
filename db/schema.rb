@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_12_29_035418) do
+ActiveRecord::Schema.define(version: 2019_12_30_004421) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -71,7 +71,9 @@ ActiveRecord::Schema.define(version: 2019_12_29_035418) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.date "date", null: false
+    t.bigint "user_id"
     t.index ["date"], name: "index_totals_on_date", unique: true
+    t.index ["user_id"], name: "index_totals_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -88,4 +90,5 @@ ActiveRecord::Schema.define(version: 2019_12_29_035418) do
   add_foreign_key "balance_dates", "users"
   add_foreign_key "balances", "accounts"
   add_foreign_key "sessions", "users"
+  add_foreign_key "totals", "users"
 end

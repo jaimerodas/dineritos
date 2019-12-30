@@ -1,4 +1,4 @@
 class Total < ApplicationRecord
-  belongs_to :balance_date
+  belongs_to :user
   monetize :amount_cents
 end
