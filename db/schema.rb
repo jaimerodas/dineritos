@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_12_30_004421) do
+ActiveRecord::Schema.define(version: 2019_12_30_181324) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -43,6 +43,9 @@ ActiveRecord::Schema.define(version: 2019_12_30_004421) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.date "date", null: false
+    t.integer "transfers_cents", default: 0, null: false
+    t.integer "diff_cents"
+    t.integer "diff_days"
     t.index ["account_id"], name: "index_balances_on_account_id"
     t.index ["date", "account_id"], name: "index_balances_on_date_and_account_id", unique: true
   end

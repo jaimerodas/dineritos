@@ -3,6 +3,7 @@ Rails.application.routes.draw do
 
   scope path_names: {new: "nuevo", edit: "editar"} do
     resources :accounts, path: "cuentas", except: [:destroy] do
+      resources :balances, path: "saldos", only: [:edit, :update]
       resource :update, path: "actualizar", only: [:show], constraints: {format: :json}
     end
     resources :balances, path: "saldos", param: :date, except: [:edit, :update]
