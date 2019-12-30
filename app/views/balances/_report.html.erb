@@ -4,7 +4,7 @@
   </section>
 
   <h1><%= currency @report.total.amount %></h1>
-  <%= diff(@report.total.diff) %>
+  <%= diff(@report.total.difference) %>
 </header>
 
 <table>
@@ -16,8 +16,8 @@
           <%= account.name %>
         <% end %>
       </td>
-      <td class="account-diff <%= 'neg' if account.diff.negative? %>">
-        <%= diff account.diff %>
+      <td class="account-diff <%= 'neg' if account.difference.negative? %>">
+        <%= diff account.difference %>
       </td>
       <td class="account-balance">
         <%= currency account.amount %>

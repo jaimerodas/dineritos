@@ -7,11 +7,12 @@
 
 <table>
   <tbody>
-    <% @report.rows.each do |account| %>
+    <% @report.rows.each do |balance| %>
     <%= render 'balances/balance_row',
-      name: pretty_date(account.date),
-      amount: account.amount,
-      date: account.date
+      name: pretty_date(balance.date),
+      amount: balance.amount,
+      date: balance.date,
+      balance_id: balance.id
     %>
     <% end %>
   </tbody>

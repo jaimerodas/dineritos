@@ -6,5 +6,8 @@
   </td>
   <td class="account-balance">
     <%= currency amount %>
+    <% if @report.account&.updateable? %>
+    <%= link_to("Editar", edit_account_balance_path(params[:id], balance_id)) %>
+    <% end %>
   </td>
 </tr>

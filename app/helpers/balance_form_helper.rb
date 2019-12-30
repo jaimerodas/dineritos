@@ -4,7 +4,7 @@ module BalanceFormHelper
     currency = account.currency
     input = field.number_field(:amount,
       min: 0,
-      pattern: '^\d*(\.\d{0,2})?$',
+      pattern: '^\d*(\.\d{1,2})?$',
       step: "0.01",
       value: field.object.original_amount || field.object.amount,
       data: {

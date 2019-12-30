@@ -52,7 +52,7 @@ class AccountDetailReport
         .select(account_sql)
         .order(date: :desc)
         .where(date: dates)
-    ).where("date = ?", dates.first).order(date: :desc)
+    ).where("date = ?", dates.first).order(name: :asc)
   end
 
   private
@@ -73,7 +73,7 @@ class AccountDetailReport
             over (order by date desc),
           amount_cents
         )
-      ) / 100.0 diff,
+      ) / 100.0 difference,
       date
     SQL
   end
@@ -88,7 +88,7 @@ class AccountDetailReport
             over (partition by accounts.name order by balances.date desc),
           balances.amount_cents
         )
-      ) / 100.0 diff,
+      ) / 100.0 difference,
       balances.date,
       accounts.id aid
     SQL
