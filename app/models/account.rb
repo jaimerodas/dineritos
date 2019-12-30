@@ -9,7 +9,7 @@ class Account < ApplicationRecord
   encrypts :settings, type: :json
   scope :updateable, -> { where(account_type: UPDATEABLE) }
 
-  monetize :last_balance_cents
+  monetize :last_balance_cents, allow_nil: true
 
   validates :name, presence: true
 
@@ -24,10 +24,12 @@ class Account < ApplicationRecord
       .then { |name| "Scrapers::#{name}".constantize }
   end
 
+  def last_amount
+    balances.order(date: :desc).limit(1).first
+  end
+
   def latest_balance(force: false)
-    return last_balance if last_balance_updated_at&.>(12.hours.ago) && !force
-    last_balance = update_service.current_balance_for(self)
-    update(last_balance: last_balance, last_balance_updated_at: Time.current)
-    last_balance
+    return last_amount if last_amount.date == Date.today && !force
+    balances.create(date: Date.today, amount: update_service.current_balance_for(self))
   end
 end

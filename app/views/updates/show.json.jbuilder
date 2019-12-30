@@ -1,2 +1,2 @@
 json.success true
-json.balance @balance.to_s
+json.balance @balance.amount.to_s
