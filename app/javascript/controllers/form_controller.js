@@ -5,7 +5,6 @@ export default class extends Controller {
 
   connect() {
     this.updateTargetDate()
-    this.updateAccountBalances()
     this.totalTarget.parentNode.classList.add('active')
   }
 
@@ -59,36 +58,6 @@ export default class extends Controller {
         this.data.set(`currency-${currency.toLowerCase()}`, value)
         console.log(`Tipo de cambio: ${value}`)
         this.recalculate()
-      })
-  }
-
-  updateAccountBalances() {
-    this.balanceTargets
-      .filter(b => b.dataset.updateable === "true")
-      .forEach(this.updateAccountBalance)
-  }
-
-  updateAccountBalance(account, i) {
-    var status = document.createElement("span")
-    status.setAttribute("class", "refresh working")
-    account.parentNode.append(status)
-
-    fetch(`/cuentas/${account.dataset.account}/actualizar`)
-      .then(response => response.text())
-      .then(text => {
-        var result = JSON.parse(text)
-
-        if (!result.success) {
-          status.setAttribute("class", "refresh failed")
-          return
-        }
-
-        status.setAttribute("class", "refresh succeeded")
-        account.value = result.balance
-        account.dispatchEvent(new Event("change"))
-      })
-      .catch(error => {
-        status.setAttribute("class", "refresh failed")
       })
   }
 }

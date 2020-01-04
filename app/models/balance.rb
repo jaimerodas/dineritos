@@ -6,8 +6,7 @@ class Balance < ApplicationRecord
   monetize :original_amount_cents, allow_nil: true
   monetize :diff_cents, allow_nil: true
 
-  before_create :switch_initial_currency, if: proc { account.currency != "MXN" && account.default? }
-  before_save :convert_currency, if: proc { account.currency != "MXN" && account.default? }
+  before_validation :convert_currency, if: proc { account.currency != "MXN" && account.default? }
   before_save :calculate_diffs
 
   def prev
@@ -15,10 +14,6 @@ class Balance < ApplicationRecord
   end
 
   private
-
-  def switch_initial_currency
-    self.original_amount_cents = amount_cents
-  end
 
   def convert_currency
     rate = CurrencyRate.find_or_create_by(date: date, currency: account.currency).rate_subcents
