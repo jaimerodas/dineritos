@@ -1,6 +1,6 @@
 module BalanceFormHelper
   def amount_field(container, account)
-    field_name = (account.currency != "MXN") ? :original_amount : :amount
+    field_name = account.currency != "MXN" ? :original_amount : :amount
 
     input = container.number_field(field_name,
       min: 0,

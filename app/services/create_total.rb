@@ -25,10 +25,8 @@ class CreateTotal
 
   def create_balances_from_form
     params[:account].each do |account_id, fields|
-      balance = user.accounts.find(account_id).balances.find_or_initialize_by(date: date)
-      field = fields.keys.first
-      balance.public_send("#{field}=", fields.fetch(field))
-      balance.save
+      user.accounts.find(account_id).balances.find_or_initialize_by(date: date)
+        .update(fields) # TODO: We should sanitize these values
     end
   end
 
@@ -43,18 +41,12 @@ class CreateTotal
 
   def calculate_total
     user.balances
-      .where(date: date)
-      .select("SUM(balances.amount_cents) as total").order(nil)[0].total
-      .then { |amount_cents|
-        total = user.totals.find_or_initialize_by(date: date)
-        total.amount_cents = amount_cents
-        total.save
-      }
+      .where(date: date).select("SUM(balances.amount_cents) as total").order(nil)[0].total
+      .then { |total| user.totals.find_or_initialize_by(date: date).update(amount_cents: total) }
   end
 
   def deactivate_accounts
-    user.balances.where(amount_cents: 0).each do |balance|
-      balance.account.update(active: false)
-    end
+    user.balances.where(amount_cents: 0)
+      .each { |balance| balance.account.update(active: false) }
   end
 end
