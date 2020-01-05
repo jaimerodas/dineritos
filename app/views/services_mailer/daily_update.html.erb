@@ -3,53 +3,39 @@
 <table>
   <thead>
     <tr>
-      <th style="padding: 5px 10px;">cuenta</th>
-      <th style="padding: 5px 10px;">reporte</th>
-      <th style="padding: 5px 10px;">última descarga</th>
-      <th style="padding: 5px 10px;">nueva descarga</th>
-      <th style="padding: 5px 10px;">vs reporte</th>
-      <th style="padding: 5px 10px;">vs descarga</th>
+      <th style="padding: 5px 10px;" rowspan="2">cuenta</th>
+      <th style="padding: 5px 10px;" rowspan="2">saldo actual</th>
+      <th style="padding: 5px 10px;" colspan="3">ganancias en el último</th>
+    </tr>
+
+    <tr>
+      <th style="padding: 5px 10px;">día</th>
+      <th style="padding: 5px 10px;">semana</th>
+      <th style="padding: 5px 10px;">mes</th>
     </tr>
   </thead>
 
   <tbody>
-    <% total_reporte = BigDecimal(0); total_anterior = BigDecimal(0); total_nuevo = BigDecimal(0) %>
-    <% @summary.each do |account| %>
-    <% if account[:error] %>
+    <% total = {current: BigDecimal(0), day: BigDecimal(0), week: BigDecimal(0), month: BigDecimal(0)} %>
+    <% @report.each do |account, report| %>
+    <% %i[current day week month].each { |period| total[period] += report.fetch(period, BigDecimal(0)) } %>
     <tr>
-      <td style="padding: 5px 10px;"><%= account[:name] %></td>
-      <td style="text-align: right; padding: 5px 10px; color: #bbb;">
-        <%= currency account[:last_recorded_balance] %></td>
-      <td style="text-align: right; padding: 5px 10px; color: #bbb">
-        <%= currency account[:previous_balance] %></td>
-      <td colspan="3" style="padding: 5px 10px; text-align: center;">Hubo un error al descargar</td>
+      <td style="padding: 5px 10px;"><%= account %></td>
+      <td style="text-align: right; padding: 5px 10px"><%= report[:current] ? currency(report[:current]) : "Error de descarga" %></td>
+      <td style="text-align: right; padding: 5px 10px"><%= currency report[:day] %></td>
+      <td style="text-align: right; padding: 5px 10px"><%= currency report[:week] %></td>
+      <td style="text-align: right; padding: 5px 10px"><%= currency report[:month] %></td>
     </tr>
-    <% else %>
-    <%
-      total_reporte += account[:last_recorded_balance]
-      total_anterior += account[:previous_balance]
-      total_nuevo += account[:current_balance]
-    %>
-    <tr>
-      <td style="padding: 5px 10px;"><%= account[:name] %></td>
-      <td style="text-align: right; padding: 5px 10px"><%= currency account[:last_recorded_balance] %></td>
-      <td style="text-align: right; padding: 5px 10px"><%= currency account[:previous_balance] %></td>
-      <td style="text-align: right; padding: 5px 10px"><%= currency account[:current_balance] %></td>
-      <td style="text-align: right; padding: 5px 10px"><%= currency(account[:current_balance] - account[:last_recorded_balance]) %></td>
-      <td style="text-align: right; padding: 5px 10px"><%= currency(account[:current_balance] - account[:previous_balance]) %></td>
-    </tr>
-    <% end %>
     <% end %>
   </tbody>
 
   <tfoot>
     <tr>
-      <th style="text-align: right; padding: 5px 10px;">Total</th>
-      <th style="text-align: right; padding: 5px 10px"><%= currency total_reporte %></th>
-      <th style="text-align: right; padding: 5px 10px"><%= currency total_anterior %></th>
-      <th style="text-align: right; padding: 5px 10px"><%= currency total_nuevo %></th>
-      <th style="text-align: right; padding: 5px 10px"><%= currency(total_nuevo - total_reporte)%></th>
-      <th style="text-align: right; padding: 5px 10px"><%= currency(total_nuevo - total_anterior) %></th>
+      <th style="padding: 5px 10px;">Total</th>
+      <th style="text-align: right; padding: 5px 10px"><%= currency total[:current] %></th>
+      <th style="text-align: right; padding: 5px 10px"><%= currency total[:day] %></th>
+      <th style="text-align: right; padding: 5px 10px"><%= currency total[:week] %></th>
+      <th style="text-align: right; padding: 5px 10px"><%= currency total[:month] %></th>
     </tr>
   </tfoot>
 </table>
