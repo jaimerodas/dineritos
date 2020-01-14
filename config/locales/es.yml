@@ -51,6 +51,7 @@ es:
           afluenta: "Afluenta"
           latasa: "La Tasa"
           cetesdirecto: "CetesDirecto"
+          redgirasol: "RedGirasol"
     models:
       account: "Cuenta"
   helpers:

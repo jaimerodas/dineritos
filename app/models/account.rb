@@ -2,7 +2,7 @@ class Account < ApplicationRecord
   belongs_to :user
   has_many :balances
 
-  UPDATEABLE = %i[yotepresto briq afluenta latasa cetesdirecto]
+  UPDATEABLE = %i[yotepresto briq afluenta latasa cetesdirecto redgirasol]
   NOT_UPDATEABLE = %i[default bitso]
 
   enum account_type: (NOT_UPDATEABLE + UPDATEABLE)
@@ -19,7 +19,7 @@ class Account < ApplicationRecord
 
   def update_service
     UPDATEABLE
-      .zip(%w[YoTePresto Briq Afluenta LaTasa CetesDirecto]).to_h
+      .zip(%w[YoTePresto Briq Afluenta LaTasa CetesDirecto RedGirasol]).to_h
       .fetch(account_type.to_sym)
       .then { |name| "Scrapers::#{name}".constantize }
   end
@@ -29,7 +29,7 @@ class Account < ApplicationRecord
   end
 
   def latest_balance(force: false)
-    return last_amount if last_amount.date == Date.today && !force
+    return last_amount.amount if last_amount.date == Date.today && !force
     balance = balances.find_or_initialize_by(date: Date.today)
     balance.update(amount: update_service.current_balance_for(self))
     BigDecimal(balance.amount.to_d)
