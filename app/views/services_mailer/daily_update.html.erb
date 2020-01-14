@@ -1,11 +1,9 @@
-<h1>Última actualización</h1>
-
 <table>
   <thead>
     <tr>
-      <th style="padding: 5px 10px;" rowspan="2">cuenta</th>
-      <th style="padding: 5px 10px;" rowspan="2">saldo actual</th>
-      <th style="padding: 5px 10px;" colspan="3">ganancias en el último</th>
+      <th style="padding: 5px 10px;" rowspan="2">Cuenta</th>
+      <th style="padding: 5px 10px;" rowspan="2">Saldo actual</th>
+      <th style="padding: 5px 10px;" colspan="3">Ganancias último</th>
     </tr>
 
     <tr>
@@ -13,12 +11,18 @@
       <th style="padding: 5px 10px;">semana</th>
       <th style="padding: 5px 10px;">mes</th>
     </tr>
+
+    <tr>
+      <th style="padding: 5px 10px;">Total</th>
+      <th style="text-align: right; padding: 5px 10px"><%= currency @report.totals[:current] %></th>
+      <th style="text-align: right; padding: 5px 10px"><%= currency @report.totals[:day] %></th>
+      <th style="text-align: right; padding: 5px 10px"><%= currency @report.totals[:week] %></th>
+      <th style="text-align: right; padding: 5px 10px"><%= currency @report.totals[:month] %></th>
+    </tr>
   </thead>
 
   <tbody>
-    <% total = {current: BigDecimal(0), day: BigDecimal(0), week: BigDecimal(0), month: BigDecimal(0)} %>
-    <% @report.each do |account, report| %>
-    <% %i[current day week month].each { |period| total[period] += report.fetch(period, BigDecimal(0)) } %>
+    <% @report.details.each do |account, report| %>
     <tr>
       <td style="padding: 5px 10px;"><%= account %></td>
       <td style="text-align: right; padding: 5px 10px"><%= report[:current] ? currency(report[:current]) : "Error de descarga" %></td>
@@ -28,14 +32,4 @@
     </tr>
     <% end %>
   </tbody>
-
-  <tfoot>
-    <tr>
-      <th style="padding: 5px 10px;">Total</th>
-      <th style="text-align: right; padding: 5px 10px"><%= currency total[:current] %></th>
-      <th style="text-align: right; padding: 5px 10px"><%= currency total[:day] %></th>
-      <th style="text-align: right; padding: 5px 10px"><%= currency total[:week] %></th>
-      <th style="text-align: right; padding: 5px 10px"><%= currency total[:month] %></th>
-    </tr>
-  </tfoot>
 </table>

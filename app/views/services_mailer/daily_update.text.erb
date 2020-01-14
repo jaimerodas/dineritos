@@ -1,3 +1,16 @@
-Services#daily_update
+Saldo actual total en inversiones: <%= currency @report.totals[:current] %>
 
-<%= @greeting %>, find me in app/views/services_mailer/daily_update.text.erb
+Ganancias hoy: <%= currency @report.totals[:day] %>
+Ganancias última semana: <%= currency @report.totals[:week] %>
+Ganancias último mes: <%= currency @report.totals[:month] %>
+
+------------------------------------------
+<% @report.details.each do |account, report| %>
+<%= account %>
+
+Saldo actual: <%= report[:current] ? currency(report[:current]) : "Error de descarga" %>
+Ganancias hoy: <%= currency report[:day] %>
+Ganancias última semana: <%= currency report[:week] %>
+Ganancias último mes: <%= currency report[:month] %>
+------------------------------------------
+<% end %>

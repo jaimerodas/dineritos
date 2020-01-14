@@ -1,6 +1,6 @@
 class EarningsReport
   def self.for(user)
-    new(user).run
+    new(user)
   end
 
   def initialize(user)
@@ -9,13 +9,21 @@ class EarningsReport
 
   attr_reader :user
 
-  def run
-    combine(
+  def details
+    @details ||= combine(
       current: current_balances,
       day: earnings_in_the_last(1.day),
       week: earnings_in_the_last(1.week),
       month: earnings_in_the_last(1.month)
     )
+  end
+
+  def totals
+    @totals ||= details.each_with_object(totals_hash) do |(account, report), result|
+      %i[current day week month].each do |period|
+        result[period] += report.fetch(period, BigDecimal(0))
+      end
+    end
   end
 
   private
@@ -49,5 +57,9 @@ class EarningsReport
         result[account][period] = balance
       end
     end
+  end
+
+  def totals_hash
+    { current: BigDecimal(0), day: BigDecimal(0), week: BigDecimal(0), month: BigDecimal(0) }
   end
 end
