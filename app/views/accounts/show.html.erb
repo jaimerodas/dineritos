@@ -1,21 +1,11 @@
-<header class="simple">
-  <section class="header-details">
-    Historial de
-  </section>
+<header class="account-header">
   <h1><%= @report.account_name %></h1>
 </header>
+<% if @report.account_type == :investment %>
+<%= render "accounts/investment_account_summary" %>
+<%= render "accounts/investment_account_balances" %>
+<% else %>
+<%= render "accounts/regular_account_balances" %>
+<% end %>
 
-<table>
-  <tbody>
-    <% @report.rows.each do |balance| %>
-    <%= render 'balances/balance_row',
-      name: pretty_date(balance.date),
-      amount: balance.amount,
-      date: balance.date,
-      balance_id: balance.id
-    %>
-    <% end %>
-  </tbody>
-</table>
-
-<%= will_paginate @report.rows, page_links: false, renderer: DineritosNavRenderer %>
+<%= will_paginate @report.balances(params[:page]), page_links: false, renderer: DineritosNavRenderer %>

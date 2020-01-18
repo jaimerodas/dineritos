@@ -1,7 +1,7 @@
 module MoneyHelper
   def diff(number)
     classes = "diff"
-    return tag.span("-", class: classes) unless number
+    return tag.span("-", class: classes += " zero") if !number || number.zero?
 
     text = currency(number)
 

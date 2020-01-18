@@ -1,0 +1,84 @@
+class AccountReport
+  def initialize(user:, account:)
+    raise unless account.user == user
+    @account = account
+  end
+
+  attr_reader :account
+
+  def account_name
+    account.name
+  end
+
+  def account_type
+    account.updateable? ? :investment : :regular
+  end
+
+  def latest_balance
+    account.last_amount
+  end
+
+  def period
+    1.year.ago.beginning_of_month..Date.current
+  end
+
+  def earnings
+    @earnings ||= summary.earnings / 100.0
+  end
+
+  def deposits
+    @deposits ||= summary.deposits / 100.0
+  end
+
+  def withdrawals
+    @withdrawals ||= summary.withdrawals / -100.0
+  end
+
+  def irr
+    @irr ||= summary.irr
+  end
+
+  def balances(page = 1)
+    available_balances.paginate(page: page, per_page: 15).order(date: :desc)
+  end
+
+  def monthly_irrs
+    available_balances
+      .select("DATE(DATE_TRUNC('month', date)) AS month")
+      .select(select_irr)
+      .group("1").order("1 ASC")
+      .map { |balance| [balance.month, balance.irr] }
+  end
+
+  def balances_in_period
+    available_balances
+      .select("DATE(DATE_TRUNC('month', date)) AS month")
+      .select(:amount_cents)
+      .order("1 ASC")
+      .map { |balance| [balance.date, balance.amount] }
+  end
+
+  private
+
+  def available_balances
+    account.balances.where(date: period)
+  end
+
+  def summary
+    available_balances
+      .select("SUM(diff_cents) AS earnings")
+      .select("SUM(CASE WHEN (transfers_cents > 0) THEN transfers_cents ELSE 0 END ) deposits")
+      .select("SUM(CASE WHEN (transfers_cents < 0) THEN transfers_cents ELSE 0 END ) withdrawals")
+      .select(select_irr)
+      .order("1")
+      .first
+  end
+
+  def select_irr
+    "
+      COALESCE((((1 + SUM((diff_cents * 1.0) / (amount_cents - diff_cents - transfers_cents))) ^
+      (365.0 / SUM(diff_days))) - 1) * 100, 0)
+      AS irr
+    "
+  end
+end

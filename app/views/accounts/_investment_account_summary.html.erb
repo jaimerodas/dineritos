@@ -1,0 +1,16 @@
+<section class="summary">
+  <div class="big-number">
+    <span>Saldo Actual</span>
+    <em><%= currency @report.latest_balance.amount %></em>
+  </div>
+
+  <div class="big-number">
+    <span>Rendimiento Anual</span>
+    <em><%= diff @report.earnings %></em>
+  </div>
+
+  <div class="big-number">
+    <span>TIR</span>
+    <em><%= currency @report.irr %>%</em>
+  </div>
+</section>

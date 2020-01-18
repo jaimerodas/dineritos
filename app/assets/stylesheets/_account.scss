@@ -1,0 +1,175 @@
+header.account-header {
+  text-align: left;
+  border: none;
+  margin: 2em 0 1em;
+  padding: 0;
+}
+
+table.balance-sheet {
+  margin: 1em 0;
+  font-size: 1rem;
+  border-collapse: collapse;
+
+  .date {
+    text-align: center;
+  }
+
+  .main {
+    font-weight: 700;
+    color: var(--fg-color);
+  }
+
+  .currency {
+    min-width: 7em;
+    text-align: right;
+  }
+
+  .links {
+    padding: 0;
+    text-align: 0;
+
+    a {
+      display: block;
+      padding: 0;
+      margin: 0 0 0 0.5em;
+      width: 1.4em;
+      height: 1.4em;
+    }
+
+    svg {
+      height: 1.4em;
+      fill: var(--mid-color);
+    }
+  }
+
+  th {
+    color: var(--mid-color);
+    font-size: 0.75em;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+
+    padding: 0.25rem;
+    border-bottom: 0.0625rem solid var(--mid-color);
+  }
+
+  td {
+    border-bottom: 0.0625rem solid var(--border-color);
+  }
+}
+
+.summary {
+  margin: 2em 0;
+}
+
+.big-number {
+  text-align: center;
+  & > span {
+    color: var(--mid-color);
+    text-transform: uppercase;
+    font-size: 0.75em;
+    font-weight: 700;
+    letter-spacing: 0.125em;
+  }
+  & > em {
+    display: block;
+    font-size: 2em;
+    font-style: normal;
+    font-weight: 900;
+  }
+}
+
+@media screen and (max-width: 33em) {
+  table.balance-sheet {
+    border-top: 0.0625rem solid var(--mid-color);
+
+    thead { display: none; }
+    tr {
+      padding: 0.25em 0;
+      position: relative;
+      display: grid;
+      grid-template-columns: 2fr 3fr;
+      grid-template-rows: auto;
+      grid-gap: 0.25em;
+      border-bottom: 0.0625rem solid var(--border-color);
+    }
+    td {
+      border: none;
+      padding: 0;
+    }
+    .date {
+      grid-column: 1;
+      grid-row: 1 / span 3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .main.currency {
+      grid-column: 2;
+      grid-row: 1;
+    }
+    .currency {
+      position: relative;
+    }
+    .currency::before {
+      content: attr(data-name);
+      color: var(--mid-color);
+      font-size: 0.625em;
+      font-weight: 400;
+      text-transform: uppercase;
+      position: absolute;
+      left: 0;
+      top: 0.3em;
+    }
+    .diff.currency {
+      grid-column: 2;
+      grid-row: 2;
+    }
+    .transfers.currency {
+      grid-column: 2;
+      grid-row: 3;
+    }
+    .links {
+      text-align: center;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      padding: 0;
+      width: 40%;
+      height: 40%;
+      a {
+        display: block;
+        width: 100%;
+        height: 100%;
+        margin: 0;
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 25em) and (max-width: 33em) {
+  table.balance-sheet tr {
+    grid-template-columns: 1fr 1fr;
+  }
+  table.balance-sheet .links {
+    width: 50%;
+  }
+}
+
+@media screen and (min-width: 30em) {
+  .summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .big-number > em {
+    font-size: 1.5em;
+  }
+}
+
+@media screen and (min-width: 40em) {
+  .big-number > em {
+    font-size: 2em;
+  }
+}

@@ -96,7 +96,7 @@ header {
 
 h1 {
   font-size: 2.5em;
-  font-weight: 800;
+  font-weight: 900;
   line-height: 1;
   margin: 0.1em 0;
 }
@@ -166,7 +166,7 @@ td {
     color: #077DBE;
     text-decoration: none;
     text-transform: uppercase;
-    font-weight: 800;
+    font-weight: 900;
 
     display: inline-block;
     padding: 0.25em 0;
@@ -409,6 +409,12 @@ select option {
   }
 }
 
+@media screen and (max-width: 40em) {
+  table.balance-sheet th span {
+    display: none;
+  }
+}
+
 @media screen and (min-width: 25em) {
   .header-details {
     font-size: 1.25em;
@@ -491,3 +497,5 @@ select option {
     }
   }
 }
+
+@import "account";

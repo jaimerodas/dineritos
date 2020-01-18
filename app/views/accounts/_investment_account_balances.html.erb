@@ -1,0 +1,26 @@
+<table class="balance-sheet">
+  <thead>
+    <tr>
+      <th width="100">Fecha</th>
+      <th class="currency">Saldo</th>
+      <th class="currency">Rend<span>imientos</span></th>
+      <th class="currency">Transf<span>erencias</span></th>
+      <th width="25"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @report.balances(params[:page]).each do |balance| %>
+    <tr>
+      <td class="date"><%= balance.date %></td>
+      <td class="main currency" data-name="Saldo"><%= currency balance.amount %></td>
+      <td class="diff currency" data-name="Rend"><%= diff balance.diff %></td>
+      <td class="transfers currency" data-name="Transf"><%= diff balance.transfers %></td>
+      <td class="links"><%= link_to edit_account_balance_path(params[:id], balance) do %>
+        <?xml version="1.0" encoding="UTF-8"?><svg version="1.1" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M53.0208,32.0208v0c0,2.76142 -2.23858,5 -5,5c-2.76142,0 -5,-2.23858 -5,-5c0,-2.76142 2.23858,-5 5,-5l-2.18557e-07,7.10543e-15c2.76142,-1.20706e-07 5,2.23858 5,5Zm-16,0v0c0,2.76142 -2.23858,5 -5,5c-2.76142,0 -5,-2.23858 -5,-5c0,-2.76142 2.23858,-5 5,-5l2.41686e-07,-4.82459e-12c2.76142,-5.5095e-05 5.00004,2.23848 5.0001,4.9999c6.65061e-10,3.33337e-05 9.96785e-10,6.66673e-05 9.95165e-10,0.000100001Zm-21,-5l-2.18557e-07,7.10543e-15c2.76142,-1.20706e-07 5,2.23858 5,5c1.20706e-07,2.76142 -2.23858,5 -5,5c-2.76142,1.20706e-07 -5,-2.23858 -5,-5l-9.95557e-10,9.90255e-05c4.16952e-07,-2.76135 2.23846,-4.99989 4.9998,-5Z"></path></svg>
+      <% end %>
+      </td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>

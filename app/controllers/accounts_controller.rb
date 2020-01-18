@@ -34,7 +34,7 @@ class AccountsController < ApplicationController
   end
 
   def show
-    @report = BalanceReport.new(account: params[:id], user: current_user, page: params[:page])
+    @report = AccountReport.new(account: Account.find(params[:id]), user: current_user)
   end
 
   private
