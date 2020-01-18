@@ -7,7 +7,7 @@ class BalancesController < ApplicationController
   end
 
   def show
-    @report = AccountDetailReport.new(current_user.totals.dates_from(params[:date]))
+    @report = AllAccountsReport.new(current_user.totals.dates_from(params[:date]))
   end
 
   def new

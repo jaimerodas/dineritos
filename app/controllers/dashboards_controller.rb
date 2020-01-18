@@ -2,6 +2,6 @@ class DashboardsController < ApplicationController
   before_action :auth
 
   def show
-    @report = AccountDetailReport.latest_for(current_user)
+    @report = AllAccountsReport.latest_for(current_user)
   end
 end

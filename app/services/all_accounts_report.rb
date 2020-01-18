@@ -1,4 +1,4 @@
-class AccountDetailReport
+class AllAccountsReport
   def self.latest_for(user)
     new(
       user.totals.select(:date).order(date: :desc).limit(2).map(&:date)
