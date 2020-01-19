@@ -47,7 +47,8 @@ class AccountReport
       .select("DATE(DATE_TRUNC('month', date)) AS month")
       .select(select_irr)
       .group("1").order("1 ASC")
-      .map { |balance| [balance.month, balance.irr] }
+      .map { |balance| "{date: new Date(\"#{balance.month}\"), value: #{balance.irr}}" }
+      .join(",")
   end
 
   def balances_in_period
@@ -55,7 +56,8 @@ class AccountReport
       .select("DATE(DATE_TRUNC('month', date)) AS month")
       .select(:amount_cents)
       .order("1 ASC")
-      .map { |balance| [balance.date, balance.amount] }
+      .map { |balance| "{date: new Date(\"#{balance.month}\"), value: #{balance.amount}}" }
+      .join(",")
   end
 
   private
@@ -77,7 +79,7 @@ class AccountReport
   def select_irr
     "
       COALESCE((((1 + SUM((diff_cents * 1.0) / (amount_cents - diff_cents - transfers_cents))) ^
-      (365.0 / SUM(diff_days))) - 1) * 100, 0)
+      (365.0 / SUM(diff_days))) - 1), 0)
       AS irr
     "
   end

@@ -11,6 +11,16 @@
 
   <div class="big-number">
     <span>TIR</span>
-    <em><%= currency @report.irr %>%</em>
+    <em><%= currency (@report.irr * 100) %>%</em>
   </div>
+</section>
+
+<section id="charts" data-controller="show-account">
+  <script type="text/javascript">
+    var data = [
+    <%= @report.monthly_irrs.html_safe %>
+    ]
+
+  </script>
+  <div id="chart-container" data-target="show-account.chart"></div>
 </section>

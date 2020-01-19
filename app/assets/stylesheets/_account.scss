@@ -79,6 +79,11 @@ table.balance-sheet {
   }
 }
 
+svg .axis {
+  color: var(--mid-color);
+  fill: var(--mid-color);
+}
+
 @media screen and (max-width: 33em) {
   table.balance-sheet {
     border-top: 0.0625rem solid var(--mid-color);
