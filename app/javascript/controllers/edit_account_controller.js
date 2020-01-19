@@ -1,4 +1,5 @@
 import { Controller } from "stimulus"
+import graph from "graphs"
 
 export default class extends Controller {
   static targets = [ "type", "currency", "apiKey", "apiSecret", "username", "password" ]

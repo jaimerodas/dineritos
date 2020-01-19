@@ -1,11 +1,11 @@
-<%= form_for @account, data: { controller: "account" } do |f| %>
+<%= form_for @account, data: { controller: "edit-account" } do |f| %>
 
   <div class="field">
     <%= f.label :account_type %>
     <%= f.select :account_type,
       Account.account_types.map { |type, i|
         [t("activerecord.attributes.account.account_types.#{type}"), type]
-      }, {}, data: { target: "account.type", action: "change->account#change" } %>
+      }, {}, data: { target: "edit-account.type", action: "change->edit-account#change" } %>
   </div>
 
   <div class="field">
@@ -23,14 +23,14 @@
     <input type="text"
            name="account[settings][bitso_key]"
            id="account_settings_bitso_key"
-           data-target="account.apiKey"
+           data-target="edit-account.apiKey"
            value="<%= @account.settings&.fetch("bitso_key", nil) %>"
            disabled>
     <label for="account_settings_bitso_secret">API Secret</label>
     <input type="text"
            name="account[settings][bitso_secret]"
            id="account_settings_bitso_secret"
-           data-target="account.apiSecret"
+           data-target="edit-account.apiSecret"
            value="<%= @account.settings&.fetch("bitso_secret", nil) %>"
            disabled>
   </div>
@@ -40,14 +40,14 @@
     <input type="text"
            name="account[settings][username]"
            id="account_settings_username"
-           data-target="account.username"
+           data-target="edit-account.username"
            value="<%= @account.settings&.fetch("username", nil) %>"
            disabled>
     <label for="account_settings_password">Contraseña</label>
     <input type="text"
            name="account[settings][password]"
            id="account_settings_password"
-           data-target="account.password"
+           data-target="edit-account.password"
            value="<%= @account.settings&.fetch("password", nil) %>"
            disabled>
   </div>
