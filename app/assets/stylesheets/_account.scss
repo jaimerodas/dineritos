@@ -63,8 +63,12 @@ table.balance-sheet {
 }
 
 .big-number {
-  text-align: center;
+  display: flex;
+  text-align: left;
+  align-items: center;
+
   & > span {
+    flex: 1;
     color: var(--mid-color);
     text-transform: uppercase;
     font-size: 0.75em;
@@ -72,7 +76,9 @@ table.balance-sheet {
     letter-spacing: 0.125em;
   }
   & > em {
+    flex: 1;
     display: block;
+    text-align: right;
     font-size: 2em;
     font-style: normal;
     font-weight: 900;
@@ -168,8 +174,14 @@ svg .axis {
     justify-content: space-between;
   }
 
-  .big-number > em {
-    font-size: 1.5em;
+  .big-number {
+    text-align: center;
+    display: block;
+
+    & > em {
+      font-size: 1.5em;
+      text-align: center;
+    }
   }
 }
 

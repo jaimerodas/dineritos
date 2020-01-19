@@ -8,7 +8,7 @@ export default class Graph {
 
   draw() {
     const width = this.container.offsetWidth
-    const height = 250
+    const height = 300
     const margin = {top: 20, right: 32, bottom: 30, left: 40}
 
     const data = this.data()
@@ -119,7 +119,7 @@ ${date.toLocaleString("es-MX", {timeZone: "UTC", year: "numeric", month: "2-digi
     const width = w + 10
     const height = h + 10
 
-    text.attr("transform", `translate(${-w / 2},0)`)
+    text.attr("text-anchor", "middle")
     box.attr("width", width).attr("height", height)
       .attr("transform", `translate(${-width / 2},${(-height/2)+3})`)
 
