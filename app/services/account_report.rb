@@ -53,10 +53,9 @@ class AccountReport
 
   def balances_in_period
     available_balances
-      .select("DATE(DATE_TRUNC('month', date)) AS month")
-      .select(:amount_cents)
+      .select(:date, :amount_cents)
       .order("1 ASC")
-      .map { |balance| "{date: new Date(\"#{balance.month}\"), value: #{balance.amount}}" }
+      .map { |balance| "{date: new Date(\"#{balance.date}\"), value: #{balance.amount}}" }
       .join(",")
   end
 

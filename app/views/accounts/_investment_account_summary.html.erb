@@ -17,9 +17,10 @@
 
 <section id="charts" data-controller="show-account">
   <script type="text/javascript">
-    var data = [
-    <%= @report.monthly_irrs.html_safe %>
-    ]
+    var data = {
+      irrs: [<%= @report.monthly_irrs.html_safe %>],
+      balances: [<%= @report.balances_in_period.html_safe %>]
+    }
 
   </script>
   <div id="chart-container" data-target="show-account.chart"></div>

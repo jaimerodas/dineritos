@@ -1,9 +1,16 @@
 import * as d3 from "d3"
 
-export default class Graph {
-  constructor(element) {
+const context = require.context("controllers", true, /_graph\.js$/)
+
+class IRRGraph {
+  constructor(element, data) {
     this.container = element
+    this.data = data
     this.setLocale()
+  }
+
+  name() {
+    return "irr-graph"
   }
 
   draw() {
@@ -11,18 +18,19 @@ export default class Graph {
     const height = 300
     const margin = {top: 20, right: 32, bottom: 30, left: 40}
 
-    const data = this.data()
-    const percentageFormatter = d3.format(".0%")
+    const data = this.data
 
     const svg = d3.select(this.container).append("svg")
-      .attr("width", width).attr("height", height)
+      .attr("id", this.name)
+      .attr("width", width)
+      .attr("height", height)
 
     const x = d3.scaleUtc()
       .domain(d3.extent(data, d => d.date))
       .range([margin.left, width - margin.right])
 
     const y = d3.scaleLinear()
-      .domain([0, d3.max(data, d => d.value)]).nice()
+      .domain([this.axisFloor(), d3.max(data, d => d.value)]).nice()
       .range([height - margin.bottom, margin.top])
 
     const xAxis = g => g
@@ -31,10 +39,11 @@ export default class Graph {
 
     const yAxis = g => g
       .attr("transform", `translate(${margin.left},0)`)
-      .call(d3.axisLeft(y).tickFormat(percentageFormatter))
+      .call(d3.axisLeft(y).tickFormat(this.axisFormatter()))
       .call(g => g.select(".domain").remove())
 
     const line = d3.line()
+      .curve(this.curve())
       .defined(d => !isNaN(d.value))
       .x(d => x(d.date))
       .y(d => y(d.value))
@@ -76,14 +85,31 @@ export default class Graph {
         .attr("transform", `translate(${x(date)}, ${y(value)})`)
         .call(
           this.callout,
-          `${value.toLocaleString(
-            undefined,
-            {style: "percent", maximumFractionDigits: 2}
-          )}
-${date.toLocaleString("es-MX", {timeZone: "UTC", year: "numeric", month: "2-digit"})}`)
+          `${value.toLocaleString(undefined, this.valueFormatter())}
+${date.toLocaleString("es-MX", this.dateFormatter())}`)
     })
 
     svg.on("touchend mouseleave", () => tooltip.call(this.callout, null))
+  }
+
+  curve() {
+    return d3.curveLinear
+  }
+
+  axisFloor() {
+    return 0
+  }
+
+  axisFormatter() {
+    return d3.format(".0%")
+  }
+
+  valueFormatter() {
+    return {style: "percent", maximumFractionDigits: 2}
+  }
+
+  dateFormatter() {
+    return {timeZone: "UTC", year: "numeric", month: "2-digit"}
   }
 
   callout(g, value) {
@@ -137,8 +163,32 @@ ${date.toLocaleString("es-MX", {timeZone: "UTC", year: "numeric", month: "2-digi
       shortMonths: ["ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sep", "oct", "nov", "dic"]
     })
   }
+}
 
-  data() {
-    return window.data
+class BalanceGraph extends IRRGraph {
+  name() {
+    return "balance-graph"
+  }
+
+  curve() {
+    return d3.curveStep
+  }
+
+  axisFloor() {
+    return d3.min(this.data, d => d.value)
+  }
+
+  axisFormatter() {
+    return d3.format(".3s")
+  }
+
+  valueFormatter() {
+    return {style: "currency", currency: "USD"}
+  }
+
+  dateFormatter() {
+    return {timeZone: "UTC", year: "numeric", month: "2-digit", day: "2-digit"}
   }
 }
+
+export { IRRGraph, BalanceGraph }

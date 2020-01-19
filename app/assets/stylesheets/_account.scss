@@ -1,12 +1,12 @@
 header.account-header {
   text-align: left;
   border: none;
-  margin: 2em 0 1em;
+  margin: 2em 0 2em;
   padding: 0;
 }
 
 table.balance-sheet {
-  margin: 1em 0;
+  margin: 2em 0;
   font-size: 1rem;
   border-collapse: collapse;
 
@@ -59,7 +59,7 @@ table.balance-sheet {
 }
 
 .summary {
-  margin: 2em 0;
+  margin: 2em 0 0;
 }
 
 .big-number {
@@ -88,6 +88,28 @@ table.balance-sheet {
 svg .axis {
   color: var(--mid-color);
   fill: var(--mid-color);
+}
+.chart-toggle {
+  display: flex;
+
+  button {
+    background-color: var(--border-color);
+
+    text-transform: none;
+    font-weight: bold;
+    border-radius: 0;
+    padding: 0.75em;
+    box-shadow: none;
+
+    &:hover {
+      box-shadow: none;
+    }
+
+    &.active {
+      cursor: default;
+      background-color: var(--mid-color);
+    }
+  }
 }
 
 @media screen and (max-width: 33em) {
