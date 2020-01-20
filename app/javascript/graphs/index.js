@@ -112,7 +112,7 @@ class IRRGraph {
   }
 
   dateFormatter(value) {
-    return d3.timeFormat("%Y-%m")(value)
+    return d3.utcFormat("%Y-%m")(value)
   }
 
   callout(g, value) {
@@ -190,7 +190,7 @@ class BalanceGraph extends IRRGraph {
   }
 
   dateFormatter(value) {
-    return d3.timeFormat("%Y-%m-%d")(value)
+    return d3.utcFormat("%Y-%m-%d")(value)
   }
 }
 
