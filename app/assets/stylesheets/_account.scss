@@ -1,8 +1,12 @@
 header.account-header {
-  text-align: left;
+  text-align: center;
   border: none;
-  margin: 2em 0 2em;
+  margin: 2em 0 1em;
   padding: 0;
+
+  h1 {
+    margin: 0;
+  }
 }
 
 table.balance-sheet {
@@ -59,7 +63,7 @@ table.balance-sheet {
 }
 
 .summary {
-  margin: 2em 0 0;
+  margin: 1em 0;
 }
 
 .big-number {

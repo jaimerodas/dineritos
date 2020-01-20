@@ -14,9 +14,9 @@ class IRRGraph {
   }
 
   draw() {
-    const width = this.container.offsetWidth
+    const width = this.container.offsetWidth + 32;
     const height = 300
-    const margin = {top: 20, right: 32, bottom: 30, left: 40}
+    const margin = {top: 20, right: 39, bottom: 30, left: 39}
 
     const data = this.data
 
@@ -40,6 +40,10 @@ class IRRGraph {
     const yAxis = g => g
       .attr("transform", `translate(${margin.left},0)`)
       .call(d3.axisLeft(y).tickFormat(this.axisFormatter()))
+      .call(g => g.selectAll(".tick line").clone()
+        .attr("stroke-opacity", d => d === 0 ? null : 0.2)
+        .attr("stroke-dasharray", "4, 4")
+        .attr("x2", width - margin.left - margin.right))
       .call(g => g.select(".domain").remove())
 
     const line = d3.line()
@@ -85,8 +89,7 @@ class IRRGraph {
         .attr("transform", `translate(${x(date)}, ${y(value)})`)
         .call(
           this.callout,
-          `${value.toLocaleString(undefined, this.valueFormatter())}
-${date.toLocaleString("es-MX", this.dateFormatter())}`)
+          `${this.valueFormatter(value)}|${this.dateFormatter(date)}`)
     })
 
     svg.on("touchend mouseleave", () => tooltip.call(this.callout, null))
@@ -104,12 +107,12 @@ ${date.toLocaleString("es-MX", this.dateFormatter())}`)
     return d3.format(".0%")
   }
 
-  valueFormatter() {
-    return {style: "percent", maximumFractionDigits: 2}
+  valueFormatter(value) {
+    return d3.format(".2~%")(value)
   }
 
-  dateFormatter() {
-    return {timeZone: "UTC", year: "numeric", month: "2-digit"}
+  dateFormatter(value) {
+    return d3.timeFormat("%Y-%m")(value)
   }
 
   callout(g, value) {
@@ -133,7 +136,7 @@ ${date.toLocaleString("es-MX", this.dateFormatter())}`)
       .join("text")
       .call(text => text
       .selectAll("tspan")
-      .data((value + "").split(/\n/))
+      .data((value + "").split("|"))
       .join("tspan")
       .attr("x", 0)
       .attr("y", (d, i) => `${i * 1.1}em`)
@@ -171,7 +174,7 @@ class BalanceGraph extends IRRGraph {
   }
 
   curve() {
-    return d3.curveStep
+    return d3.curveStepAfter
   }
 
   axisFloor() {
@@ -179,15 +182,15 @@ class BalanceGraph extends IRRGraph {
   }
 
   axisFormatter() {
-    return d3.format(".3s")
+    return d3.format(".3~s")
   }
 
-  valueFormatter() {
-    return {style: "currency", currency: "USD"}
+  valueFormatter(value) {
+    return d3.format(",.2f")(value)
   }
 
-  dateFormatter() {
-    return {timeZone: "UTC", year: "numeric", month: "2-digit", day: "2-digit"}
+  dateFormatter(value) {
+    return d3.timeFormat("%Y-%m-%d")(value)
   }
 }
 
