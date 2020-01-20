@@ -2,8 +2,8 @@ class Account < ApplicationRecord
   belongs_to :user
   has_many :balances
 
-  UPDATEABLE = %i[yotepresto briq afluenta latasa cetesdirecto redgirasol]
-  NOT_UPDATEABLE = %i[default bitso]
+  UPDATEABLE = %i[bitso yotepresto briq afluenta latasa cetesdirecto redgirasol]
+  NOT_UPDATEABLE = %i[default]
 
   enum account_type: (NOT_UPDATEABLE + UPDATEABLE)
   encrypts :settings, type: :json
@@ -19,7 +19,7 @@ class Account < ApplicationRecord
 
   def update_service
     UPDATEABLE
-      .zip(%w[YoTePresto Briq Afluenta LaTasa CetesDirecto RedGirasol]).to_h
+      .zip(%w[Bitso YoTePresto Briq Afluenta LaTasa CetesDirecto RedGirasol]).to_h
       .fetch(account_type.to_sym)
       .then { |name| "Scrapers::#{name}".constantize }
   end

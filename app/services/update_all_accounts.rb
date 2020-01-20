@@ -19,6 +19,8 @@ class UpdateAllAccounts
     user.accounts.updateable.each do |account|
       begin
         account.latest_balance(force: true)
+      rescue
+        next
       end
     end
   end
