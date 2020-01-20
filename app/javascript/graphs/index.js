@@ -97,7 +97,7 @@ ${date.toLocaleString("es-MX", this.dateFormatter())}`)
   }
 
   axisFloor() {
-    return 0
+    return d3.min([0, d3.min(this.data, d => d.value)])
   }
 
   axisFormatter() {
