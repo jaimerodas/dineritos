@@ -17,11 +17,9 @@ class UpdateAllAccounts
 
   def process_accounts_for(user)
     user.accounts.updateable.each do |account|
-      begin
-        account.latest_balance(force: true)
-      rescue
-        next
-      end
+      account.latest_balance(force: true)
+    rescue
+      next
     end
   end
 end
