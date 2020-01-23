@@ -23,7 +23,7 @@ class BalancesController < ApplicationController
   end
 
   def update
-    if @balance.update(account_balance_params)
+    if UpdateBalance.run(balance: @balance, params: account_balance_params)
       redirect_to account_path(params[:account_id])
     else
       render :edit
