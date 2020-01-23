@@ -17,6 +17,10 @@ class Account < ApplicationRecord
     UPDATEABLE.include? account_type.to_sym
   end
 
+  def can_be_updated?
+    last_amount.date < Date.today && updateable?
+  end
+
   def update_service
     UPDATEABLE
       .zip(%w[Bitso YoTePresto Briq Afluenta LaTasa CetesDirecto RedGirasol]).to_h

@@ -1,5 +1,14 @@
 <header class="account-header">
   <h1><%= @report.account_name %></h1>
+  <div class="last-updated">
+    Actualizado al:
+    <span><%= @report.latest_balance.date %></span>
+    <% if @report.account.can_be_updated? %>
+    <%= link_to account_update_path(@report.account) do %>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><path d="M52.8359,43.6067a.9955.9955,0,0,1-1.6381,0L44.209,33.6325a1.0273,1.0273,0,0,1,.8192-1.6225h4.9835A18.002,18.002,0,0,0,20.6465,18.0605,2.0005,2.0005,0,0,1,18.0576,15.01a22.0026,22.0026,0,0,1,35.9544,17h4.9935a1.0274,1.0274,0,0,1,.8192,1.6225ZM12.823,20.435l6.9888,9.9742a1.0272,1.0272,0,0,1-.8188,1.6224H14.01a18.0017,18.0017,0,0,0,29.3649,13.95,2.0005,2.0005,0,0,1,2.5888,3.0506,22.0023,22.0023,0,0,1-35.954-17H5.0153a1.0274,1.0274,0,0,1-.8192-1.6224l6.9888-9.9742A.9955.9955,0,0,1,12.823,20.435Z"/></svg>
+    <% end %>
+    <% end %>
+  </div>
 </header>
 <% if @report.account_type == :investment %>
 <%= render "accounts/investment_account_summary" %>

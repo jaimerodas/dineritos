@@ -7,6 +7,38 @@ header.account-header {
   h1 {
     margin: 0;
   }
+
+  .last-updated {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-size: 0.875em;
+    color: var(--mid-color);
+  }
+
+  span {
+    color: var(--fg-color);
+    margin: 0 0.25em;
+  }
+
+  a {
+    display: block;
+    font-size: 0;
+    transform: rotate(0deg);
+
+    &:hover {
+      animation-name: rotate;
+      animation-duration: 1.5s;
+      animation-iteration-count: infinite;
+      animation-timing-function: linear;
+    }
+  }
+
+  svg {
+    width: calc(1.125rem);
+    fill: var(--positive-color);
+  }
 }
 
 table.balance-sheet {
@@ -214,5 +246,15 @@ svg .axis {
 @media screen and (min-width: 40em) {
   .big-number > em {
     font-size: 2em;
+  }
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
   }
 }
