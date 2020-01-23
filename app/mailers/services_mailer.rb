@@ -8,6 +8,6 @@ class ServicesMailer < ApplicationMailer
   #
   def daily_update(user)
     @report = EarningsReport.for(user)
-    mail to: user.email, subject: "Actualización de Saldos #{Date.today}"
+    mail to: user.email, subject: "Actualización de Saldos #{Date.current}"
   end
 end

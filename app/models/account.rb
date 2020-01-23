@@ -18,7 +18,7 @@ class Account < ApplicationRecord
   end
 
   def can_be_updated?
-    last_amount.date < Date.today && updateable?
+    last_amount.date < Date.current && updateable?
   end
 
   def update_service
@@ -33,8 +33,8 @@ class Account < ApplicationRecord
   end
 
   def latest_balance(force: false)
-    return last_amount.amount if last_amount.date == Date.today && !force
-    balance = balances.find_or_initialize_by(date: Date.today)
+    return last_amount.amount if last_amount.date == Date.current && !force
+    balance = balances.find_or_initialize_by(date: Date.current)
     balance.update(amount: update_service.current_balance_for(self))
     BigDecimal(balance.amount.to_d)
   end

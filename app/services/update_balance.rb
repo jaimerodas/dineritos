@@ -14,7 +14,7 @@ class UpdateBalance
 
   def run
     balance.assign_attributes(params)
-    should_resend_email = balance.date == Date.today && balance.transfers_cents_changed?
+    should_resend_email = balance.date == Date.current && balance.transfers_cents_changed?
     result = balance.save
     ServicesMailer.daily_update(balance.account.user).deliver_now if should_resend_email
     result
