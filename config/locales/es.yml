@@ -42,6 +42,10 @@ es:
       account:
         name: "Nombre"
         currency: "Moneda"
+        account_type: "Tipo de Cuenta"
+        account_types:
+          checking: "Cheques"
+          investment: "Inversión"
         platform: "Plataforma"
         platforms:
           no_platform: "Default"

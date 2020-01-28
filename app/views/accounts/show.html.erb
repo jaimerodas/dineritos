@@ -10,7 +10,7 @@
     <% end %>
   </div>
 </header>
-<% if @report.account_type == :investment %>
+<% if @report.account_type == "investment" %>
 <%= render "accounts/investment_account_summary" %>
 <%= render "accounts/investment_account_balances" %>
 <% else %>

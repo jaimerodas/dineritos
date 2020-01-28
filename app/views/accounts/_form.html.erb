@@ -1,6 +1,14 @@
 <%= form_for @account, data: { controller: "edit-account" } do |f| %>
 
   <div class="field">
+    <%= f.label :account_type %>
+    <%= f.select :account_type,
+      Account.account_types.map { |type, i|
+        [t("activerecord.attributes.account.account_types.#{type}"), type]
+      } %>
+  </div>
+
+  <div class="field">
     <%= f.label :platform %>
     <%= f.select :platform,
       Account.platforms.map { |type, i|

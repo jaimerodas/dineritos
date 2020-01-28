@@ -11,7 +11,7 @@ class AccountReport
   end
 
   def account_type
-    account.updateable? ? :investment : :regular
+    account.account_type
   end
 
   def latest_balance
