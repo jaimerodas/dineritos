@@ -42,16 +42,16 @@ es:
       account:
         name: "Nombre"
         currency: "Moneda"
-        account_type: "Tipo de Cuenta"
-        account_types:
-          default: "Normal"
+        platform: "Plataforma"
+        platforms:
+          no_platform: "Default"
           bitso: "Bitso"
-          yotepresto: "Yo Te Presto"
+          yo_te_presto: "Yo Te Presto"
           briq: "Briq.mx"
           afluenta: "Afluenta"
-          latasa: "La Tasa"
-          cetesdirecto: "CetesDirecto"
-          redgirasol: "RedGirasol"
+          la_tasa: "La Tasa"
+          cetes_directo: "CetesDirecto"
+          red_girasol: "RedGirasol"
     models:
       account: "Cuenta"
   helpers:

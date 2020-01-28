@@ -15,7 +15,7 @@ export default class extends Controller {
         this.disableRegularFields()
         this.disableCredentialsFields()
         break
-      case "default":
+      case "no_platform":
         this.enableRegularFields()
         this.disableBitsoFields()
         this.disableCredentialsFields()

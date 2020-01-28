@@ -17,7 +17,7 @@ class NewTotal
     user.accounts.left_joins(:balances)
       .select(select_statement)
       .where(active: true)
-      .where.not(account_type: 1)
+      .where.not(platform: "bitso")
       .order("accounts.id": :asc, "balances.date": :desc)
   end
 

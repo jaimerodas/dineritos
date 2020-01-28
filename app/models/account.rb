@@ -2,19 +2,17 @@ class Account < ApplicationRecord
   belongs_to :user
   has_many :balances
 
-  UPDATEABLE = %i[bitso yotepresto briq afluenta latasa cetesdirecto redgirasol]
-  NOT_UPDATEABLE = %i[default]
+  PLATFORMS = %i[no_platform bitso yo_te_presto briq afluenta la_tasa cetes_directo red_girasol]
 
-  enum account_type: (NOT_UPDATEABLE + UPDATEABLE)
+  enum platform: PLATFORMS
+
   encrypts :settings, type: :json
-  scope :updateable, -> { where(account_type: UPDATEABLE) }
-
-  monetize :last_balance_cents, allow_nil: true
+  scope :updateable, -> { where.not(platform: :no_platform) }
 
   validates :name, presence: true
 
   def updateable?
-    UPDATEABLE.include? account_type.to_sym
+    platform != "no_platform"
   end
 
   def can_be_updated?
@@ -22,9 +20,7 @@ class Account < ApplicationRecord
   end
 
   def update_service
-    UPDATEABLE
-      .zip(%w[Bitso YoTePresto Briq Afluenta LaTasa CetesDirecto RedGirasol]).to_h
-      .fetch(account_type.to_sym)
+    platform.camelize
       .then { |name| "Scrapers::#{name}".constantize }
   end
 
