@@ -1,7 +1,5 @@
 import * as d3 from "d3"
 
-const context = require.context("controllers", true, /_graph\.js$/)
-
 class IRRGraph {
   constructor(element, data) {
     this.container = element

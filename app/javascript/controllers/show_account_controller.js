@@ -1,5 +1,5 @@
 import { Controller } from "stimulus"
-import { IRRGraph, BalanceGraph } from "graphs"
+import { IRRGraph, BalanceGraph } from "../graphs/account_graphs"
 
 export default class extends Controller {
   static targets = ["chart", "balanceButton", "irrButton"]
