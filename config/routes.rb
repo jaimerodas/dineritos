@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  root "dashboards#show"
+  root "investments#show"
 
   scope path_names: {new: "nuevo", edit: "editar"} do
     resources :accounts, path: "cuentas", except: [:destroy] do

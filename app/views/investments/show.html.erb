@@ -1,0 +1,14 @@
+<header>
+  <section class="header-details">
+    <span class="header-description">Total de Inversiones al <%= @report.latest_date %></span>
+  </section>
+
+  <h1><%= currency @report.latest_total %></h1>
+</header>
+
+<section id="charts" data-controller="investments">
+  <script type="text/javascript">
+    var data = <%= @report.to_json.html_safe %>
+  </script>
+  <div id="chart-container" data-target="investments.chart"></div>
+</section>
