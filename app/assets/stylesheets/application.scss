@@ -23,7 +23,7 @@ article {
   position: relative;
   flex: 1;
   width: calc(100% - 4em);
-  max-width: 41em;
+  max-width: 48em;
   margin: 0 auto;
   padding: 0;
 }
@@ -377,6 +377,13 @@ select option {
     opacity: 0;
     transition: 0.2s ease all;
   }
+}
+
+.hoverText {
+  fill: var(--fg-color);
+}
+.hoverLine {
+  stroke: var(--fg-color);
 }
 
 .navigation {
