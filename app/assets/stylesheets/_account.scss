@@ -121,10 +121,14 @@ table.balance-sheet {
   }
 }
 
-svg .axis {
+svg .axis .tick {
   color: var(--mid-color);
   fill: var(--mid-color);
 }
+svg .color-container {
+  fill-opacity: 0.8;
+}
+
 .chart-toggle {
   display: flex;
 
@@ -145,6 +149,12 @@ svg .axis {
       cursor: default;
       background-color: var(--mid-color);
     }
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  svg .color-container {
+    fill-opacity: 0.6;
   }
 }
 

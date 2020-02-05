@@ -385,6 +385,10 @@ select option {
 .hoverLine {
   stroke: var(--fg-color);
 }
+.barchart-text {
+  fill: var(--fg-color);
+  font-size: 0.75em;
+}
 
 .navigation {
   text-align: center;
@@ -414,6 +418,10 @@ select option {
   &.active {
     display: block;
   }
+}
+
+#charts {
+  margin: 0 0 2em;
 }
 
 @media screen and (max-width: 40em) {
