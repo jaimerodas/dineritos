@@ -64,7 +64,7 @@ class InvestmentGraph {
     this.barXAxis = g => g
       .attr("transform", `translate(0, ${this.barMargins.top})`)
       .call(d3.axisTop(this.barX)
-      .tickFormat(d3.format(".3~s"))
+      .ticks(this.width > 400 ? 10 : 6, ".3~s")
       .tickSize(-(this.barChartHeight-this.barMargins.top-this.barMargins.bottom)))
       .call(g => g.selectAll(".tick:not(:first-of-type) line")
         .attr("stroke-opacity", 0.3)
@@ -73,7 +73,7 @@ class InvestmentGraph {
   }
 
   draw() {
-    this.drawHistogram()
+    this.stackedAreaChart()
     this.barChart = this.barChart()
   }
 
@@ -146,7 +146,7 @@ class InvestmentGraph {
     })
   }
 
-  drawHistogram() {
+  stackedAreaChart() {
     const xAxis = (g) => g
       .attr("transform", `translate(0,${this.height - this.margin.bottom})`)
       .call(d3.axisBottom(this.x).ticks(this.width / 80).tickSizeOuter(0))
@@ -163,37 +163,24 @@ class InvestmentGraph {
 
     const drawTooltip = () => {
       d3.event.preventDefault()
-      var [xCoord, yCoord] = d3.mouse(d3.event.target)
-      const mouseDate = this.x.invert(xCoord)
 
-      if (xCoord > this.width - this.margin.right) {
-        xCoord = this.width - this.margin.right
-      }
-
+      const [xCoord, _] = d3.mouse(d3.event.target)
       const bisectDate = d3.bisector(d => d.date).left
-      const xIndex = bisectDate(this.totals, mouseDate, 1)
-      const mousePopulation = this.totals[xIndex - 1].value
-      const mouseDateSnap = this.x(this.totals[xIndex - 1].date)
+      const xIndex = bisectDate(this.totals, this.x.invert(xCoord), 1) - 1
+      const datum = this.totals[xIndex]
+      const dateSnap = this.x(datum.date)
 
-      this.svg.selectAll('.hoverLine')
-        .attr('x1', mouseDateSnap)
-        .attr('y1', this.margin.top)
-        .attr('x2', mouseDateSnap)
-        .attr('y2', this.height - this.margin.bottom)
+      hoverLine.attr('x1', dateSnap).attr('x2', dateSnap)
 
-      const isLessThanHalf = mouseDateSnap > this.width / 2
-      const hoverTextX = isLessThanHalf ? '-0.25em' : '0.25em'
-      const hoverTextAnchor = isLessThanHalf ? 'end' : 'start'
+      const isLessThanHalf = dateSnap > this.width / 2
 
       this.svg.selectAll('.hoverText')
-        .attr('x', mouseDateSnap)
-        .attr('y', 0)
-        .attr('dx', hoverTextX)
-        .attr('dy', '.75em')
-        .style('text-anchor', hoverTextAnchor)
-        .text(d3.format("$,.2f")(mousePopulation))
+        .attr('x', dateSnap)
+        .attr('dx', isLessThanHalf ? '-0.25em' : '0.25em')
+        .style('text-anchor', isLessThanHalf ? 'end' : 'start')
+        .text(d3.format("$,.2f")(datum.value))
 
-      this.barChart.update(xIndex - 1)
+      this.barChart.update(xIndex)
     }
 
     this.svg.append("g")
@@ -209,8 +196,23 @@ class InvestmentGraph {
     this.svg.append("g").attr("class", "axis").call(xAxis).attr("font-family", null)
     this.svg.append("g").attr("class", "axis").call(yAxis).attr("font-family", null)
 
-    this.svg.append('line').classed('hoverLine', true)
-    this.svg.append("text").classed('hoverText', true)
+    const dateSnap = this.x(this.totals[this.totals.length - 1].date)
+
+    const hoverLine = this.svg.append("line")
+      .classed('hoverLine', true)
+      .attr('x1', dateSnap)
+      .attr('x2', dateSnap)
+      .attr('y1', this.margin.top)
+      .attr('y2', this.height - this.margin.bottom)
+
+    const hoverText = this.svg.append("text")
+      .classed('hoverText', true)
+      .attr('x', dateSnap)
+      .attr('y', 0)
+      .attr('dx', '-0.25em')
+      .attr('dy', '.75em')
+      .style('text-anchor', 'end')
+      .text(d3.format("$,.2f")(this.totals[this.totals.length - 1].value))
 
     this.svg.append('rect')
       .attr('fill', 'transparent')
@@ -219,8 +221,7 @@ class InvestmentGraph {
       .attr('width', this.width)
       .attr('height', this.height)
 
-
-    this.svg.on('mousemove', drawTooltip)
+    this.svg.on('touchmove mousemove', drawTooltip)
   }
 
   interpolateColors(dataLength, colorScale) {
