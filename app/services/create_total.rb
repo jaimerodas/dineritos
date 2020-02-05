@@ -12,7 +12,6 @@ class CreateTotal
 
   def run
     create_balances_from_form
-    create_balances_on_bitso_accounts
     calculate_total
     deactivate_accounts
   end
@@ -27,15 +26,6 @@ class CreateTotal
     params[:account].each do |account_id, fields|
       user.accounts.find(account_id).balances.find_or_initialize_by(date: date)
         .update(fields) # TODO: We should sanitize these values
-    end
-  end
-
-  def create_balances_on_bitso_accounts
-    user.accounts.bitso.each do |account|
-      amount = BitsoService.current_balance_for(account)
-      next if amount.zero? && !account.active?
-      account.balances.create(amount: amount, date: date)
-      account.update_attribute(:active, true) if !amount.zero? && !account.active?
     end
   end
 

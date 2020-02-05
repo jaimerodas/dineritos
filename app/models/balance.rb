@@ -6,7 +6,7 @@ class Balance < ApplicationRecord
   monetize :original_amount_cents, allow_nil: true
   monetize :diff_cents, allow_nil: true
 
-  before_validation :convert_currency, if: proc { account.currency != "MXN" && account.default? }
+  before_validation :convert_currency, if: proc { account.currency != "MXN" && account.no_platform? }
   before_save :calculate_diffs
 
   def prev
