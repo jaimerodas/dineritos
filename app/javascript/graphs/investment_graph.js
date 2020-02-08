@@ -2,7 +2,7 @@ import * as d3 from "d3"
 
 class InvestmentGraph {
   height = 250
-  barChartHeight = 400
+  barChartHeight = 350
 
   constructor(element, data) {
     this.container = element
@@ -85,6 +85,13 @@ class InvestmentGraph {
     const margin = this.barMargins
     const data = dataAccessor(this.data.length - 1)
     const bsvg = this.bsvg
+    const formatCurrency = this.formatCurrency
+
+    const labelTransform = (d) => {
+      const xOffset = d3.max([barX(d.value) - 10, margin.left + 100])
+      const yOffset = barY(d.key) + barY.bandwidth() / 2
+      return `translate(${xOffset}, ${yOffset})`
+    }
 
     const bars = bsvg.append("g")
       .attr("class", "color-container")
@@ -103,7 +110,7 @@ class InvestmentGraph {
       .selectAll("text")
       .data(data)
       .join("text")
-      .attr("transform", d => `translate(${d3.max([barX(d.value) - 10, margin.left + 100])}, ${barY(d.key) + barY.bandwidth() / 2})`)
+      .attr("transform", labelTransform)
       .style("fill-opacity", d => (d.value > 0) ? "1" : "0")
       .attr("dy", "-0.15em")
       .text(d => d.key)
@@ -114,10 +121,10 @@ class InvestmentGraph {
       .selectAll("text")
       .data(data)
       .join("text")
-      .attr("transform", d => `translate(${d3.max([barX(d.value) - 10, margin.left + 100])}, ${barY(d.key) + barY.bandwidth() / 2})`)
+      .attr("transform", labelTransform)
       .style("fill-opacity", d => (d.value > 0) ? "1" : "0")
       .attr("dy", "0.85em")
-      .text(d => d3.format(",.2f")(d.value))
+      .text(formatCurrency)
 
     const xAxis = bsvg.append("g").attr("class", "axis").call(barXAxis).attr("font-family", null)
 
@@ -133,13 +140,13 @@ class InvestmentGraph {
           .attr("y", d => barY(d.key))
 
         accounts.data(data, d => d.key).order().transition(t)
-          .attr("transform", d => `translate(${d3.max([barX(d.value) - 10, margin.left + 100])}, ${barY(d.key) + barY.bandwidth() / 2})`)
+          .attr("transform", labelTransform)
           .style("fill-opacity", d => (d.value > 0) ? "1" : "0")
 
         amounts.data(data, d => d.key).order().transition(t)
-          .attr("transform", d => `translate(${d3.max([barX(d.value) - 10, margin.left + 100])}, ${barY(d.key) + barY.bandwidth() / 2})`)
+          .attr("transform", labelTransform)
           .style("fill-opacity", d => (d.value > 0) ? "1" : "0")
-          .text(d => d3.format(",.2f")(d.value))
+          .text(formatCurrency)
 
         xAxis.transition(t).call(barXAxis)
       }
@@ -147,6 +154,8 @@ class InvestmentGraph {
   }
 
   stackedAreaChart() {
+    const formatCurrency = this.formatCurrency
+    const formatDate = d3.utcFormat("%Y-%m-%d")
     const xAxis = (g) => g
       .attr("transform", `translate(0,${this.height - this.margin.bottom})`)
       .call(d3.axisBottom(this.x).ticks(this.width / 80).tickSizeOuter(0))
@@ -172,13 +181,10 @@ class InvestmentGraph {
 
       hoverLine.attr('x1', dateSnap).attr('x2', dateSnap)
 
-      const isLessThanHalf = dateSnap > this.width / 2
-
-      this.svg.selectAll('.hoverText')
-        .attr('x', dateSnap)
-        .attr('dx', isLessThanHalf ? '-0.25em' : '0.25em')
-        .style('text-anchor', isLessThanHalf ? 'end' : 'start')
-        .text(d3.format("$,.2f")(datum.value))
+      d3.select("#investments h1").text(formatCurrency(datum))
+      d3.select("#investments time")
+        .attr("datetime", formatDate(datum.date))
+        .text(formatDate(datum.date))
 
       this.barChart.update(xIndex)
     }
@@ -200,28 +206,20 @@ class InvestmentGraph {
 
     const hoverLine = this.svg.append("line")
       .classed('hoverLine', true)
-      .attr('x1', dateSnap)
-      .attr('x2', dateSnap)
+      .attr('x1', dateSnap).attr('x2', dateSnap)
       .attr('y1', this.margin.top)
       .attr('y2', this.height - this.margin.bottom)
 
-    const hoverText = this.svg.append("text")
-      .classed('hoverText', true)
-      .attr('x', dateSnap)
-      .attr('y', 0)
-      .attr('dx', '-0.25em')
-      .attr('dy', '.75em')
-      .style('text-anchor', 'end')
-      .text(d3.format("$,.2f")(this.totals[this.totals.length - 1].value))
-
     this.svg.append('rect')
       .attr('fill', 'transparent')
-      .attr('x', 0)
-      .attr('y', 0)
-      .attr('width', this.width)
-      .attr('height', this.height)
+      .attr('x', 0).attr('y', 0)
+      .attr('width', this.width).attr('height', this.height)
 
     this.svg.on('touchmove mousemove', drawTooltip)
+  }
+
+  formatCurrency(d) {
+    return d3.format("$,.2f")(d.value)
   }
 
   interpolateColors(dataLength, colorScale) {

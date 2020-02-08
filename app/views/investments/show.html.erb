@@ -1,9 +1,9 @@
-<header>
+<header id="investments">
   <section class="header-details">
-    <span class="header-description">Total de Inversiones al <%= @report.latest_date %></span>
+    <span class="header-description">Total de Inversiones al <time datetime="<%= @report.latest_date %>"><%= @report.latest_date %></time></span>
   </section>
 
-  <h1><%= currency @report.latest_total %></h1>
+  <h1>$<%= currency @report.latest_total %></h1>
 </header>
 
 <section id="charts" data-controller="investments">

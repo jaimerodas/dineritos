@@ -379,9 +379,6 @@ select option {
   }
 }
 
-.hoverText {
-  fill: var(--fg-color);
-}
 .hoverLine {
   stroke: var(--fg-color);
 }
@@ -514,3 +511,4 @@ select option {
 }
 
 @import "account";
+@import "investments";
