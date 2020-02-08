@@ -93,6 +93,11 @@ class InvestmentGraph {
       return `translate(${xOffset}, ${yOffset})`
     }
 
+    const detailsHTML = (d) => {
+      return `<tspan dy="-0.15em" dx="0.4em" x="0" y="0">${d.key}</tspan>
+              <tspan class="money" dy="0.85em" dx="0" x="0" y="0">${formatCurrency(d)}</tspan>`
+    }
+
     const bars = bsvg.append("g")
       .attr("class", "color-container")
       .selectAll("rect")
@@ -104,7 +109,7 @@ class InvestmentGraph {
       .attr("width", d => barX(d.value) - barX(0))
       .attr("height", barY.bandwidth())
 
-    const accounts = bsvg.append("g")
+    const details = bsvg.append("g")
       .attr("class", "barchart-text")
       .attr("text-anchor", "end")
       .selectAll("text")
@@ -112,19 +117,7 @@ class InvestmentGraph {
       .join("text")
       .attr("transform", labelTransform)
       .style("fill-opacity", d => (d.value > 0) ? "1" : "0")
-      .attr("dy", "-0.15em")
-      .text(d => d.key)
-
-    const amounts = bsvg.append("g")
-      .attr("class", "barchart-text")
-      .attr("text-anchor", "end")
-      .selectAll("text")
-      .data(data)
-      .join("text")
-      .attr("transform", labelTransform)
-      .style("fill-opacity", d => (d.value > 0) ? "1" : "0")
-      .attr("dy", "0.85em")
-      .text(formatCurrency)
+      .html(detailsHTML)
 
     const xAxis = bsvg.append("g").attr("class", "axis").call(barXAxis).attr("font-family", null)
 
@@ -139,14 +132,10 @@ class InvestmentGraph {
           .attr("width", d => barX(d.value) - barX(0))
           .attr("y", d => barY(d.key))
 
-        accounts.data(data, d => d.key).order().transition(t)
+        details.data(data, d => d.key).order().transition(t)
           .attr("transform", labelTransform)
           .style("fill-opacity", d => (d.value > 0) ? "1" : "0")
-
-        amounts.data(data, d => d.key).order().transition(t)
-          .attr("transform", labelTransform)
-          .style("fill-opacity", d => (d.value > 0) ? "1" : "0")
-          .text(formatCurrency)
+          .select("tspan.money").text(formatCurrency)
 
         xAxis.transition(t).call(barXAxis)
       }
