@@ -1,34 +1,22 @@
-<header id="investments">
-  <section class="header-details">
-    <span class="header-description">Total de Inversiones al <time datetime="<%= @report.latest_date %>"><%= @report.latest_date %></time></span>
+<main
+  data-controller="investments"
+  data-investments-summary-url="<%= investments_summary_path(format: :html) %>">
+  <header id="investments">
+    <section class="header-details">
+      <span class="header-description">Total de Inversiones al <time datetime="<%= @report.latest_date %>"><%= @report.latest_date %></time></span>
+    </section>
+
+    <h1>$<%= currency @report.latest_total %></h1>
+  </header>
+
+  <section id="charts">
+    <script type="text/javascript">
+      var data = <%= @report.to_json.html_safe %>
+    </script>
+    <div id="chart-container" data-target="investments.chart"></div>
   </section>
 
-  <h1>$<%= currency @report.latest_total %></h1>
-</header>
+  <div class="chart-toggle" data-target="investments.summaryButtons"></div>
 
-<section id="charts" data-controller="investments">
-  <script type="text/javascript">
-    var data = <%= @report.to_json.html_safe %>
-  </script>
-  <div id="chart-container" data-target="investments.chart"></div>
-</section>
-
-<dl class="investment-summary">
-  <dt>Saldo Actual</dt>
-  <dd><%= currency @summary.final_balance %></dd>
-
-  <dt>Saldo Inicial</dt>
-  <dd><%= currency @summary.starting_balance %></dd>
-
-  <dt>Ganancias</dt>
-  <dd><%= currency @summary.earnings %></dd>
-
-  <dt>Inversión Neta</dt>
-  <dd><%= currency @summary.net_investment %></dd>
-
-  <dt>Depósitos</dt>
-  <dd><%= currency @summary.deposits %></dd>
-
-  <dt>Retiros</dt>
-  <dd><%= currency @summary.withdrawals %></dd>
-</dl>
+  <section id="investmentSummary" data-target="investments.summary"></section>
+</main>

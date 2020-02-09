@@ -9,6 +9,9 @@ Rails.application.routes.draw do
     resources :balances, path: "saldos", param: :date, except: [:edit, :update]
     resource :login, path: "ingresar", only: [:show, :create]
     resource :currency, path: "tipo_de_cambio", only: [:show]
+    scope module: "investments", as: "investments", path: "inversiones" do
+      resource :summary, path: "resumen", only: [:show]
+    end
   end
 
   # Rutas directas
