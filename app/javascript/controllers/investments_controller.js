@@ -44,6 +44,6 @@ export default class extends Controller {
     this.summaryButtonsTarget
       .append(lastYearButton, currentCalendarYearButton, previousCalendarYearButton)
 
-    this.updateSummary({target: lastYearButton})
+    this.updateSummary({target: currentCalendarYearButton})
   }
 }

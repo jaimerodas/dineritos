@@ -1,19 +1,22 @@
 <dl class="investment-summary">
   <dt>Saldo Actual</dt>
-  <dd><%= currency @summary.final_balance %></dd>
+  <dd><%= number_to_currency @summary.final_balance %></dd>
 
   <dt>Saldo Inicial</dt>
-  <dd><%= currency @summary.starting_balance %></dd>
+  <dd><%= number_to_currency @summary.starting_balance %></dd>
 
   <dt>Ganancias</dt>
-  <dd><%= currency @summary.earnings %></dd>
+  <dd><%= number_to_currency @summary.earnings %></dd>
 
   <dt>Inversión Neta</dt>
-  <dd><%= currency @summary.net_investment %></dd>
+  <dd><%= number_to_currency @summary.net_investment %></dd>
 
   <dt>Depósitos</dt>
-  <dd><%= currency @summary.deposits %></dd>
+  <dd><%= number_to_currency @summary.deposits %></dd>
 
   <dt>Retiros</dt>
-  <dd><%= currency @summary.withdrawals %></dd>
+  <dd><%= number_to_currency @summary.withdrawals %></dd>
+
+  <dt>TIR</dt>
+  <dd><%= number_to_percentage @summary.irr * 100, precision: 2 %></dd>
 </dl>
