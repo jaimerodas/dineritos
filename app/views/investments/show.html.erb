@@ -1,22 +1,30 @@
-<main
+<% content_for :article do %>
+<article
+  class="investments"
   data-controller="investments"
   data-investments-summary-url="<%= investments_summary_path(format: :html) %>">
-  <header id="investments">
-    <section class="header-details">
-      <span class="header-description">Total de Inversiones al <time datetime="<%= @report.latest_date %>"><%= @report.latest_date %></time></span>
+
+  <aside>
+    <div
+      id="investment-summary-nav"
+      class="chart-toggle"
+      data-target="investments.summaryButtons"></div>
+
+    <section id="investmentSummary" data-target="investments.summary"></section>
+  </aside>
+
+  <main>
+    <section id="charts">
+      <dl>
+        <dt>Total invertido al <time datetime="<%= @report.latest_date %>"><%= @report.latest_date %></time></dt>
+        <dd>$<%= currency @report.latest_total %></dd>
+      </dl>
+
+      <script type="text/javascript">
+        var data = <%= @report.to_json.html_safe %>
+      </script>
+      <div id="chart-container" data-target="investments.chart"></div>
     </section>
-
-    <h1>$<%= currency @report.latest_total %></h1>
-  </header>
-
-  <section id="charts">
-    <script type="text/javascript">
-      var data = <%= @report.to_json.html_safe %>
-    </script>
-    <div id="chart-container" data-target="investments.chart"></div>
-  </section>
-
-  <div class="chart-toggle" data-target="investments.summaryButtons"></div>
-
-  <section id="investmentSummary" data-target="investments.summary"></section>
-</main>
+  </main>
+</article>
+<% end %>

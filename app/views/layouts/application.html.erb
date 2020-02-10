@@ -13,9 +13,13 @@
   </head>
 
   <body>
+    <% if content_for?(:article) %>
+      <%= yield :article %>
+    <% else %>
     <article>
       <%= yield %>
     </article>
+    <% end %>
 
     <%= content_for :graph %>
 

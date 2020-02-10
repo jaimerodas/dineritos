@@ -1,9 +1,9 @@
 module MoneyHelper
-  def diff(number)
+  def diff(number, unit: "")
     classes = "diff"
     return tag.span("-", class: classes += " zero") if !number || number.zero?
 
-    text = currency(number)
+    text = currency(number, unit: unit)
 
     if number.zero? then classes += " zero"
     elsif number.negative? then classes += " neg"
@@ -13,7 +13,7 @@ module MoneyHelper
     tag.span text, class: classes
   end
 
-  def currency(number)
-    number_to_currency(number, unit: "")
+  def currency(number, unit: "")
+    number_to_currency(number, unit: unit)
   end
 end

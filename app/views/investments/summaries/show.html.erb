@@ -1,15 +1,15 @@
 <dl class="investment-summary">
-  <dt>Saldo Actual</dt>
+  <dt>Saldo <%= @summary.period.include?(Date.current) ? "Actual" : "Final" %></dt>
   <dd><%= number_to_currency @summary.final_balance %></dd>
 
   <dt>Saldo Inicial</dt>
   <dd><%= number_to_currency @summary.starting_balance %></dd>
 
-  <dt>Ganancias</dt>
-  <dd><%= number_to_currency @summary.earnings %></dd>
+  <dt>Rendimientos</dt>
+  <dd><%= diff @summary.earnings, unit: "$" %></dd>
 
   <dt>Inversión Neta</dt>
-  <dd><%= number_to_currency @summary.net_investment %></dd>
+  <dd><%= diff @summary.net_investment, unit: "$" %></dd>
 
   <dt>Depósitos</dt>
   <dd><%= number_to_currency @summary.deposits %></dd>

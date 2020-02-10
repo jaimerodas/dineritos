@@ -9,17 +9,19 @@ class InvestmentGraph {
     this.data = data
     this.margin = ({top: 20, right: 5, bottom: 30, left: 32})
     this.barMargins = ({top: 20, right: 20, bottom: 0, left: 5})
-    this.width = this.container.offsetWidth + 32
+    this.width = this.container.offsetWidth
 
     this.setLocale()
 
     this.svg = d3.select(this.container).append("svg")
       .attr("id", "histogram")
       .attr("viewBox", [0, 0, this.width, this.height])
+      .attr("height", this.height)
 
     this.bsvg = d3.select(this.container).append("svg")
       .attr("id", "barChart")
       .attr("viewBox", [0, 0, this.width, this.barChartHeight])
+      .attr("height", this.barChartHeight)
 
     this.keys = Object.keys(this.data[this.data.length - 1])
       .slice(0, Object.keys(this.data[this.data.length -1]).length -1)
@@ -170,8 +172,8 @@ class InvestmentGraph {
 
       hoverLine.attr('x1', dateSnap).attr('x2', dateSnap)
 
-      d3.select("#investments h1").text(formatCurrency(datum))
-      d3.select("#investments time")
+      d3.select("#charts dd").text(formatCurrency(datum))
+      d3.select("#charts time")
         .attr("datetime", formatDate(datum.date))
         .text(formatDate(datum.date))
 
