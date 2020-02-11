@@ -7,8 +7,8 @@ class InvestmentGraph {
   constructor(element, data) {
     this.container = element
     this.data = data
-    this.margin = ({top: 20, right: 5, bottom: 30, left: 32})
-    this.barMargins = ({top: 20, right: 20, bottom: 0, left: 5})
+    this.margin = ({top: 20, right: 10, bottom: 30, left: 32})
+    this.barMargins = ({top: 20, right: 20, bottom: 0, left: 10})
     this.width = this.container.offsetWidth
 
     this.setLocale()
@@ -210,7 +210,7 @@ class InvestmentGraph {
   }
 
   formatCurrency(d) {
-    return d3.format("$,.2f")(d.value)
+    return d3.format(",.2f")(d.value)
   }
 
   interpolateColors(dataLength, colorScale) {

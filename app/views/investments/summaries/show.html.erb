@@ -1,22 +1,36 @@
 <dl class="investment-summary">
-  <dt>Saldo <%= @summary.period.include?(Date.current) ? "Actual" : "Final" %></dt>
-  <dd><%= number_to_currency @summary.final_balance %></dd>
+  <div>
+    <dt>Saldo <%= @summary.period.include?(Date.current) ? "Actual" : "Final" %></dt>
+    <dd><%= currency @summary.final_balance %></dd>
+  </div>
 
-  <dt>Saldo Inicial</dt>
-  <dd><%= number_to_currency @summary.starting_balance %></dd>
+  <div>
+    <dt>Saldo Inicial</dt>
+    <dd><%= currency @summary.starting_balance %></dd>
+  </div>
 
-  <dt>Rendimientos</dt>
-  <dd><%= diff @summary.earnings, unit: "$" %></dd>
+  <div>
+    <dt>Rendimientos</dt>
+    <dd><%= diff @summary.earnings %></dd>
+  </div>
 
-  <dt>Inversión Neta</dt>
-  <dd><%= diff @summary.net_investment, unit: "$" %></dd>
+  <div>
+    <dt>Inversión Neta</dt>
+    <dd><%= diff @summary.net_investment %></dd>
+  </div>
 
-  <dt>Depósitos</dt>
-  <dd><%= number_to_currency @summary.deposits %></dd>
+  <div>
+    <dt>Depósitos</dt>
+    <dd><%= currency @summary.deposits %></dd>
+  </div>
 
-  <dt>Retiros</dt>
-  <dd><%= number_to_currency @summary.withdrawals %></dd>
+  <div>
+    <dt>Retiros</dt>
+    <dd><%= currency @summary.withdrawals %></dd>
+  </div>
 
-  <dt>TIR</dt>
-  <dd><%= number_to_percentage @summary.irr * 100, precision: 2 %></dd>
+  <div>
+    <dt>TIR</dt>
+    <dd><%= number_to_percentage @summary.irr * 100, precision: 2 %></dd>
+  </div>
 </dl>

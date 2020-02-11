@@ -3,12 +3,11 @@
   max-width: none;
   max-width: 70em;
   box-sizing: border-box;
-  padding: 1em;
 }
 
 #charts {
   border: none;
-  margin: 0;
+  margin: 1em 0 0;
 
   svg {
     width: 100%;
@@ -44,7 +43,18 @@
 }
 
 .investment-summary {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 0.25rem;
+  padding: 0.25rem;
+
   text-align: right;
+  margin: 0;
+
+  div {
+    padding: 1em;
+    background-color: var(--bg-alt-color);
+  }
 
   dt {
     color: var(--mid-color);
@@ -52,14 +62,32 @@
   }
 
   dd {
-    font-size: 1.5em;
+    font-size: 1em;
     font-weight: bold;
-    margin: 0 0 0.5em;
+    margin: 0;
+  }
+}
+
+@media screen and (min-width: 22em) {
+  .investment-summary {
+    dd {
+      font-size: 1.25em;
+    }
   }
 }
 
 @media screen and (min-width: 45em) {
+  #charts {
+    margin: 0;
+  }
+
+  .investment-summary {
+    grid-template-columns: 1fr;
+    padding: 0.25em 0;
+  }
+
   .investments {
+    padding: 1em;
     display: flex;
 
     aside {
@@ -74,6 +102,12 @@
 
 @media screen and (min-width: 50em) {
   .investments aside {
-    width: 14rem;
+    width: 15rem;
+  }
+
+  .investment-summary {
+    dd {
+      font-size: 1.5em;
+    }
   }
 }

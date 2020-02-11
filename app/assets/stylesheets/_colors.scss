@@ -1,5 +1,6 @@
 :root {
     --bg-color: #e9edef;
+    --bg-alt-color: #dde1e9;
     --fg-color: #25272B;
     --mid-color: #767D95;
     --nav-color: #222;
@@ -25,6 +26,7 @@
 @media (prefers-color-scheme: dark) {
     :root {
         --bg-color: #222222;
+        --bg-alt-color: #2c2e32;
         --fg-color: #dde1e9;
         --nav-color: #2c2e32;
 
