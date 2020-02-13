@@ -6,7 +6,7 @@ class InvestmentGraph {
 
   constructor(element, data) {
     this.container = element
-    this.data = data
+    this.data = data.balances
     this.margin = ({top: 20, right: 10, bottom: 30, left: 32})
     this.barMargins = ({top: 20, right: 20, bottom: 0, left: 10})
     this.width = this.container.offsetWidth
@@ -23,16 +23,16 @@ class InvestmentGraph {
       .attr("viewBox", [0, 0, this.width, this.barChartHeight])
       .attr("height", this.barChartHeight)
 
-    this.keys = Object.keys(this.data[this.data.length - 1])
-      .slice(0, Object.keys(this.data[this.data.length -1]).length -1)
+    this.accounts = data.accounts
+    this.keys = Object.keys(this.accounts)
 
     this.series = d3.stack().keys(this.keys)(this.data)
 
     this.color = d3.scaleOrdinal().domain(this.keys)
       .range(this.interpolateColors(this.keys.length, d3.interpolateRainbow))
 
-    this.totals = this.series[this.series.length - 1].map(d => {
-      return {date: new Date(d.data.date), value: d[1]}
+    this.totals = Object.entries(this.data).map(d => {
+      return {date: new Date(d[1].date), value: d3.sum(Object.values(d[1]))}
     })
 
     this.barData = (index) => {
@@ -48,12 +48,14 @@ class InvestmentGraph {
       .domain([0, d3.max(this.series, d => d3.max(d, d => d[1]))]).nice()
       .range([this.height - this.margin.bottom, this.margin.top])
 
+    this.lastDate = this.data.length - 1
+
     this.barX = d3.scaleLinear()
-      .domain([0, d3.max(this.barData(this.data.length - 1), d => d.value)])
+      .domain([0, d3.max(this.barData(this.lastDate), d => d.value)])
       .range([this.barMargins.left, this.width - this.barMargins.right]).nice()
 
     this.barY = d3.scaleBand()
-      .domain(this.barData(this.data.length - 1).map(d => d.key))
+      .domain(this.keys)
       .range([this.barMargins.top, this.barChartHeight - this.barMargins.bottom])
       .padding(0.1)
 
@@ -81,11 +83,12 @@ class InvestmentGraph {
 
   barChart() {
     const dataAccessor = this.barData
+    const accounts = this.accounts
     const barX = this.barX
     const barY = this.barY
     const barXAxis = this.barXAxis
     const margin = this.barMargins
-    const data = dataAccessor(this.data.length - 1)
+    const data = dataAccessor(this.lastDate)
     const bsvg = this.bsvg
     const formatCurrency = this.formatCurrency
 
@@ -96,15 +99,17 @@ class InvestmentGraph {
     }
 
     const detailsHTML = (d) => {
-      return `<tspan dy="-0.15em" dx="0.4em" x="0" y="0">${d.key}</tspan>
+      return `<tspan dy="-0.15em" dx="0.4em" x="0" y="0">${accounts[d.key].name}</tspan>
               <tspan class="money" dy="0.85em" dx="0" x="0" y="0">${formatCurrency(d)}</tspan>`
     }
 
     const bars = bsvg.append("g")
       .attr("class", "color-container")
-      .selectAll("rect")
+      .selectAll("a")
       .data(data)
-      .join("rect")
+      .join("a")
+      .attr("xlink:href", d => accounts[d.key].url)
+      .append("rect")
       .attr("fill", d => this.color(d.key))
       .attr("x", barX(0))
       .attr("y", d => barY(d.key))
@@ -114,9 +119,11 @@ class InvestmentGraph {
     const details = bsvg.append("g")
       .attr("class", "barchart-text")
       .attr("text-anchor", "end")
-      .selectAll("text")
+      .selectAll("a")
       .data(data)
-      .join("text")
+      .join("a")
+      .attr("xlink:href", d => accounts[d.key].url)
+      .append("text")
       .attr("transform", labelTransform)
       .style("fill-opacity", d => (d.value > 0) ? "1" : "0")
       .html(detailsHTML)
@@ -187,13 +194,11 @@ class InvestmentGraph {
         .attr("fill", ({key}) => this.color(key))
         .attr("class", "color-container")
         .attr("d", this.area)
-      .append("title")
-        .text(({key}) => key)
 
     this.svg.append("g").attr("class", "axis").call(xAxis).attr("font-family", null)
     this.svg.append("g").attr("class", "axis").call(yAxis).attr("font-family", null)
 
-    const dateSnap = this.x(this.totals[this.totals.length - 1].date)
+    const dateSnap = this.x(this.totals[this.lastDate].date)
 
     const hoverLine = this.svg.append("line")
       .classed('hoverLine', true)

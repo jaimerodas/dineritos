@@ -51,9 +51,9 @@ class InvestmentSummary
   private
 
   def calculate_period_from(year)
-      return 1.year.ago..Date.current if year == "past_year"
-      year = year.to_i if year.class == String
-      Date.new(year)...Date.new(year + 1)
+    return 1.year.ago..Date.current if year == "past_year"
+    year = year.to_i if year.class == String
+    Date.new(year)...Date.new(year + 1)
   end
 
   def elegible_account_ids

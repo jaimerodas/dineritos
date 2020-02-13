@@ -383,7 +383,9 @@ select option {
   stroke: var(--fg-color);
 }
 .barchart-text {
-  fill: var(--fg-color);
+  a {
+    fill: var(--fg-color);
+  }
   font-size: 0.75em;
 }
 

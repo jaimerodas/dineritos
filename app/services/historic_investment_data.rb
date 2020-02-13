@@ -13,50 +13,58 @@ class HistoricInvestmentData
     data.to_json
   end
 
+  def data
+    {accounts: account_details, balances: balances}
+  end
+
   def latest_date
-    @latest_date ||= Date.parse(data.last.fetch(:date))
+    @latest_date ||= Date.parse(balances.last.fetch(:date))
   end
 
   def latest_total
-    @latest_total ||= data.last.reject { |key, value| key == :date }.values.sum
+    @latest_total ||= balances.last.reject { |k, _| k == :date }.values.sum
   end
 
   private
 
-  def data
-    @data ||= begin
-      empty = account_names.zip(Array.new(accounts.size, 0)).to_h
+  def balances
+    @balances ||= begin
+      empty = account_ids.zip(Array.new(account_ids.size, 0)).to_h
       current = -1
 
       data_from_db.each_with_object([]) do |balance, result|
-        if result.dig(current, :date) != balance.date.to_s
+        date = balance.date.to_s
+
+        if result.dig(current, :date) != date
           current += 1
           result[current] = result.fetch(current - 1, empty).dup
-          result[current][:date] = balance.date.to_s
+          result[current][:date] = date
         end
 
-        result[current][balance.name] = balance.amount.to_f
+        result[current][balance.account_id] = balance.amount.to_f
       end
     end
   end
 
   def accounts
-    @accounts ||= user.accounts.where(account_type: :investment).select(:name, :id).order(:id)
-  end
-
-  def account_names
-    accounts.map(&:name)
+    @accounts ||= user.accounts.where(account_type: :investment).order(:id)
   end
 
   def account_ids
-    accounts.map(&:id)
+    @account_ids ||= accounts.pluck(:id)
+  end
+
+  def account_details
+    accounts.select(:id, :name)
+      .map { |account| [account.id, {name: account.name, url: "/cuentas/#{account.id}"}] }
+      .to_h
   end
 
   def data_from_db
     user.balances
-      .select(:date, :"accounts.name", :amount_cents)
+      .select(:date, :account_id, :amount_cents)
       .where("date > ?", 1.year.ago)
-      .where("accounts.id": account_ids)
-      .order(:date, :"accounts.name")
+      .where(account_id: account_ids)
+      .order(:date, :account_id)
   end
 end
