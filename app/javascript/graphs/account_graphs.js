@@ -175,10 +175,6 @@ class BalanceGraph extends IRRGraph {
     return d3.curveStepAfter
   }
 
-  axisFloor() {
-    return d3.min(this.data, d => d.value)
-  }
-
   axisFormatter() {
     return d3.format(".3~s")
   }
