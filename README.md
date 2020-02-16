@@ -12,11 +12,11 @@ vistas para ver la evolución a través del tiempo del total de saldos y de cada
 cuenta en particular.
 
 ## Instalación
-Esto es una app de Rails 6, corriendo sobre Ruby 2.6.3. Usamos postgresql como
-db. Si tienes Ruby instalado, puedes simplemente correr
+Esto es una app de Rails 6, corriendo sobre Ruby 2.6.5. Usamos postgresql como
+db. Si tienes Ruby y yarn instalados, puedes simplemente correr
 
 ```bash
-bundle && rails db:setup
+bundle && yarn && rails db:setup
 ```
 
 ## Configuración
@@ -25,8 +25,6 @@ específicamente:
 - `fixer`: el API key de [fixer.io][1]
 - `auth_secret`: un secreto que genero para validar sesiones
 - `postmark`: el API key de [Postmark][2] para poder enviar correos
-- `email`: el correo del usuario principal, en lo que hago una madre
-multi-usuario
 
 Yo guardo estas en el archivo de `credentials.yml.enc`, y si quieres correr esto
 tú, vas a tener que sobreescribir ese archivo con tus propias variables y
