@@ -5,18 +5,41 @@ class UpdateBalance
 
   def initialize(balance:, params:)
     @balance = balance
-    @params = params
-    @should_resend_email = false
+    balance.assign_attributes(params)
+    invalidated_todays_email?
+    modified_history?
   end
 
-  attr_reader :params
-  attr_accessor :balance, :should_resend_email
+  attr_accessor :balance
 
   def run
-    balance.assign_attributes(params)
-    should_resend_email = balance.date == Date.current && balance.transfers_cents_changed?
-    result = balance.save
-    ServicesMailer.daily_update(balance.account.user).deliver_now if should_resend_email
-    result
+    saved_successfully = balance.save
+
+    if saved_successfully
+      resend_email if invalidated_todays_email?
+      update_financials if modified_history?
+    end
+
+    saved_successfully
+  end
+
+  private
+
+  def invalidated_todays_email?
+    @invalidated_todays_email ||= balance.date == Date.current && (
+      balance.transfers_cents_changed? || balance.amount_cents_changed?
+    )
+  end
+
+  def modified_history?
+    @modified_history ||= balance.date < Date.current && balance.amount_cents_changed?
+  end
+
+  def resend_email
+    ServicesMailer.daily_update(balance.account.user).deliver_now
+  end
+
+  def update_financials
+    balance.next.save
   end
 end

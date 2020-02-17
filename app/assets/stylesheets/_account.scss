@@ -23,7 +23,23 @@ header.account-header {
   }
 
   a {
+    display: inline-block;
+
+    background-color: var(--border-color);
+    color: var(--fg-color);
+    font-size: 0.625rem;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 0.125em;
+
+    padding: 0.25em 0.5em 0.4em;
+    margin: 0 0.5em;
+    border-radius: 0.25em;
+  }
+
+  a.svg-link {
     display: block;
+    background-color: transparent;
     font-size: 0;
     transform: rotate(0deg);
 

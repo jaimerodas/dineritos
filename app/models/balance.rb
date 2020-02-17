@@ -1,5 +1,6 @@
 class Balance < ApplicationRecord
   belongs_to :account
+  # belongs_to :user
 
   monetize :amount_cents
   monetize :transfers_cents
@@ -11,6 +12,10 @@ class Balance < ApplicationRecord
 
   def prev
     self.class.where(account: account).where("date < ?", date).order(date: :desc).limit(1).first
+  end
+
+  def next
+    self.class.where(account: account).where("date > ?", date).order(date: :asc).limit(1).first
   end
 
   private

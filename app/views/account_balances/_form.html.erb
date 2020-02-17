@@ -1,0 +1,18 @@
+<%= form_for @balance, url: url do |f| %>
+
+<p><%= pretty_date @balance.date %></p>
+
+<div class="field">
+  <%= f.label :amount %>
+  <%= f.number_field(:amount, pattern: '^\-?\d*(\.\d{1,2})?$', step: "0.01") %>
+</div>
+
+<% if @balance.account.investment? %>
+<div class="field">
+  <%= f.label :transfers %>
+  <%= f.number_field(:transfers, pattern: '^\-?\d*(\.\d{1,2})?$', step: "0.01") %>
+</div>
+<% end %>
+
+<%= f.button 'Guardar' %>
+<% end %>
