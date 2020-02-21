@@ -52,7 +52,7 @@ class InvestmentGraph {
 
     this.barX = d3.scaleLinear()
       .domain([0, d3.max(this.barData(this.lastDate), d => d.value)])
-      .range([this.barMargins.left, this.width - this.barMargins.right]).nice()
+      .range([this.barMargins.left, this.width - this.barMargins.right])
 
     this.barY = d3.scaleBand()
       .domain(this.keys)
@@ -135,7 +135,7 @@ class InvestmentGraph {
         const data = dataAccessor(index)
         const t = bsvg.transition().duration(200).ease(d3.easeLinear)
 
-        barX.domain([0, d3.max(data, d => d.value)]).nice()
+        barX.domain([0, d3.max(data, d => d.value)])
 
         bars.data(data, d => d.key).order().transition(t)
           .attr("width", d => barX(d.value) - barX(0))
