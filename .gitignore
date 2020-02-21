@@ -29,3 +29,7 @@
 /yarn-error.log
 yarn-debug.log*
 .yarn-integrity
+
+# Ignore stupid macOS stuff
+.DS_Store
+*/**/.DS_Store
