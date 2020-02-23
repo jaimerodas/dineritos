@@ -1,16 +1,40 @@
-<%= form_for @balance, url: url do |f| %>
+<%= form_for @balance,
+  data: {
+    controller: "edit-balance",
+    "previous-balance": @balance.prev.amount.to_s,
+    "diff-days": (@balance.date - @balance.prev.date).to_i
+  },
+  url: url do |f| %>
 
 <p><%= pretty_date @balance.date %></p>
+<p data-target="edit-balance.diff">0.00</p>
+<p data-target="edit-balance.irr">0%</p>
 
 <div class="field">
   <%= f.label :amount %>
-  <%= f.number_field(:amount, pattern: '^\-?\d*(\.\d{1,2})?$', step: "0.01") %>
+  <%= f.number_field(
+    :amount,
+    pattern: '^\-?\d*(\.\d{1,2})?$',
+    step: "0.01",
+    data: {
+      target: "edit-balance.amount",
+      action: "change->edit-balance#updateResults keyup->edit-balance#updateResults"
+    }
+  ) %>
 </div>
 
 <% if @balance.account.investment? %>
 <div class="field">
   <%= f.label :transfers %>
-  <%= f.number_field(:transfers, pattern: '^\-?\d*(\.\d{1,2})?$', step: "0.01") %>
+  <%= f.number_field(
+    :transfers,
+    pattern: '^\-?\d*(\.\d{1,2})?$',
+    step: "0.01",
+    data: {
+      target: "edit-balance.transfers",
+      action: "change->edit-balance#updateResults keyup->edit-balance#updateResults"
+    }
+  ) %>
 </div>
 <% end %>
 

@@ -56,6 +56,9 @@ es:
           la_tasa: "La Tasa"
           cetes_directo: "CetesDirecto"
           red_girasol: "RedGirasol"
+      balance:
+        amount: "Saldo"
+        transfers: "Depósitos / Retiros"
     models:
       account: "Cuenta"
   helpers:

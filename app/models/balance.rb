@@ -11,7 +11,10 @@ class Balance < ApplicationRecord
   before_save :calculate_diffs
 
   def prev
-    self.class.where(account: account).where("date < ?", date).order(date: :desc).limit(1).first
+    @prev ||= self.class
+      .where(account: account)
+      .where("date < ?", date)
+      .order(date: :desc).limit(1).first
   end
 
   def next
