@@ -6,7 +6,7 @@ class Scrapers::CetesDirecto < BaseScraper
   end
 
   def login
-    form = browser.form(action: "/obtenerAccesoWeb")
+    form = browser.form(id: "accesoWebForm")
     form.text_field(id: "userId").set(username)
     browser.button(id: "continuarBtn").click
     form.text_field(id: "pwdId").set(password)
@@ -14,8 +14,7 @@ class Scrapers::CetesDirecto < BaseScraper
   end
 
   def logout
-    browser.button(data_target: "#menuLateralWeb").click
-    browser.div(class: %w[bloqueMenuLateral subMenuLateralWeb], data_name: "cerrarSesion").click
+    browser.execute_script("cerrarSesion()")
   end
 
   def raw_value

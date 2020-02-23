@@ -18,6 +18,10 @@ class BaseScraper
     value = raw_value
     logout
     BigDecimal(value.tr("^0-9.", "")).round(2)
+  rescue Watir::Exception::UnknownObjectException => error
+    Rails.logger.error error
+    browser.screenshot.save "public/errors/#{Time.now.to_i}.png"
+    raise error
   ensure
     browser.close
   end
