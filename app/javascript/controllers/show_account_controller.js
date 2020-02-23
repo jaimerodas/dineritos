@@ -5,6 +5,8 @@ export default class extends Controller {
   static targets = ["chart", "balanceButton", "irrButton"]
 
   connect() {
+    this.chartTarget.innerHTML = ''
+    
     this.balances = new BalanceGraph(this.chartTarget, window.data.balances)
     this.irrs = new IRRGraph(this.chartTarget, window.data.irrs)
 

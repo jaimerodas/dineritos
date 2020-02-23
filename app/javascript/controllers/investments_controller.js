@@ -5,6 +5,7 @@ export default class extends Controller {
   static targets = ["chart", "summary", "summaryButtons"]
 
   connect() {
+    this.chartTarget.innerHTML = ''
     this.investments = new InvestmentGraph(this.chartTarget, window.data)
     this.investments.draw()
     this.addButtons()
@@ -27,6 +28,8 @@ export default class extends Controller {
   }
 
   addButtons() {
+    if (this.summaryButtonsTarget.children.length > 0) { return }
+
     const createButton = (period, text) => {
       const button = document.createElement("button")
       button.dataset.action = "click->investments#updateSummary"
