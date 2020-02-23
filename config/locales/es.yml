@@ -37,8 +37,6 @@ es:
       short_year: "%e/%B/%Y"
   activerecord:
     attributes:
-      balance_date:
-        date: "Fecha"
       account:
         name: "Nombre"
         currency: "Moneda"
