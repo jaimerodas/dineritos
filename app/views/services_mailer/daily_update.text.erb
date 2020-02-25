@@ -14,3 +14,10 @@ Ganancias última semana: <%= currency report[:week] %>
 Ganancias último mes: <%= currency report[:month] %>
 ------------------------------------------
 <% end %>
+
+<% if @errors.any? %>
+Desafortunadamente, vimos los siguientes errores:
+
+<% @errors.each do |e| %> - <%= e[:account] %>: *<%= e[:error] %>* <%= e[:message] %>
+<% end %>
+<% end %>

@@ -1,3 +1,5 @@
+
+
 <table>
   <thead>
     <tr>
@@ -33,3 +35,16 @@
     <% end %>
   </tbody>
 </table>
+
+<% if @errors.any? %>
+<h2 style="font-size: 1em;">Desafortunadamente, vimos los siguientes errores:</h2>
+<ul>
+  <% @errors.each do |error| %>
+  <li>
+    <b><%= error[:account] %></b>:
+    <i><%= error[:error] %></i>
+    <%= error[:message] %>
+  </li>
+  <% end %>
+</ul>
+<% end %>
