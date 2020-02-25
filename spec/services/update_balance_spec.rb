@@ -7,22 +7,22 @@ RSpec.describe UpdateBalance do
     let(:balance) { described_class.new(balance: FakeBalance.new, params: true) }
 
     it "should send email" do
-     expect(balance.send(:invalidated_todays_email?)).to be true
-   end
+      expect(balance.send(:invalidated_todays_email?)).to be true
+    end
 
-   it "should not update financials" do
-     expect(balance.send(:modified_history?)).to be false
-   end
+    it "should not update financials" do
+      expect(balance.send(:modified_history?)).to be false
+    end
 
-   it "should run successfully" do
-     expect(balance.run).to be true
-   end
+    it "should run successfully" do
+      expect(balance.run).to be true
+    end
   end
 
   context "balance from another day with everything changed" do
     let(:balance) { described_class.new(balance: FakeBalance.new(from_today: false), params: true) }
 
-     it "shouldn't send email" do
+    it "shouldn't send email" do
       expect(balance.send(:invalidated_todays_email?)).to be false
     end
 
@@ -37,7 +37,7 @@ RSpec.describe UpdateBalance do
 end
 
 class FakeBalance < OpenStruct
-  def initialize(params={})
+  def initialize(params = {})
     super({
       from_today: true,
       amount_cents_changed?: true,
@@ -47,6 +47,10 @@ class FakeBalance < OpenStruct
   end
 
   def assign_attributes(_)
+  end
+
+  def account
+    OpenStruct.new(user: nil)
   end
 
   def date
