@@ -1,8 +1,12 @@
 class Scrapers::CetesDirecto < BaseScraper
+  def self.current_balance_for(account)
+    new(account, headless: false).run
+  end
+
   private
 
   def login_url
-    "https://www.cetesdirecto.com/SSOSVD_wls/"
+    "https://www.cetesdirecto.com/SSOSVD_wls/login.jsp"
   end
 
   def login

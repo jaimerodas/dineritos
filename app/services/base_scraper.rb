@@ -3,8 +3,8 @@ class BaseScraper
     new(account).run
   end
 
-  def initialize(account)
-    @browser = Watir::Browser.new(:chrome, headless: true)
+  def initialize(account, headless: true)
+    @browser = Watir::Browser.new(:chrome, headless: headless)
     @username = account.settings.fetch("username")
     @password = account.settings.fetch("password")
   end
