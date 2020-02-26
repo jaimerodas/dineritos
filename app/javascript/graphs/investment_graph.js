@@ -169,15 +169,13 @@ class InvestmentGraph {
       .call(g => g.select(".domain").attr("stroke-opacity", 0))
 
     const drawTooltip = () => {
-      d3.event.preventDefault()
-
-      const [xCoord, _] = d3.mouse(d3.event.target)
       const bisectDate = d3.bisector(d => d.date).left
-      const xIndex = bisectDate(this.totals, this.x.invert(xCoord), 1) - 1
+      const xIndex = bisectDate(this.totals, this.x.invert(d3.event.x), 1) - 1
       const datum = this.totals[xIndex]
       const dateSnap = this.x(datum.date)
 
       hoverLine.attr('x1', dateSnap).attr('x2', dateSnap)
+      dragHandle.attr('cx', dateSnap)
 
       d3.select("#charts dd").text(formatCurrency(datum))
       d3.select("#charts time")
@@ -200,18 +198,25 @@ class InvestmentGraph {
 
     const dateSnap = this.x(this.totals[this.lastDate].date)
 
-    const hoverLine = this.svg.append("line")
-      .classed('hoverLine', true)
-      .attr('x1', dateSnap).attr('x2', dateSnap)
-      .attr('y1', this.margin.top)
-      .attr('y2', this.height - this.margin.bottom)
-
     this.svg.append('rect')
       .attr('fill', 'transparent')
       .attr('x', 0).attr('y', 0)
       .attr('width', this.width).attr('height', this.height)
 
-    this.svg.on('touchmove mousemove', drawTooltip)
+    const hoverLine = this.svg.append("line")
+      .classed('hover-line', true)
+      .attr('x1', dateSnap).attr('x2', dateSnap)
+      .attr('y1', this.margin.top - 4)
+      .attr('y2', this.height - this.margin.bottom)
+
+    const dragHandle = this.svg.append("circle")
+      .classed('drag-handle', true)
+      .attr('cx', dateSnap)
+      .attr('cy', 8)
+      .attr('r', 8)
+      .call(d3.drag()
+        .on("start", drawTooltip)
+        .on("drag", drawTooltip))
   }
 
   formatCurrency(d) {

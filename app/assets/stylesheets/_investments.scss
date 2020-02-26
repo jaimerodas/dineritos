@@ -27,6 +27,11 @@
   dt {
     color: var(--mid-color);
   }
+
+  .drag-handle {
+    fill: var(--fg-color);
+    cursor: ew-resize;
+  }
 }
 
 :root {
