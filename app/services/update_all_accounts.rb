@@ -20,6 +20,7 @@ class UpdateAllAccounts
 
   def process_accounts_for(user)
     user.accounts.updateable.each { |account| update_account(account) }
+    user.accounts.foreign_currency.each { |account| update_foreign_currency_account(account) }
   end
 
   def update_account(account)
@@ -30,5 +31,12 @@ class UpdateAllAccounts
     return if (tries -= 1) == 0
     sleep 5
     retry
+  end
+
+  def update_foreign_currency_account(account)
+    last_balance = account.last_amount
+    account.balances
+      .find_or_initialize_by(date: Date.current)
+      .update(original_amount_cents: last_balance.original_amount_cents)
   end
 end

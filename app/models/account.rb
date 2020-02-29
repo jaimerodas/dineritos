@@ -9,6 +9,7 @@ class Account < ApplicationRecord
 
   encrypts :settings, type: :json
   scope :updateable, -> { where.not(platform: :no_platform) }
+  scope :foreign_currency, -> { where(platform: :no_platform).where.not(currency: "MXN") }
 
   validates :name, presence: true
 
