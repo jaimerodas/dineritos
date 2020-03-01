@@ -1,4 +1,4 @@
-class Scrapers::Afluenta < BaseScraper
+class Updaters::Afluenta < BaseScraper
   private
 
   def login_url

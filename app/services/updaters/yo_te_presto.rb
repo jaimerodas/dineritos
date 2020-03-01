@@ -1,4 +1,4 @@
-class Scrapers::YoTePresto < BaseScraper
+class Updaters::YoTePresto < BaseScraper
   private
 
   def login_url

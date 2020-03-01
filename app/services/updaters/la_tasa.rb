@@ -1,4 +1,4 @@
-class Scrapers::LaTasa < BaseScraper
+class Updaters::LaTasa < BaseScraper
   private
 
   def login_url

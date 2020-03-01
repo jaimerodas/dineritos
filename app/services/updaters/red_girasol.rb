@@ -1,4 +1,4 @@
-class Scrapers::RedGirasol < BaseScraper
+class Updaters::RedGirasol < BaseScraper
   private
 
   def login_url

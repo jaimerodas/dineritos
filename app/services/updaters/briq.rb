@@ -1,4 +1,4 @@
-class Scrapers::Briq < BaseScraper
+class Updaters::Briq < BaseScraper
   private
 
   def login_url

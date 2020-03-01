@@ -23,7 +23,7 @@ class Account < ApplicationRecord
 
   def update_service
     platform.camelize
-      .then { |name| "Scrapers::#{name}".constantize }
+      .then { |name| "Updaters::#{name}".constantize }
   end
 
   def last_amount

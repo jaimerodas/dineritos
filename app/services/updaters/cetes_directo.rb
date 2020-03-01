@@ -1,4 +1,4 @@
-class Scrapers::CetesDirecto < BaseScraper
+class Updaters::CetesDirecto < BaseScraper
   def self.current_balance_for(account)
     new(account, headless: false).run
   end

@@ -1,4 +1,4 @@
-class Scrapers::Bitso
+class Updaters::Bitso
   BASE_URL = "https://api.bitso.com"
 
   def self.current_balance_for(account)
