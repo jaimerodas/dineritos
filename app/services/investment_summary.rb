@@ -5,7 +5,8 @@ class InvestmentSummary
 
   def initialize(user, period_string)
     @user = user
-    @period = calculate_period_from(period_string)
+    @period_string = period_string
+    @period = calculate_period_from(@period_string)
   end
 
   attr_reader :user, :period
@@ -45,7 +46,7 @@ class InvestmentSummary
   end
 
   def irr
-    @irr ||= period_aggregate.irr
+    IrrReport.for(user: user, period: @period_string).accumulated_irr
   end
 
   private
@@ -62,7 +63,7 @@ class InvestmentSummary
 
   def period_aggregate
     @period_aggregate ||= Balance
-      .select(deposits_column, withdrawals_column, earnings_column, irr_column)
+      .select(deposits_column, withdrawals_column, earnings_column)
       .where(account_id: elegible_account_ids, date: period)
       .order("1").first
   end
@@ -77,16 +78,6 @@ class InvestmentSummary
 
   def earnings_column
     "SUM(diff_cents) / 100.0 AS earnings"
-  end
-
-  # TODO: Remake the IRR calculator to take into account amounts as a percentage of the total
-  def irr_column
-    <<~SQL
-      COALESCE((
-        ((1 + SUM((diff_cents * 1.0) / (amount_cents - diff_cents - transfers_cents))) ^
-        (365.0 / SUM(diff_days)
-      )) - 1), 0) AS irr
-    SQL
   end
 
   def rank_column
