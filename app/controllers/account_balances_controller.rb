@@ -4,7 +4,7 @@ class AccountBalancesController < ApplicationController
   before_action :account_balance, only: %i[edit update]
 
   def new
-    @balance = Balance.new(date: Date.current, account: account)
+    @balance = Balance.new(date: Date.current, account: account, amount: account.last_amount.amount)
   end
 
   def create
