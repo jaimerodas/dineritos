@@ -2,7 +2,8 @@
   data: {
     controller: "edit-balance",
     "previous-balance": @balance.prev.amount.to_s,
-    "diff-days": (@balance.date - @balance.prev.date).to_i
+    "diff-days": (@balance.date - @balance.prev.date).to_i,
+    "exchange-rate": @balance.exchange_rate
   },
   url: url do |f| %>
 
@@ -23,18 +24,7 @@
   <div><%= pretty_date @balance.date %></div>
 </div>
 
-<div class="field">
-  <%= f.label :amount %>
-  <%= f.text_field(
-    :amount,
-    pattern: '^\-?\d*(\.\d{1,2})?$',
-    class: "amount",
-    data: {
-      target: "edit-balance.amount",
-      action: "change->edit-balance#updateResults"
-    }
-  ) %>
-</div>
+<%= amount_field_for f %>
 
 <% if @balance.account.investment? %>
 <div class="field">

@@ -21,11 +21,26 @@ class Balance < ApplicationRecord
     self.class.where(account: account).where("date > ?", date).order(date: :asc).limit(1).first
   end
 
+  def foreign_currency?
+    @foreign_currency ||= (currency != "MXN")
+  end
+
+  def currency
+    @currency ||= account.currency
+  end
+
+  def exchange_rate
+    @exchange_rate ||= if foreign_currency?
+      CurrencyRate.find_or_create_by(date: date, currency: currency).rate_subcents / 1000000.0
+    else
+      1.0
+    end
+  end
+
   private
 
   def convert_currency
-    rate = CurrencyRate.find_or_create_by(date: date, currency: account.currency).rate_subcents
-    self.amount_cents = (original_amount_cents * rate / 1000000.0).to_i
+    self.amount_cents = (original_amount_cents * exchange_rate).to_i
   end
 
   def calculate_diffs

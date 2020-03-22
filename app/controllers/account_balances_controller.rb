@@ -41,7 +41,7 @@ class AccountBalancesController < ApplicationController
   end
 
   def account_balance_params
-    params.require(:balance).permit(:amount, :transfers)
+    params.require(:balance).permit(:amount, :original_amount, :transfers)
   end
 
   def balance_missing?

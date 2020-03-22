@@ -5,6 +5,7 @@ export default class extends Controller {
   connect() {
     this.prevAmount = parseFloat(this.element.dataset.previousBalance)
     this.diffDays = parseInt(this.element.dataset.diffDays, 10)
+    this.exchangeRate = parseFloat(this.element.dataset.exchangeRate)
     this.updateResults()
   }
 
@@ -21,7 +22,7 @@ export default class extends Controller {
   }
 
   amount() {
-    return parseFloat(this.amountTarget.value)
+    return parseFloat(this.amountTarget.value) * this.exchangeRate
   }
 
   transfers() {
@@ -35,7 +36,8 @@ export default class extends Controller {
     if (amount === NaN || this.prevAmount === NaN || transfers === NaN) { return }
     const result = (amount - this.prevAmount - transfers).toLocaleString("en-us", {
       style: "decimal",
-      minimumFractionDigits: 2
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
     })
     this.diffTarget.textContent = result
   }
