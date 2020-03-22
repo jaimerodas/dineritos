@@ -12,13 +12,13 @@
 
 <div class="field">
   <%= f.label :amount %>
-  <%= f.number_field(
+  <%= f.text_field(
     :amount,
     pattern: '^\-?\d*(\.\d{1,2})?$',
-    step: "0.01",
+    class: "amount",
     data: {
       target: "edit-balance.amount",
-      action: "change->edit-balance#updateResults keyup->edit-balance#updateResults"
+      action: "change->edit-balance#updateResults"
     }
   ) %>
 </div>
@@ -26,13 +26,13 @@
 <% if @balance.account.investment? %>
 <div class="field">
   <%= f.label :transfers %>
-  <%= f.number_field(
+  <%= f.text_field(
     :transfers,
     pattern: '^\-?\d*(\.\d{1,2})?$',
-    step: "0.01",
+    class: "amount",
     data: {
       target: "edit-balance.transfers",
-      action: "change->edit-balance#updateResults keyup->edit-balance#updateResults"
+      action: "change->edit-balance#updateResults"
     }
   ) %>
 </div>

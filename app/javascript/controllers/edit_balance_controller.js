@@ -9,8 +9,15 @@ export default class extends Controller {
   }
 
   updateResults() {
+    this.cleanAmounts()
     this.calculateDiff()
     this.calculateIRR()
+  }
+
+  cleanAmounts() {
+    let regex = /[^-\d\.]/g
+    this.amountTarget.value = this.amountTarget.value.replace(regex, '')
+    this.transfersTarget.value = this.transfersTarget.value.replace(regex, '')
   }
 
   amount() {
@@ -50,3 +57,4 @@ export default class extends Controller {
     this.irrTarget.textContent = result
   }
 }
+// 1,100.00
