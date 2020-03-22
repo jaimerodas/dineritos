@@ -177,10 +177,8 @@ class InvestmentGraph {
       hoverLine.attr('x1', dateSnap).attr('x2', dateSnap)
       dragHandle.attr('cx', dateSnap)
 
-      d3.select("#charts dd").text(formatCurrency(datum))
-      d3.select("#charts time")
-        .attr("datetime", formatDate(datum.date))
-        .text(formatDate(datum.date))
+      currentAmount.text(formatCurrency(datum))
+      currentDate.text(formatDate(datum.date))
 
       this.barChart.update(xIndex)
     }
@@ -196,12 +194,29 @@ class InvestmentGraph {
     this.svg.append("g").attr("class", "axis").call(xAxis).attr("font-family", null)
     this.svg.append("g").attr("class", "axis").call(yAxis).attr("font-family", null)
 
-    const dateSnap = this.x(this.totals[this.lastDate].date)
+    const datum = this.totals[this.lastDate]
+    const dateSnap = this.x(datum.date)
 
     this.svg.append('rect')
       .attr('fill', 'transparent')
       .attr('x', 0).attr('y', 0)
       .attr('width', this.width).attr('height', this.height)
+
+    const textHolder = this.svg.append("text")
+      .attr("class", "current-data")
+      .attr("text-anchor", "start")
+      .attr("y", this.height - this.margin.top - 75)
+
+    const currentAmount = textHolder.append("tspan")
+      .style("font-size", "2em")
+      .style("font-weight", "900")
+      .attr("dy", "1em")
+      .attr("x", this.margin.left + 10)
+      .text(formatCurrency(datum))
+    const currentDate = textHolder.append("tspan")
+      .attr("dy", "1.3em")
+      .attr("x", this.margin.left + 10)
+      .text(formatDate(datum.date))
 
     const hoverLine = this.svg.append("line")
       .classed('hover-line', true)

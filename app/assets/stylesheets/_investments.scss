@@ -13,19 +13,8 @@
     width: 100%;
   }
 
-  dl {
-    text-align: center;
-    margin: 0;
-  }
-
-  dd {
-    font-size: 2em;
-    font-weight: 900;
-    margin: 0;
-  }
-
-  dt {
-    color: var(--mid-color);
+  .current-data {
+    fill: var(--fg-color);
   }
 
   .drag-handle {
@@ -44,6 +33,7 @@
   button {
     flex: auto;
     width: auto;
+    margin-top: 0;
   }
 }
 

@@ -15,11 +15,6 @@
 
   <main>
     <section id="charts">
-      <dl>
-        <dt>Total invertido al <time datetime="<%= @report.latest_date %>"><%= @report.latest_date %></time></dt>
-        <dd><%= currency @report.latest_total %></dd>
-      </dl>
-
       <script type="text/javascript">
         var data = <%= @report.to_json.html_safe %>
       </script>
