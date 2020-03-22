@@ -7,10 +7,10 @@ form {
 
 .field {
   position: relative;
-  margin: 1em auto 2em;
+  margin: 1em auto 1em;
 }
 
-label {
+label, form .label {
   display: block;
   padding: 0.5rem 0 0.25rem;
 
@@ -138,8 +138,9 @@ select {
       box-shadow: 0 0 0 0.125em var(--focus-color);
     }
 }
+
 select option {
-    font-weight:normal;
+  font-weight:normal;
 }
 
 .form-help {
@@ -151,4 +152,29 @@ select option {
   position: absolute;
   right: 0;
   bottom: -1.3rem;
+}
+
+form dl {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+
+  padding: 0.5em 0;
+  border: 0.0625em solid var(--border-color);
+  border-radius: 0.25em;
+
+  text-align: center;
+
+  div {
+    padding: 0 0.5em;
+  }
+
+  dt {
+    font-size: 0.75em;
+    color: var(--mid-color);
+  }
+  dd {
+    margin: 0;
+    font-weight: bold;
+  }
 }

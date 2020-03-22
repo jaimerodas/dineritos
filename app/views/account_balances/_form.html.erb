@@ -6,9 +6,22 @@
   },
   url: url do |f| %>
 
-<p><%= pretty_date @balance.date %></p>
-<p data-target="edit-balance.diff">0.00</p>
-<p data-target="edit-balance.irr">0%</p>
+<dl class="balance-results-summary">
+  <div>
+    <dt>TIR</dt>
+    <dd data-target="edit-balance.irr">0%</dd>
+  </div>
+
+  <div>
+    <dt>Rendimiento</dt>
+    <dd data-target="edit-balance.diff">0.00</dd>
+  </div>
+</dl>
+
+<div class="field">
+  <div class="label">Fecha</div>
+  <div><%= pretty_date @balance.date %></div>
+</div>
 
 <div class="field">
   <%= f.label :amount %>
