@@ -1,1 +1,5 @@
 <%= render "form", url: account_account_balances_path(@balance.account) %>
+
+<section class="actions">
+  <%= link_to "Cancelar", account_path(@balance.account) %>
+</section>

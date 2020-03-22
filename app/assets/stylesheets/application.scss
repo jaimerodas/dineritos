@@ -158,28 +158,6 @@ td {
   }
 }
 
-.actions {
-  text-align: center;
-  margin: 1em auto;
-  max-width: 40em;
-
-  a {
-    color: #077DBE;
-    text-decoration: none;
-    text-transform: uppercase;
-    font-weight: 900;
-
-    display: inline-block;
-    padding: 0.25em 0;
-    margin: 0 0.25em 0.25em;
-
-    &:hover {
-      border-bottom: 0.25em solid #077DBE;
-      margin-bottom: 0;
-    }
-  }
-}
-
 .graph-report {
   --height: 10rem;
   display: flex;
