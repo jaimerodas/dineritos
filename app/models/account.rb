@@ -18,7 +18,11 @@ class Account < ApplicationRecord
   end
 
   def can_be_updated?
-    last_amount.date < Date.current && updateable?
+    !last_amount.date || last_amount.date < Date.current 
+  end
+  
+  def can_be_updated_automatically?
+    can_be_updated? && updateable?
   end
 
   def update_service
@@ -27,7 +31,7 @@ class Account < ApplicationRecord
   end
 
   def last_amount
-    balances.order(date: :desc).limit(1).first
+    balances.order(date: :desc).limit(1).first || Balance.new
   end
 
   def latest_balance(force: false)

@@ -34,12 +34,16 @@ class AccountsController < ApplicationController
   end
 
   def show
-    @report = AccountReport.new(account: Account.find(params[:id]), user: current_user)
+    @report = AccountReport.new(account: account, user: current_user)
   end
 
   private
 
   def account_params
     params.require(:account).permit(:name, :currency, :platform, :account_type, settings: {})
+  end
+  
+  def account
+    @account ||= Account.find(params[:id])
   end
 end
