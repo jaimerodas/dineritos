@@ -30,10 +30,12 @@ class IrrReport
         eom = balance.month.end_of_month
         eom = Date.current if eom == Date.current.end_of_month
         month = balance.month.to_s
+        final_balance = final_balances.fetch(month)
 
         if prev_date && prev_final_balance
           result[month] = {
             diff: balance.diff.to_f,
+            transfers: (final_balance - prev_final_balance - balance.diff).to_f,
             starting_balance: prev_final_balance.to_f,
             days: prev_date ? (eom - prev_date).to_i : nil,
           }
@@ -41,7 +43,7 @@ class IrrReport
         end
 
         prev_date = eom
-        prev_final_balance = final_balances.fetch(month)
+        prev_final_balance = final_balance
       end
     end
   end
