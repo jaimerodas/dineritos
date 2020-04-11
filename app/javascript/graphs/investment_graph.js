@@ -6,7 +6,11 @@ class InvestmentGraph {
 
   constructor(element, data) {
     this.container = element
-    this.data = data.balances
+    this.data = data.balances.map(d => {
+      d.date = this.createDateInCorrectZone(d.date)
+      return d
+    })
+
     this.margin = ({top: 20, right: 10, bottom: 30, left: 32})
     this.barMargins = ({top: 20, right: 20, bottom: 0, left: 10})
     this.width = this.container.offsetWidth
@@ -32,16 +36,21 @@ class InvestmentGraph {
       .range(this.interpolateColors(this.keys.length, d3.interpolateRainbow))
 
     this.totals = Object.entries(this.data).map(d => {
-      return {date: new Date(d[1].date), value: d3.sum(Object.values(d[1]))}
+      return {
+        date: d[1].date,
+        value: d3.sum(Object.values(d[1]).filter(d => !(d instanceof Date)))
+      }
     })
 
     this.barData = (index) => {
       const dataset = this.data[index]
-      return this.keys.map(d => ({ key: d, value: dataset[d] }))
+      return this.keys
+        .map(d => ({ key: d, value: dataset[d] }))
+        .sort((a,b) => (b.value - a.value))
     }
 
-    this.x = d3.scaleUtc()
-      .domain(d3.extent(this.data, d => new Date(d.date)))
+    this.x = d3.scaleTime()
+      .domain(d3.extent(this.data, d => d.date))
       .range([this.margin.left, this.width - this.margin.right])
 
     this.y = d3.scaleLinear()
@@ -55,13 +64,13 @@ class InvestmentGraph {
       .range([this.barMargins.left, this.width - this.barMargins.right])
 
     this.barY = d3.scaleBand()
-      .domain(this.keys)
+      .domain(this.barData(this.lastDate).map(d => d.key))
       .range([this.barMargins.top, this.barChartHeight - this.barMargins.bottom])
       .padding(0.1)
 
     this.area = d3.area()
       .curve(d3.curveLinear)
-      .x(d => this.x(new Date(d.data.date)))
+      .x(d => this.x(d.data.date))
       .y0(d => this.y(d[0]))
       .y1(d => this.y(d[1]))
 
@@ -125,7 +134,7 @@ class InvestmentGraph {
       .attr("xlink:href", d => accounts[d.key].url)
       .append("text")
       .attr("transform", labelTransform)
-      .style("fill-opacity", d => (d.value > 0) ? "1" : "0")
+      .style("fill-opacity", d => (d.value > 1) ? "1" : "0")
       .html(detailsHTML)
 
     const xAxis = bsvg.append("g").attr("class", "axis").call(barXAxis).attr("font-family", null)
@@ -136,6 +145,7 @@ class InvestmentGraph {
         const t = bsvg.transition().duration(200).ease(d3.easeLinear)
 
         barX.domain([0, d3.max(data, d => d.value)])
+        barY.domain(data.map(d => d.key))
 
         bars.data(data, d => d.key).order().transition(t)
           .attr("width", d => barX(d.value) - barX(0))
@@ -143,7 +153,7 @@ class InvestmentGraph {
 
         details.data(data, d => d.key).order().transition(t)
           .attr("transform", labelTransform)
-          .style("fill-opacity", d => (d.value > 0) ? "1" : "0")
+          .style("fill-opacity", d => (d.value > 1) ? "1" : "0")
           .select("tspan.money").text(formatCurrency)
 
         xAxis.transition(t).call(barXAxis)
@@ -249,6 +259,12 @@ class InvestmentGraph {
     }
 
     return colorArray
+  }
+
+  createDateInCorrectZone(d) {
+    let date = new Date(d)
+    date.setTime(date.getTime() + date.getTimezoneOffset() * 60 * 1000)
+    return date
   }
 
   setLocale() {
