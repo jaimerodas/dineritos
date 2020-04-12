@@ -148,11 +148,11 @@ class InvestmentGraph {
         barX.domain([0, d3.max(data, d => d.value)])
         barY.domain(data.map(d => d.key))
 
-        bars.data(data, d => d.key).order().transition(t)
+        bars.data(data, d => d.key).transition(t)
           .attr("width", d => barX(d.value) - barX(0))
           .attr("y", d => barY(d.key))
 
-        details.data(data, d => d.key).order().transition(t)
+        details.data(data, d => d.key).transition(t)
           .attr("transform", labelTransform)
           .style("fill-opacity", d => (d.value > 0) ? "1" : "0")
           .select("tspan.money").text(formatCurrency)
