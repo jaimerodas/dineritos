@@ -7,10 +7,20 @@
 
 #charts {
   border: none;
-  margin: 1em 0 0;
+  margin: 0;
 
   svg {
     width: 100%;
+    display: block;
+  }
+
+  .line {
+    stroke: var(--fg-color);
+    stroke-width: 2;
+    stroke-opacity: 0.5;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+    fill: none;
   }
 
   .current-data {
@@ -21,13 +31,23 @@
     fill: var(--fg-color);
     cursor: ew-resize;
   }
+
+  .hover-line {
+    stroke: var(--fg-color);
+    stroke-opacity: 0.4;
+  }
+
+  .hover-dot {
+    fill: var(--fg-color);
+    opacity: 0.75;
+  }
 }
 
 :root {
   --sidebar-width: 15rem;
 }
 
-#investment-summary-nav {
+.chart-toggle {
   font-size: 0.875em;
 
   button {

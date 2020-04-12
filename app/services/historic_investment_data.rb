@@ -9,10 +9,6 @@ class HistoricInvestmentData
 
   attr_reader :user
 
-  def to_json
-    data.to_json
-  end
-
   def data
     {accounts: account_details, balances: balances}
   end

@@ -15,6 +15,11 @@ Rails.application.routes.draw do
     scope module: "investments", as: "investments", path: "inversiones" do
       resource :summary, path: "resumen", only: [:show]
     end
+
+    scope path: "graficas", as: "chart_data", module: "charts", defaults: {format: :json} do
+      resource :balances, path: "saldos", only: [:show]
+      resource :yields, path: "rendimientos", only: [:show]
+    end
   end
 
   # Rutas directas

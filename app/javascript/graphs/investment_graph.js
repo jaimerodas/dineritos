@@ -2,7 +2,6 @@ import * as d3 from "d3"
 
 class InvestmentGraph {
   height = 250
-  barChartHeight = 350
 
   constructor(element, data) {
     this.container = element
@@ -11,9 +10,19 @@ class InvestmentGraph {
       return d
     })
 
+    this.totals = Object.entries(this.data).map(d => {
+      return {
+        date: d[1].date,
+        value: d3.sum(Object.values(d[1]).filter(d => !(d instanceof Date)))
+      }
+    })
+
     this.margin = ({top: 20, right: 10, bottom: 30, left: 32})
     this.barMargins = ({top: 20, right: 20, bottom: 0, left: 10})
     this.width = this.container.offsetWidth
+    this.accounts = data.accounts
+    this.keys = Object.keys(this.accounts)
+    this.barChartHeight = (this.keys.length * 36) + this.barMargins.top + this.barMargins.bottom
 
     this.setLocale()
 
@@ -27,20 +36,12 @@ class InvestmentGraph {
       .attr("viewBox", [0, 0, this.width, this.barChartHeight])
       .attr("height", this.barChartHeight)
 
-    this.accounts = data.accounts
-    this.keys = Object.keys(this.accounts)
-
     this.series = d3.stack().keys(this.keys)(this.data)
 
     this.color = d3.scaleOrdinal().domain(this.keys)
       .range(this.interpolateColors(this.keys.length, d3.interpolateRainbow))
 
-    this.totals = Object.entries(this.data).map(d => {
-      return {
-        date: d[1].date,
-        value: d3.sum(Object.values(d[1]).filter(d => !(d instanceof Date)))
-      }
-    })
+
 
     this.barData = (index) => {
       const dataset = this.data[index]
@@ -134,7 +135,7 @@ class InvestmentGraph {
       .attr("xlink:href", d => accounts[d.key].url)
       .append("text")
       .attr("transform", labelTransform)
-      .style("fill-opacity", d => (d.value > 1) ? "1" : "0")
+      .style("fill-opacity", d => (d.value > 0) ? "1" : "0")
       .html(detailsHTML)
 
     const xAxis = bsvg.append("g").attr("class", "axis").call(barXAxis).attr("font-family", null)
@@ -142,7 +143,7 @@ class InvestmentGraph {
     return Object.assign(bsvg.node(), {
       update(index) {
         const data = dataAccessor(index)
-        const t = bsvg.transition().duration(200).ease(d3.easeLinear)
+        const t = bsvg.transition().duration(400).ease(d3.easeLinear)
 
         barX.domain([0, d3.max(data, d => d.value)])
         barY.domain(data.map(d => d.key))
@@ -153,7 +154,7 @@ class InvestmentGraph {
 
         details.data(data, d => d.key).order().transition(t)
           .attr("transform", labelTransform)
-          .style("fill-opacity", d => (d.value > 1) ? "1" : "0")
+          .style("fill-opacity", d => (d.value > 0) ? "1" : "0")
           .select("tspan.money").text(formatCurrency)
 
         xAxis.transition(t).call(barXAxis)

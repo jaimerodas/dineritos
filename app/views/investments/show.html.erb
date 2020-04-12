@@ -2,7 +2,8 @@
 <article
   class="investments"
   data-controller="investments"
-  data-investments-summary-url="<%= investments_summary_path(format: :html) %>">
+  data-investments-summary-url="<%= investments_summary_path(format: :html) %>"
+  data-investments-chart-url="/graficas/">
 
   <aside>
     <div
@@ -14,6 +15,10 @@
   </aside>
 
   <main>
+    <div
+      id="investment-charts-nav"
+      class="chart-toggle"
+      data-target="investments.chartButtons"></div>
     <section id="charts">
       <script type="text/javascript">
         var data = <%= @report.to_json.html_safe %>
