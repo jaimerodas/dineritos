@@ -17,31 +17,19 @@ class InvestmentGraph {
       }
     })
 
-    this.margin = ({top: 20, right: 10, bottom: 30, left: 32})
-    this.barMargins = ({top: 20, right: 20, bottom: 0, left: 10})
+    this.margin = ({top: 10, right: 10, bottom: 30, left: 32})
     this.width = this.container.offsetWidth
     this.accounts = data.accounts
     this.keys = Object.keys(this.accounts)
-    this.barChartHeight = (this.keys.length * 36) + this.barMargins.top + this.barMargins.bottom
 
     this.setLocale()
-
-    this.svg = d3.select(this.container).append("svg")
-      .attr("id", "histogram")
-      .attr("viewBox", [0, 0, this.width, this.height])
-      .attr("height", this.height)
-
-    this.bsvg = d3.select(this.container).append("svg")
-      .attr("id", "barChart")
-      .attr("viewBox", [0, 0, this.width, this.barChartHeight])
-      .attr("height", this.barChartHeight)
 
     this.series = d3.stack().keys(this.keys)(this.data)
 
     this.color = d3.scaleOrdinal().domain(this.keys)
       .range(this.interpolateColors(this.keys.length, d3.interpolateRainbow))
 
-
+    this.lastDate = this.data.length - 1
 
     this.barData = (index) => {
       const dataset = this.data[index]
@@ -53,58 +41,75 @@ class InvestmentGraph {
     this.x = d3.scaleTime()
       .domain(d3.extent(this.data, d => d.date))
       .range([this.margin.left, this.width - this.margin.right])
+  }
 
-    this.y = d3.scaleLinear()
-      .domain([0, d3.max(this.series, d => d3.max(d, d => d[1]))]).nice()
-      .range([this.height - this.margin.bottom, this.margin.top])
+  draw() {
+    this.navBar = this.navBar()
+    this.stackedAreaChart = this.stackedAreaChart()
+    this.barChart = this.barChart()
+  }
 
-    this.lastDate = this.data.length - 1
+  navBar() {
+    const navContainer = d3.select(this.container).append("section")
+      .attr("class", "chart-options")
 
-    this.barX = d3.scaleLinear()
-      .domain([0, d3.max(this.barData(this.lastDate), d => d.value)])
-      .range([this.barMargins.left, this.width - this.barMargins.right])
+    const textContainer = navContainer.append("div")
+    textContainer.append("span").text("Datos al")
 
-    this.barY = d3.scaleBand()
-      .domain(this.barData(this.lastDate).map(d => d.key))
-      .range([this.barMargins.top, this.barChartHeight - this.barMargins.bottom])
+    const datum = this.data[this.lastDate]
+    const currentDate = textContainer.append("span")
+      .attr("class", "chart-date")
+      .text(d3.utcFormat("%Y-%m-%d")(datum.date))
+
+    const formContainer = navContainer.append("label")
+    const followToggle = formContainer.append("input")
+      .attr("type", "checkbox")
+
+    return Object.assign(navContainer.node(), {
+      shouldFollow() {
+        return followToggle.property("checked")
+      },
+      update(datum) {
+        currentDate.text(d3.utcFormat("%Y-%m-%d")(datum.date))
+      }
+    })
+  }
+
+  barChart() {
+    const margin = ({top: 20, right: 20, bottom: 0, left: 10})
+    const height = (this.keys.length * 36) + margin.top + margin.bottom
+
+    const svg = this.svg("barChart", height)
+
+    const dataset = this.barData
+    const data = dataset(this.lastDate)
+
+    const x = d3.scaleLinear()
+      .domain([0, d3.max(data, d => d.value)])
+      .range([margin.left, this.width - margin.right])
+
+    const y = d3.scaleBand()
+      .domain(data.map(d => d.key))
+      .range([margin.top, height - margin.bottom])
       .padding(0.1)
 
-    this.area = d3.area()
-      .curve(d3.curveLinear)
-      .x(d => this.x(d.data.date))
-      .y0(d => this.y(d[0]))
-      .y1(d => this.y(d[1]))
 
-    this.barXAxis = g => g
-      .attr("transform", `translate(0, ${this.barMargins.top})`)
-      .call(d3.axisTop(this.barX)
+    const accounts = this.accounts
+    const xAxis = g => g
+      .attr("transform", `translate(0, ${margin.top})`)
+      .call(d3.axisTop(x)
       .ticks(this.width > 400 ? 10 : 6, ".3~s")
-      .tickSize(-(this.barChartHeight-this.barMargins.top-this.barMargins.bottom)))
+      .tickSize(-(height - margin.top - margin.bottom)))
       .call(g => g.selectAll(".tick:not(:first-of-type) line")
         .attr("stroke-opacity", 0.3)
         .attr("stroke-dasharray", "2,2"))
       .call(g => g.select(".domain").attr("stroke-opacity", 0))
-  }
 
-  draw() {
-    this.stackedAreaChart()
-    this.barChart = this.barChart()
-  }
-
-  barChart() {
-    const dataAccessor = this.barData
-    const accounts = this.accounts
-    const barX = this.barX
-    const barY = this.barY
-    const barXAxis = this.barXAxis
-    const margin = this.barMargins
-    const data = dataAccessor(this.lastDate)
-    const bsvg = this.bsvg
     const formatCurrency = this.formatCurrency
 
     const labelTransform = (d) => {
-      const xOffset = d3.max([barX(d.value) - 10, margin.left + 100])
-      const yOffset = barY(d.key) + barY.bandwidth() / 2
+      const xOffset = d3.max([x(d.value) - 10, margin.left + 100])
+      const yOffset = y(d.key) + y.bandwidth() / 2
       return `translate(${xOffset}, ${yOffset})`
     }
 
@@ -113,7 +118,7 @@ class InvestmentGraph {
               <tspan class="money" dy="0.85em" dx="0" x="0" y="0">${formatCurrency(d)}</tspan>`
     }
 
-    const bars = bsvg.append("g")
+    const bars = svg.append("g")
       .attr("class", "color-container")
       .selectAll("a")
       .data(data)
@@ -121,12 +126,12 @@ class InvestmentGraph {
       .attr("xlink:href", d => accounts[d.key].url)
       .append("rect")
       .attr("fill", d => this.color(d.key))
-      .attr("x", barX(0))
-      .attr("y", d => barY(d.key))
-      .attr("width", d => barX(d.value) - barX(0))
-      .attr("height", barY.bandwidth())
+      .attr("x", x(0))
+      .attr("y", d => y(d.key))
+      .attr("width", d => x(d.value) - x(0))
+      .attr("height", y.bandwidth())
 
-    const details = bsvg.append("g")
+    const details = svg.append("g")
       .attr("class", "barchart-text")
       .attr("text-anchor", "end")
       .selectAll("a")
@@ -138,111 +143,146 @@ class InvestmentGraph {
       .style("fill-opacity", d => (d.value > 0) ? "1" : "0")
       .html(detailsHTML)
 
-    const xAxis = bsvg.append("g").attr("class", "axis").call(barXAxis).attr("font-family", null)
+    const gx = svg.append("g").attr("class", "axis").call(xAxis).attr("font-family", null)
 
-    return Object.assign(bsvg.node(), {
+    return Object.assign(svg.node(), {
       update(index) {
-        const data = dataAccessor(index)
-        const t = bsvg.transition().duration(400).ease(d3.easeLinear)
+        const data = dataset(index)
+        const t = svg.transition().duration(400).ease(d3.easeLinear)
 
-        barX.domain([0, d3.max(data, d => d.value)])
-        barY.domain(data.map(d => d.key))
+        x.domain([0, d3.max(data, d => d.value)])
+        y.domain(data.map(d => d.key))
 
         bars.data(data, d => d.key).transition(t)
-          .attr("width", d => barX(d.value) - barX(0))
-          .attr("y", d => barY(d.key))
+          .attr("width", d => x(d.value) - x(0))
+          .attr("y", d => y(d.key))
 
         details.data(data, d => d.key).transition(t)
           .attr("transform", labelTransform)
           .style("fill-opacity", d => (d.value > 0) ? "1" : "0")
           .select("tspan.money").text(formatCurrency)
 
-        xAxis.transition(t).call(barXAxis)
+        gx.transition(t).call(xAxis)
       }
     })
   }
 
   stackedAreaChart() {
+    const margin = this.margin
+    const svg = this.svg("stackedAreaChart", this.height)
+
     const formatCurrency = this.formatCurrency
-    const formatDate = d3.utcFormat("%Y-%m-%d")
+
+    const x = this.x
+    const y = d3.scaleLinear()
+      .domain([0, d3.max(this.series, d => d3.max(d, d => d[1]))]).nice()
+      .range([this.height - margin.bottom, margin.top])
+
     const xAxis = (g) => g
-      .attr("transform", `translate(0,${this.height - this.margin.bottom})`)
-      .call(d3.axisBottom(this.x).ticks(this.width / 80).tickSizeOuter(0))
+      .attr("transform", `translate(0,${this.height - margin.bottom})`)
+      .call(d3.axisBottom(x).ticks(this.width / 80).tickSizeOuter(0))
 
     const yAxis = (g) => g
-      .attr("transform", `translate(${this.margin.left},0)`)
-      .call(d3.axisLeft(this.y)
+      .attr("transform", `translate(${margin.left},0)`)
+      .call(d3.axisLeft(y)
         .tickFormat(d3.format(".3~s"))
-        .tickSize(-(this.width-this.margin.left-this.margin.right)))
+        .tickSize(-(this.width-margin.left-margin.right)))
       .call(g => g.selectAll(".tick:not(:first-of-type) line")
         .attr("stroke-opacity", 0.3)
         .attr("stroke-dasharray", "2,2"))
       .call(g => g.select(".domain").attr("stroke-opacity", 0))
 
-    const drawTooltip = () => {
-      const bisectDate = d3.bisector(d => d.date).left
-      const xIndex = bisectDate(this.totals, this.x.invert(d3.event.x), 1) - 1
-      const datum = this.totals[xIndex]
-      const dateSnap = this.x(datum.date)
+    const area = d3.area()
+      .curve(d3.curveLinear)
+      .x(d => x(d.data.date))
+      .y0(d => y(d[0]))
+      .y1(d => y(d[1]))
 
-      hoverLine.attr('x1', dateSnap).attr('x2', dateSnap)
-      dragHandle.attr('cx', dateSnap)
-
-      currentAmount.text(formatCurrency(datum))
-      currentDate.text(formatDate(datum.date))
-
-      this.barChart.update(xIndex)
-    }
-
-    this.svg.append("g")
+    svg.append("g")
       .selectAll("path")
       .data(this.series)
       .join("path")
         .attr("fill", ({key}) => this.color(key))
         .attr("class", "color-container")
-        .attr("d", this.area)
+        .attr("d", area)
 
-    this.svg.append("g").attr("class", "axis").call(xAxis).attr("font-family", null)
-    this.svg.append("g").attr("class", "axis").call(yAxis).attr("font-family", null)
+    svg.append("g").attr("class", "axis").call(xAxis).attr("font-family", null)
+    svg.append("g").attr("class", "axis").call(yAxis).attr("font-family", null)
 
     const datum = this.totals[this.lastDate]
-    const dateSnap = this.x(datum.date)
+    const dateSnap = x(datum.date)
 
-    this.svg.append('rect')
+    svg.append('rect')
       .attr('fill', 'transparent')
       .attr('x', 0).attr('y', 0)
       .attr('width', this.width).attr('height', this.height)
 
-    const textHolder = this.svg.append("text")
+    const textHolder = svg.append("text")
       .attr("class", "current-data")
       .attr("text-anchor", "start")
-      .attr("y", this.height - this.margin.top - 75)
+      .attr("y", 0)
+
+    textHolder.append("tspan")
+      .attr("dy", "1em")
+      .attr("x", margin.left + 10)
+      .text("Saldo Total")
 
     const currentAmount = textHolder.append("tspan")
       .style("font-size", "2em")
       .style("font-weight", "900")
-      .attr("dy", "1em")
-      .attr("x", this.margin.left + 10)
+      .attr("dy", "0.9em")
+      .attr("x", margin.left + 10)
       .text(formatCurrency(datum))
-    const currentDate = textHolder.append("tspan")
-      .attr("dy", "1.3em")
-      .attr("x", this.margin.left + 10)
-      .text(formatDate(datum.date))
 
-    const hoverLine = this.svg.append("line")
+    const hoverLine = svg.append("line")
       .classed('hover-line', true)
       .attr('x1', dateSnap).attr('x2', dateSnap)
-      .attr('y1', this.margin.top - 4)
-      .attr('y2', this.height - this.margin.bottom)
+      .attr('y1', margin.top - 4)
+      .attr('y2', this.height - margin.bottom)
 
-    const dragHandle = this.svg.append("circle")
-      .classed('drag-handle', true)
+    const hoverDot = svg.append("circle")
+      .classed('hover-dot', true)
       .attr('cx', dateSnap)
-      .attr('cy', 8)
-      .attr('r', 8)
-      .call(d3.drag()
-        .on("start", drawTooltip)
-        .on("drag", drawTooltip))
+      .attr('cy', y(datum.value))
+      .attr('r', 3)
+
+    svg.on("touchmove mousemove", () => {
+      this.updateCharts()
+    })
+
+    return Object.assign(svg.node(), {
+      update(datum) {
+        const dateSnap = x(datum.date)
+
+        hoverLine.attr('x1', dateSnap).attr('x2', dateSnap)
+        hoverDot.attr('cx', dateSnap).attr("cy", y(datum.value))
+        currentAmount.text(formatCurrency(datum))
+      }
+    })
+  }
+
+  updateCharts() {
+    if (!this.navBar.shouldFollow()) { return }
+
+    const bisector = d3.bisector(d => d.date).left
+    const mouseX = d3.mouse(this.container)[0]
+    const realX = mouseX > (this.width - this.margin.right) ? this.width - this.margin.right : mouseX
+    const date = this.x.invert(realX)
+    const i = bisector(this.totals, date, 1)
+    const a = this.totals[i - 1], b = this.totals[i]
+    const datum = (date - a.date > b.date - date) ? b : a
+    const index = datum === a ? i - 1 : i
+
+    this.navBar.update(datum)
+    this.stackedAreaChart.update(datum)
+    this.barChart.update(index)
+  }
+
+  svg(id, height) {
+    return d3.select(this.container).append("svg")
+      .attr("id", id)
+      .attr("viewBox", [0, 0, this.width, height])
+      .attr("height", height)
   }
 
   formatCurrency(d) {

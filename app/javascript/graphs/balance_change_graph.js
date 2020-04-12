@@ -27,9 +27,36 @@ class BalanceChangeGraph {
   }
 
   draw() {
+    this.navBar = this.navBar()
     this.diffChart = this.diffChart()
     this.irrChart = this.irrChart()
     this.transfersChart = this.transfersChart()
+  }
+
+  navBar() {
+    const navContainer = d3.select(this.container).append("section")
+      .attr("class", "chart-options")
+
+    const textContainer = navContainer.append("div")
+    textContainer.append("span").text("Datos al mes de")
+
+    const datum = this.data[this.data.length - 1]
+    const currentDate = textContainer.append("span")
+      .attr("class", "chart-date")
+      .text(d3.utcFormat("%b %Y")(datum.date))
+
+    const formContainer = navContainer.append("label")
+    const followToggle = formContainer.append("input")
+      .attr("type", "checkbox")
+
+    return Object.assign(navContainer.node(), {
+      shouldFollow() {
+        return followToggle.property("checked")
+      },
+      update(datum) {
+        currentDate.text(d3.utcFormat("%b %Y")(datum.date))
+      }
+    })
   }
 
   irrChart() {
@@ -219,6 +246,8 @@ class BalanceChangeGraph {
   }
 
   updateCharts() {
+    if (!this.navBar.shouldFollow()) { return }
+
     const mouseX = d3.mouse(this.container)[0]
     const x = mouseX > (this.width - this.margin.right) ? this.width - this.margin.right : mouseX
     const date = this.x.invert(x)
@@ -228,6 +257,7 @@ class BalanceChangeGraph {
     const a = this.data[index - 1], b = this.data[index]
     const datum = (date - a.date > b.date - date) ? b : a
 
+    this.navBar.update(datum)
     this.diffChart.update(datum)
     this.irrChart.update(datum)
     this.transfersChart.update(datum)

@@ -27,11 +27,6 @@
     fill: var(--fg-color);
   }
 
-  .drag-handle {
-    fill: var(--fg-color);
-    cursor: ew-resize;
-  }
-
   .hover-line {
     stroke: var(--fg-color);
     stroke-opacity: 0.4;
@@ -45,6 +40,30 @@
 
 :root {
   --sidebar-width: 15rem;
+}
+
+.chart-options {
+  padding: 1rem;
+  margin: 0 0 1rem;
+  font-size: 0.875em;
+  color: var(--mid-color);
+
+  background-color: var(--bg-alt-color);
+  display: grid;
+  grid-template-columns: 1fr 3em;
+
+  .chart-date {
+    color: var(--fg-color);
+    display: block;
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+
+  label {
+    display: block;
+    width: 2em;
+    text-align: right;
+  }
 }
 
 .chart-toggle {
@@ -86,7 +105,7 @@
 @media screen and (min-width: 22em) {
   .investment-summary {
     dd {
-      font-size: 1.25em;
+      font-size: 1.5rem;
     }
   }
 }
@@ -98,7 +117,7 @@
 
   .investment-summary {
     grid-template-columns: 1fr;
-    padding: 0.25em 0;
+    padding: 0;
   }
 
   .investments {
