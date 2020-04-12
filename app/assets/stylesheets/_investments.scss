@@ -50,7 +50,8 @@
 
   background-color: var(--bg-alt-color);
   display: grid;
-  grid-template-columns: 1fr 3em;
+  grid-template-columns: 1fr 2rem;
+  align-items: center;
 
   .chart-date {
     color: var(--fg-color);
@@ -61,8 +62,27 @@
 
   label {
     display: block;
-    width: 2em;
-    text-align: right;
+    padding: 0;
+    width: 1.75rem;
+    height: 1.75rem;
+    background-color: var(--bg-alt-color);
+    border: 0.25rem solid var(--border-color);
+    border-radius: 2rem;
+    transition: background-color 0.4s ease-out;
+    transition: border-color 0.2s ease-out;
+
+    &:hover {
+      border-color: var(--focus-dark-color);
+    }
+  }
+
+  input[type="checkbox"]:checked ~ label {
+    border-color: var(--mid-color);
+    background-color: var(--mid-color);
+  }
+
+  input[type="checkbox"] {
+    display: none;
   }
 }
 

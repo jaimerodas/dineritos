@@ -45,9 +45,13 @@ class BalanceChangeGraph {
       .attr("class", "chart-date")
       .text(d3.utcFormat("%b %Y")(datum.date))
 
-    const formContainer = navContainer.append("label")
+    const formContainer = navContainer.append("div")
     const followToggle = formContainer.append("input")
+      .attr("id", "chartFollowToggle")
       .attr("type", "checkbox")
+
+    formContainer.append("label")
+      .attr("for", "chartFollowToggle")
 
     return Object.assign(navContainer.node(), {
       shouldFollow() {
