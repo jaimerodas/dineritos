@@ -1,6 +1,6 @@
 import * as d3 from "d3"
 
-class InvestmentGraph {
+class InvestmentChart {
   height = 250
 
   constructor(element, data) {
@@ -327,4 +327,4 @@ class InvestmentGraph {
   }
 }
 
-export { InvestmentGraph }
+export { InvestmentChart }

@@ -1,6 +1,6 @@
 import { Controller } from "stimulus"
-import { InvestmentGraph } from "../graphs/investment_graph"
-import { BalanceChangeGraph } from "../graphs/balance_change_graph"
+import { InvestmentChart } from "../charts/investment_chart"
+import { BalanceChangeChart } from "../charts/balance_change_chart"
 
 export default class extends Controller {
   static targets = ["chart", "summary", "summaryButtons", "chartButtons"]
@@ -11,7 +11,7 @@ export default class extends Controller {
   }
 
   chartGenerator(name) {
-    return {"Saldos": InvestmentGraph, "Rendimientos": BalanceChangeGraph}[name]
+    return {"Saldos": InvestmentChart, "Rendimientos": BalanceChangeChart}[name]
   }
 
   updateSummary(event) {

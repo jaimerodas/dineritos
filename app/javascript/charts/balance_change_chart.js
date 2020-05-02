@@ -1,6 +1,6 @@
 import * as d3 from "d3"
 
-class BalanceChangeGraph {
+class BalanceChangeChart {
   height = 180
 
   constructor(element, data) {
@@ -315,4 +315,4 @@ class BalanceChangeGraph {
   }
 }
 
-export { BalanceChangeGraph }
+export { BalanceChangeChart }

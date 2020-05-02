@@ -1,5 +1,5 @@
 import { Controller } from "stimulus"
-import { IRRGraph, BalanceGraph } from "../graphs/account_graphs"
+import { IRRChart, BalanceChart } from "../charts/account_charts"
 
 export default class extends Controller {
   static targets = ["chart", "balanceButton", "irrButton"]
@@ -7,14 +7,14 @@ export default class extends Controller {
   connect() {
     this.chartTarget.innerHTML = ''
     
-    this.balances = new BalanceGraph(this.chartTarget, window.data.balances)
-    this.irrs = new IRRGraph(this.chartTarget, window.data.irrs)
+    this.balances = new BalanceChart(this.chartTarget, window.data.balances)
+    this.irrs = new IRRChart(this.chartTarget, window.data.irrs)
 
     this.balances.draw()
     this.irrs.draw()
 
-    this.irrChart = document.getElementById("irr-graph")
-    this.balanceChart = document.getElementById("balance-graph")
+    this.irrChart = document.getElementById("irr-chart")
+    this.balanceChart = document.getElementById("balance-chart")
 
     this.addButtons()
   }

@@ -1,6 +1,6 @@
 import * as d3 from "d3"
 
-class IRRGraph {
+class IRRChart {
   constructor(element, data) {
     this.container = element
     this.data = data
@@ -8,7 +8,7 @@ class IRRGraph {
   }
 
   name() {
-    return "irr-graph"
+    return "irr-chart"
   }
 
   draw() {
@@ -166,9 +166,9 @@ class IRRGraph {
   }
 }
 
-class BalanceGraph extends IRRGraph {
+class BalanceChart extends IRRChart {
   name() {
-    return "balance-graph"
+    return "balance-chart"
   }
 
   curve() {
@@ -188,4 +188,4 @@ class BalanceGraph extends IRRGraph {
   }
 }
 
-export { IRRGraph, BalanceGraph }
+export { IRRChart, BalanceChart }
