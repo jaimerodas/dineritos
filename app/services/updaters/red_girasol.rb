@@ -13,6 +13,8 @@ class Updaters::RedGirasol < BaseScraper
 
     browser.text_field(class: "form-control", visible: true).set(password)
     browser.button(class: %w[btn btn-md], visible: true).click
+    
+    sleep 3
   end
 
   def logout
