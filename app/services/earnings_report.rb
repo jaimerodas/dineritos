@@ -35,7 +35,7 @@ class EarningsReport
         "balances.amount_cents / 100.0 amount",
         "balances.date"
       )
-      .where.not("accounts.platform": 0)
+      .where("accounts.account_type": 1)
       .order("accounts.name": :asc, "balances.date": :desc)
       .map { |account| [account.name, BigDecimal(account.amount.to_s)] }.to_h
   end
@@ -43,7 +43,7 @@ class EarningsReport
   def earnings_in_the_last(period)
     user.balances.joins(:account)
       .select("accounts.name, SUM(diff_cents) AS diff_cents")
-      .where.not("accounts.platform": 0)
+      .where("accounts.account_type": 1)
       .where.not("balances.diff_cents": nil)
       .where("balances.date > ?", period.ago.to_date)
       .group("accounts.name").order("accounts.name": :asc)
