@@ -19,6 +19,8 @@ Rails.application.routes.draw do
     scope path: "graficas", as: "chart_data", module: "charts", defaults: {format: :json} do
       resource :balances, path: "saldos", only: [:show]
       resource :yields, path: "rendimientos", only: [:show]
+      resources :account_balances, path: "saldos_de_cuenta", only: [:show]
+      resources :account_yields, path: "rendimiento_de_cuenta", only: [:show]
     end
   end
 

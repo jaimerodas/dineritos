@@ -37,7 +37,7 @@ class IrrReport
             diff: balance.diff.to_f,
             transfers: (final_balance - prev_final_balance - balance.diff).to_f,
             starting_balance: prev_final_balance.to_f,
-            days: prev_date ? (eom - prev_date).to_i : nil,
+            days: prev_date ? (eom - prev_date).to_i : nil
           }
           result[month][:irr] = (1 + balance.diff / prev_final_balance)**(365.0 / result[month][:days]) - 1
         end

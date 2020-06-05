@@ -5,7 +5,7 @@ class AccountReport
   end
 
   attr_reader :account
-  
+
   def renderer
     return "regular_account" if account_type == "checking"
     return "regular_account" if account.balances.count < 2

@@ -10,7 +10,7 @@ module AccountBalanceFormHelper
         class: "amount",
         data: {
           target: "edit-balance.amount",
-          action: "change->edit-balance#updateResults",
+          action: "change->edit-balance#updateResults"
         }
       )
     }

@@ -11,7 +11,7 @@ module BalanceFormHelper
         action: "change->form#recalculate keyup->form#recalculate",
         target: "form.balance",
         account: account.id,
-        currency: account.currency,
+        currency: account.currency
       })
 
     if account.currency != "MXN"
@@ -35,7 +35,7 @@ module BalanceFormHelper
 
     messages = {
       true => ["Las cuentas", "actualizan solas"],
-      false => ["La cuenta", "actualiza sola"],
+      false => ["La cuenta", "actualiza sola"]
     }
 
     plural = @data.non_editable_accounts.count > 1

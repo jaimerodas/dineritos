@@ -42,7 +42,7 @@ class AccountsController < ApplicationController
   def account_params
     params.require(:account).permit(:name, :currency, :platform, :account_type, settings: {})
   end
-  
+
   def account
     @account ||= Account.find(params[:id])
   end

@@ -33,7 +33,7 @@ class Updaters::Bitso
     signature = signature(nonce, path)
 
     HTTParty.get(BASE_URL + path, headers: {
-      "Authorization" => auth_header(nonce, signature),
+      "Authorization" => auth_header(nonce, signature)
     }).dig("payload", "balances").map { |result|
       amount = BigDecimal(result["total"])
       next unless amount > 0

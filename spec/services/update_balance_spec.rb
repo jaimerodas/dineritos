@@ -42,7 +42,7 @@ class FakeBalance < OpenStruct
       from_today: true,
       amount_cents_changed?: true,
       transfers_cents_changed?: true,
-      save: true,
+      save: true
     }.merge(params))
   end
 
