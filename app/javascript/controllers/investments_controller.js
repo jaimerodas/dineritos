@@ -6,7 +6,6 @@ export default class extends Controller {
   static targets = ["chart", "summary", "summaryButtons", "chartButtons"]
 
   connect() {
-    this.addSummaryNav()
     this.addChartsNav()
   }
 
@@ -15,6 +14,8 @@ export default class extends Controller {
   }
 
   updateSummary(event) {
+    event.preventDefault()
+
     const buttons = this.summaryButtonsTarget
     const summary = this.summaryTarget
 
@@ -22,10 +23,10 @@ export default class extends Controller {
       .then(response => response.text())
       .then(html => {
         buttons
-          .querySelectorAll("button.active")
-          .forEach(d => d.className = "")
+          .querySelectorAll("a.active")
+          .forEach(d => d.classList.remove("active"))
 
-        event.target.className = "active"
+        event.target.classList.add("active")
         summary.innerHTML = html
       })
   }
@@ -46,29 +47,6 @@ export default class extends Controller {
         chartContainer.innerHTML = ''
         new chartGenerator(this.chartTarget, JSON.parse(raw)).draw()
       })
-  }
-
-  addSummaryNav() {
-    if (this.summaryButtonsTarget.children.length > 0) { return }
-
-    const createButton = (period, label) => {
-      const button = document.createElement("button")
-      button.dataset.action = "click->investments#updateSummary"
-      button.dataset.url = this.data.get("summary-url") + "?period=" + period
-      button.textContent = label
-      return button
-    }
-
-    const currentYear = (new Date()).getFullYear()
-
-    const lastYearButton = createButton("past_year", "Último Año")
-    const currentCalendarYearButton = createButton(currentYear, currentYear)
-    const previousCalendarYearButton = createButton(currentYear - 1, currentYear - 1)
-
-    this.summaryButtonsTarget
-      .append(lastYearButton, currentCalendarYearButton, previousCalendarYearButton)
-
-    this.updateSummary({target: currentCalendarYearButton})
   }
 
   addChartsNav() {

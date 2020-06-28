@@ -89,7 +89,7 @@
 .chart-toggle {
   font-size: 0.875em;
 
-  button {
+  & > button, & > a {
     flex: auto;
     width: auto;
     margin-top: 0;

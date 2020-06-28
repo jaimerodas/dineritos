@@ -67,7 +67,7 @@ input {
   }
 }
 
-button {
+button, .btn {
   display: block;
   width: 100%;
   border: none;
@@ -81,6 +81,7 @@ button {
   font-family: inherit;
   font-size: 1em;
   font-weight: bold;
+  text-decoration: none;
 
   cursor: pointer;
 

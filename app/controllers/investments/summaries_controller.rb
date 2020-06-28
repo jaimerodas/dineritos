@@ -7,6 +7,6 @@ class Investments::SummariesController < ApplicationController
       period: params[:period].blank? ? "past_year" : params[:period]
     )
 
-    render layout: false
+    render "shared/_investments_summary", layout: false
   end
 end

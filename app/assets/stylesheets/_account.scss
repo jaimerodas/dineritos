@@ -148,9 +148,10 @@ svg .color-container {
 .chart-toggle {
   display: flex;
 
-  button {
+  & > button, & > a {
     background-color: var(--border-color);
 
+    text-align: center;
     text-transform: none;
     font-weight: bold;
     border-radius: 0;

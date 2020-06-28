@@ -6,12 +6,10 @@
   data-investments-chart-url="/graficas/">
 
   <aside>
-    <div
-      id="investment-summary-nav"
-      class="chart-toggle"
-      data-target="investments.summaryButtons"></div>
-
-    <section id="investmentSummary" data-target="investments.summary"></section>
+    <%= summary_buttons %>
+    <section id="investmentSummary" data-target="investments.summary">
+      <%= render "shared/investments_summary" %>
+    </section>
   </aside>
 
   <main>
