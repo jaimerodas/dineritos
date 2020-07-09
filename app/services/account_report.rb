@@ -83,7 +83,10 @@ class AccountReport
 
   def select_irr
     "
-      COALESCE((((1 + SUM((diff_cents * 1.0) / (amount_cents - diff_cents - transfers_cents))) ^
+      COALESCE((((1 + SUM(
+        (diff_cents * 1.0) /
+        CASE WHEN (amount_cents - diff_cents - transfers_cents = 0) THEN 1 ELSE (amount_cents - diff_cents - transfers_cents) END
+      )) ^
       (365.0 / SUM(diff_days))) - 1), 0)
       AS irr
     "
