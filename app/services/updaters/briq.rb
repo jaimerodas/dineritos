@@ -8,7 +8,7 @@ class Updaters::Briq < BaseScraper
   def login
     browser.text_field(id: "user_email").set(username)
     browser.text_field(id: "user_password").set(password)
-    browser.form(action: "/users/sign_in").submit
+    browser.form(action: "/users/sign_in?next=2FA").submit
   end
 
   def raw_value
