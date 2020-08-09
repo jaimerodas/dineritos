@@ -13,6 +13,7 @@ class AccountBalancesController < ApplicationController
     )
 
     if @balance.save
+      ServicesMailer.daily_update(balance.account.user).deliver_now
       redirect_to account_path(@balance.account)
     else
       render :new
