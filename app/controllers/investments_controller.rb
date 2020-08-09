@@ -9,4 +9,3 @@ class InvestmentsController < ApplicationController
     )
   end
 end
-
