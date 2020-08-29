@@ -21,7 +21,7 @@ class EarningsReport
   def totals
     @totals ||= details.each_with_object(totals_hash) { |(account, report), result|
       %i[current day week month].each do |period|
-        result[period] += report.fetch(period, BigDecimal(0))
+        result[period] += report.fetch(period, BigDecimal("0"))
       end
     }
   end
@@ -60,6 +60,6 @@ class EarningsReport
   end
 
   def totals_hash
-    {current: BigDecimal(0), day: BigDecimal(0), week: BigDecimal(0), month: BigDecimal(0)}
+    {current: BigDecimal("0"), day: BigDecimal("0"), week: BigDecimal("0"), month: BigDecimal("0")}
   end
 end

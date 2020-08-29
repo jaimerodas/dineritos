@@ -11,13 +11,13 @@ gem "rails", "~> 6.0"
 gem "pg", ">= 0.18", "< 2.0"
 gem "postmark-rails"
 gem "puma", "~> 3.12"
-gem "sass-rails", "~> 5"
+gem "sass-rails", "~> 6"
 gem "turbolinks", "~> 5"
 gem "watir"
-gem "webpacker", "~> 4.0"
-gem "will_paginate", "~> 3.1"
+gem "webpacker", "~> 5.2"
+gem "will_paginate", "~> 3.3"
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
-gem "jbuilder", "~> 2.5"
+gem "jbuilder", "~> 2"
 # Use Redis adapter to run Action Cable in production
 # gem 'redis', '~> 4.0'
 
