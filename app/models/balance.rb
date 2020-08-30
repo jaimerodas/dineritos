@@ -4,29 +4,27 @@ class Balance < ApplicationRecord
 
   monetize :amount_cents
   monetize :transfers_cents
-  monetize :original_amount_cents, allow_nil: true
   monetize :diff_cents, allow_nil: true
 
-  before_validation :convert_currency, if: proc { account.currency != "MXN" && account.no_platform? }
   before_save :calculate_diffs
+  after_save :convert_currency, if: proc { currency != "MXN" && account.currency != "MXN" }
 
   def prev
     @prev ||= self.class
-      .where(account: account)
+      .where(account: account, currency: currency)
       .where("date < ?", date)
       .order(date: :desc).limit(1).first
   end
 
   def next
-    self.class.where(account: account).where("date > ?", date).order(date: :asc).limit(1).first
+    self.class
+      .where(account: account, currency: currency)
+      .where("date > ?", date)
+      .order(date: :asc).limit(1).first
   end
 
   def foreign_currency?
     @foreign_currency ||= (currency != "MXN")
-  end
-
-  def currency
-    @currency ||= account.currency
   end
 
   def exchange_rate
@@ -40,7 +38,14 @@ class Balance < ApplicationRecord
   private
 
   def convert_currency
-    self.amount_cents = (original_amount_cents * exchange_rate).to_i
+    Balance.find_or_initialize_by(
+      account: account,
+      date: date,
+      currency: "MXN"
+    ).update(
+      amount_cents: (amount_cents * exchange_rate).to_i,
+      transfers_cents: (transfers_cents * exchange_rate).to_i
+    )
   end
 
   def calculate_diffs

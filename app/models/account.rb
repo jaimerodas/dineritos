@@ -31,12 +31,12 @@ class Account < ApplicationRecord
   end
 
   def last_amount
-    balances.order(date: :desc).limit(1).first || Balance.new
+    balances.where(currency: currency).order(date: :desc).limit(1).first || Balance.new
   end
 
   def latest_balance(force: false)
     return last_amount.amount if last_amount.date == Date.current && !force
-    balance = balances.find_or_initialize_by(date: Date.current)
+    balance = balances.find_or_initialize_by(date: Date.current, currency: currency)
     balance.update(amount: update_service.current_balance_for(self))
     BigDecimal(balance.amount.to_d)
   end

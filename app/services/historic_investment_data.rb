@@ -59,6 +59,7 @@ class HistoricInvestmentData
   def data_from_db
     user.balances
       .select(:date, :account_id, :amount_cents)
+      .where(currency: "MXN")
       .where("date > ?", 1.year.ago)
       .where(account_id: account_ids)
       .order(:date, :account_id)

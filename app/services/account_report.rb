@@ -68,7 +68,7 @@ class AccountReport
   private
 
   def available_balances
-    account.balances.where(date: period)
+    account.balances.where(date: period, currency: account.currency)
   end
 
   def summary

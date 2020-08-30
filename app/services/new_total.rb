@@ -32,7 +32,6 @@ class NewTotal
       DISTINCT ON (accounts.id)
       accounts.id, accounts.name, accounts.currency,
       balances.amount_cents / 100.0 AS amount,
-      balances.original_amount_cents / 100.0 AS original_amount,
       balances.date
     SQL
   end

@@ -42,6 +42,7 @@ class AllAccountsReport
   def account(account_id)
     @account ||= Balance.joins(:account)
       .where("accounts.id": account_id)
+      .where("balances.currency": "MXN")
       .select(account_sql)
       .order("balances.date": :desc)
   end
@@ -51,7 +52,7 @@ class AllAccountsReport
       Balance.joins(:account)
         .select(account_sql)
         .order(date: :desc)
-        .where(date: dates)
+        .where(date: dates, currency: "MXN")
     ).where("date = ?", dates.first).order(name: :asc)
   end
 

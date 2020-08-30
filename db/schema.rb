@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_23_200243) do
+ActiveRecord::Schema.define(version: 2020_08_30_161711) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -38,8 +38,9 @@ ActiveRecord::Schema.define(version: 2020_02_23_200243) do
     t.integer "transfers_cents", default: 0, null: false
     t.integer "diff_cents"
     t.integer "diff_days"
+    t.text "currency", default: "MXN", null: false
     t.index ["account_id"], name: "index_balances_on_account_id"
-    t.index ["date", "account_id"], name: "index_balances_on_date_and_account_id", unique: true
+    t.index ["date", "account_id", "currency"], name: "one_currency_balance_per_day", unique: true
   end
 
   create_table "currency_rates", force: :cascade do |t|

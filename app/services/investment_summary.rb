@@ -64,7 +64,7 @@ class InvestmentSummary
   def period_aggregate
     @period_aggregate ||= Balance
       .select(deposits_column, withdrawals_column, earnings_column)
-      .where(account_id: elegible_account_ids, date: period)
+      .where(account_id: elegible_account_ids, date: period, currency: "MXN")
       .order("1").first
   end
 
@@ -87,7 +87,7 @@ class InvestmentSummary
   def ranked_balances
     Balance
       .select(:amount_cents, rank_column)
-      .where(account_id: elegible_account_ids, date: period)
+      .where(account_id: elegible_account_ids, date: period, currency: "MXN")
       .order("rank")
   end
 end

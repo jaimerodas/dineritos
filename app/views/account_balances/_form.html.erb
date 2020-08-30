@@ -2,8 +2,7 @@
   data: {
     controller: "edit-balance",
     "previous-balance": @balance.prev&.amount&.to_s || 0,
-    "diff-days": @balance.prev ? (@balance.date - @balance.prev.date).to_i : 0,
-    "exchange-rate": @balance.exchange_rate
+    "diff-days": @balance.prev ? (@balance.date - @balance.prev.date).to_i : 0
   },
   url: url do |f| %>
 

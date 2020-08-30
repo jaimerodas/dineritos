@@ -51,7 +51,7 @@ class IrrReport
   def diffs
     @diffs ||= Balance
       .select("SUM(diff_cents) AS diff_cents", "DATE_TRUNC('month', date)::DATE AS month")
-      .where(account_id: accounts, date: period)
+      .where(account_id: accounts, date: period, currency: "MXN")
       .group("2").order("2")
   end
 
@@ -68,7 +68,7 @@ class IrrReport
   def ranked_balances
     Balance
       .select(:amount_cents, "DATE_TRUNC('month', date)::DATE AS month", rank_column)
-      .where(account_id: accounts, date: period)
+      .where(account_id: accounts, date: period, currency: "MXN")
       .order("2")
   end
 

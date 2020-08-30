@@ -36,7 +36,7 @@ class UpdateAllAccounts
   def update_foreign_currency_account(account)
     last_balance = account.last_amount
     account.balances
-      .find_or_initialize_by(date: Date.current)
-      .update(original_amount_cents: last_balance.original_amount_cents)
+      .find_or_initialize_by(date: Date.current, currency: account.currency)
+      .update(amount_cents: last_balance.amount_cents)
   end
 end

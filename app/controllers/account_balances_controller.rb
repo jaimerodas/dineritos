@@ -9,7 +9,11 @@ class AccountBalancesController < ApplicationController
 
   def create
     @balance = current_user.balances.build(
-      account_balance_params.merge({date: Date.current, account: account})
+      account_balance_params.merge({
+        date: Date.current,
+        account: account,
+        currency: account.currency
+      })
     )
 
     if @balance.save
@@ -42,7 +46,7 @@ class AccountBalancesController < ApplicationController
   end
 
   def account_balance_params
-    params.require(:balance).permit(:amount, :original_amount, :transfers)
+    params.require(:balance).permit(:amount, :transfers)
   end
 
   def balance_missing?

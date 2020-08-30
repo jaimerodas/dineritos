@@ -1,12 +1,10 @@
 module BalanceFormHelper
   def amount_field(container, account)
-    field_name = account.currency != "MXN" ? :original_amount : :amount
-
-    input = container.number_field(field_name,
+    input = container.number_field(:amount,
       min: 0,
       pattern: '^\d*(\.\d{1,2})?$',
       step: "0.01",
-      value: account.original_amount || account.amount || 0.0,
+      value: account.amount || 0.0,
       data: {
         action: "change->form#recalculate keyup->form#recalculate",
         target: "form.balance",
@@ -22,7 +20,7 @@ module BalanceFormHelper
     end
 
     content_tag(:div, class: "field") {
-      concat container.label(field_name, account.name)
+      concat container.label(:amount, account.name)
       concat input
       if account.date
         concat content_tag(:p, "Última actualización: #{account.date}", class: "form-help")
