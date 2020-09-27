@@ -34,3 +34,6 @@ yarn-debug.log*
 # Ignore stupid macOS stuff
 .DS_Store
 */**/.DS_Store
+
+# Ignore editor stuff
+.nova
