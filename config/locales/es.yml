@@ -33,6 +33,7 @@ es:
       - :month
       - :year
     formats:
+      numeric: "%d/%m/%Y"
       short: "%e de %B"
       short_year: "%e/%B/%Y"
   activerecord:

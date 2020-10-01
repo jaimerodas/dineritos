@@ -1,3 +1,4 @@
+<% content_for(:title) { @balance.account.name } %>
 <%= render "form", url: account_balance_path(params[:id]) %>
 
 <section class="actions">

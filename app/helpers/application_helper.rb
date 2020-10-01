@@ -21,4 +21,12 @@ module ApplicationHelper
       concat next_link(next_page)
     end
   end
+
+  def title
+    if content_for(:title).present?
+      [content_for(:title), "Dineritos"].join(" - ")
+    else
+      "Dineritos"
+    end
+  end
 end

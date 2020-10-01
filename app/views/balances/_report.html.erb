@@ -1,3 +1,4 @@
+<% content_for(:title) { "Saldos al #{l(@report.date, format: :numeric)}" } %>
 <header>
   <section class="header-details">
     <span class="header-description">Saldos al <%= pretty_date(@report.date) %></span>
