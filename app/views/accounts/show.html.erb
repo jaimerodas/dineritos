@@ -17,4 +17,4 @@
 </header>
 <%= render "accounts/#{@report.renderer}" %>
 
-<%= will_paginate @report.balances(params[:page]), page_links: false, renderer: DineritosNavRenderer %>
+<%= will_paginate @report.balances(params[:page]), page_links: false %>

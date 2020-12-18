@@ -30,8 +30,6 @@ module Dineritos
     # -- all .rb files in that directory are automatically loaded after loading
     # the framework and any gems in your application.
 
-    # Don't generate system test files.
-    config.generators.system_tests = nil
     Money.locale_backend = nil
     config.i18n.default_locale = :es
   end
