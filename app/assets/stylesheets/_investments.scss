@@ -101,7 +101,6 @@
   grid-template-columns: 1fr 1fr;
   grid-gap: 0.25rem;
   padding: 0.25rem;
-
   text-align: right;
   margin: 0;
 
@@ -116,13 +115,13 @@
   }
 
   dd {
-    font-size: 1em;
+    font-size: 1.2em;
     font-weight: bold;
     margin: 0;
   }
 }
 
-@media screen and (min-width: 22em) {
+@media screen and (min-width: 24em) {
   .investment-summary {
     dd {
       font-size: 1.5rem;
