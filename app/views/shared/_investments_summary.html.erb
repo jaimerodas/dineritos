@@ -11,12 +11,12 @@
 
   <div>
     <dt>Rendimientos</dt>
-    <dd><%= diff @summary.earnings %></dd>
+    <dd><%= currency @summary.earnings, diff: true %></dd>
   </div>
 
   <div>
     <dt>Inversión Neta</dt>
-    <dd><%= diff @summary.net_investment %></dd>
+    <dd><%= currency @summary.net_investment, diff: true %></dd>
   </div>
 
   <div>

@@ -11,7 +11,7 @@
     <% @report.balances(params[:page]).each do |balance| %>
     <tr>
       <td class="date"><%= balance.date %></td>
-      <td class="diff currency" data-name="Cambio"><%= diff balance.diff %></td>
+      <td class="diff currency" data-name="Cambio"><%= currency balance.diff, diff: true %></td>
       <td class="main currency" data-name="Saldo"><%= currency balance.amount %></td>
     </tr>
     <% end %>
