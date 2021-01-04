@@ -1,59 +1,109 @@
 header.account-header {
-  text-align: center;
+  text-align: left;
   border: none;
   margin: 2em 0 1em;
   padding: 0;
 
   h1 {
-    margin: 0;
+    font-size: 2em;
+    margin: 0.25em 0;
   }
 
-  .last-updated {
+  nav {
+    box-shadow: var(--border-color) 0 -0.0625rem 0 0 inset;
     display: flex;
-    justify-content: center;
-    align-items: center;
-
-    font-size: 0.875em;
-    color: var(--mid-color);
+    flex-direction: column-reverse;
   }
 
-  span {
-    color: var(--fg-color);
-    margin: 0 0.25em;
-  }
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
 
-  a {
-    display: inline-block;
+    a {
+      display: block;
+      color: var(--mid-color);
+      text-decoration: none;
 
-    background-color: var(--border-color);
-    color: var(--fg-color);
-    font-size: 0.625rem;
-    text-decoration: none;
-    text-transform: uppercase;
-    letter-spacing: 0.125em;
+      padding: 1em 1em;
+      border-bottom: 0.125rem solid transparent;
+      transition: 0.2s ease border-bottom-color;
 
-    padding: 0.25em 0.5em 0.4em;
-    margin: 0 0.5em;
-    border-radius: 0.25em;
-  }
+      &:hover {
+        border-bottom-color: var(--mid-color);
+      }
 
-  a.svg-link {
-    display: block;
-    background-color: transparent;
-    font-size: 0;
-    transform: rotate(0deg);
+      &.active {
+        color: var(--fg-color);
+        border-bottom-color: var(--focus-color)
+      }
+    }
 
-    &:hover {
-      animation-name: rotate;
-      animation-duration: 1.5s;
-      animation-iteration-count: infinite;
-      animation-timing-function: linear;
+    &.actions {
+      a {
+        color: var(--bg-color);
+        font-size: 0.875em;
+        font-weight: normal;
+        border: none;
+        border-radius: 0.5em;
+        background-color: var(--positive-color);
+        margin: 0;
+        padding: 0.5em 0.75em;
+      }
+
+      a.svg-link {
+        display: block;
+        padding: 0.32em 0.4em;
+      }
     }
   }
 
   svg {
     width: calc(1.125rem);
-    fill: var(--positive-color);
+    fill: var(--bg-color);
+  }
+}
+
+nav.secondary-nav {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  h2 {
+    flex: 1;
+  }
+
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+  }
+
+  a {
+    font-size: 0.875em;
+    text-decoration: none;
+    color: var(--fg-color);
+
+    display: block;
+    padding: 0.5em 0.75em;
+    margin-left: 0.25em;
+    border: 0.0625rem solid transparent;
+    border-radius: 0.5em;
+
+    &:hover {
+      border-color: var(--border-color);
+    }
+  }
+
+  span {
+    font-size: 0.875em;
+    color: var(--disabled-color);
+    display: block;
+    padding: 0.5em 0.75em;
+    border: 0.0625rem solid transparent;
+    margin-left: 0.25em;
   }
 }
 
@@ -253,6 +303,21 @@ svg .color-container {
 }
 
 @media screen and (min-width: 30em) {
+  header.account-header {
+    h1 {
+      font-size: 3em;
+    }
+    nav {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+    }
+  }
+
+  nav.secondary-nav {
+    flex-direction: row-reverse;
+  }
+
   .summary {
     display: flex;
     align-items: center;
@@ -273,15 +338,5 @@ svg .color-container {
 @media screen and (min-width: 40em) {
   .big-number > em {
     font-size: 2em;
-  }
-}
-
-@keyframes rotate {
-  from {
-    transform: rotate(0deg);
-  }
-
-  to {
-    transform: rotate(360deg);
   }
 }

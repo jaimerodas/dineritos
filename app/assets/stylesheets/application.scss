@@ -28,7 +28,7 @@ article {
   padding: 0;
 }
 
-nav {
+#main-nav {
   display: flex;
   box-sizing: border-box;
   width: 100%;
@@ -152,7 +152,7 @@ td {
     color: var(--negative-color);
   }
 
-  &.zero {
+  &.zero, & > .zero {
     color: var(--fg-color);
   }
 }
@@ -238,7 +238,7 @@ td {
 }
 
 @media screen and (min-width: 40em) {
-  nav {
+  #main-nav {
     position: absolute;
     font-size: 0.875rem;
     bottom: auto;
@@ -271,7 +271,7 @@ td {
 }
 
 @media screen and (min-width: 45em) {
-  nav {
+  #main-nav {
     font-size: 1rem;
   }
 

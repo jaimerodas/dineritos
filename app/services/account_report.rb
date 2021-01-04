@@ -6,12 +6,6 @@ class AccountReport
 
   attr_reader :account
 
-  def renderer
-    return "regular_account" if account_type == "checking"
-    return "regular_account" if account.balances.count < 2
-    "investment_account"
-  end
-
   def account_name
     account.name
   end
@@ -42,10 +36,6 @@ class AccountReport
 
   def irr
     @irr ||= summary.irr
-  end
-
-  def balances(page = 1)
-    available_balances.paginate(page: page, per_page: 15).order(date: :desc)
   end
 
   def monthly_irrs

@@ -5,6 +5,7 @@ Rails.application.routes.draw do
     resources :accounts, path: "cuentas", except: [:destroy] do
       resources :account_balances, path: "saldos", only: [:new, :create]
       resource :update, path: "actualizar", only: [:show], constraints: {format: :json}
+      resources :movements, path: "movimientos", only: [:index]
     end
 
     resources :account_balances, path: "saldos_de_cuenta", only: [:edit, :update]
