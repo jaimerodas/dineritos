@@ -18,7 +18,7 @@ class AccountBalancesController < ApplicationController
 
     if @balance.save
       ServicesMailer.daily_update(current_user).deliver_now
-      redirect_to account_path(@balance.account)
+      redirect_to account_movements_path(@balance.account)
     else
       render :new
     end
@@ -29,7 +29,7 @@ class AccountBalancesController < ApplicationController
 
   def update
     if UpdateBalance.run(balance: @balance, params: account_balance_params)
-      redirect_to account_path(@balance.account)
+      redirect_to account_movements_path(@balance.account)
     else
       render :edit
     end

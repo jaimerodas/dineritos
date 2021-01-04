@@ -1,0 +1,32 @@
+<% content_for(:title) { @report.account_name } %>
+
+<%= render "accounts/account_header", current: "Saldos" %>
+
+<nav class="secondary-nav">
+  <ul>
+    <li><%= prev_month_link %></li>
+    <li><%= next_month_link %></li>
+  </ul>
+  <h2><%= l(@report.parsed_date, format: :month).capitalize %></h2>
+</nav>
+
+<section class="summary">
+  <div class="big-number">
+    <span>Rendimientos</span>
+    <em><%= currency @report.earnings, diff: true, zero: true %></em>
+  </div>
+
+  <div class="big-number">
+    <span>Transferencias</span>
+    <em><%= currency @report.transfers, diff: true, zero: true %></em>
+  </div>
+
+  <div class="big-number">
+    <span>TIR</span>
+    <em><%= currency @report.irr * 100.0, zero: true %>%</em>
+  </div>
+</section>
+
+<main>
+  <%= render "accounts/balance_sheet" %>
+</main>
