@@ -13,7 +13,7 @@ class Updaters::RedGirasol
   attr_reader :username, :password
 
   def run
-    BigDecimal(invested_funds.to_s) + BigDecimal(available_funds.to_s)
+    invested_funds + available_funds
   end
 
   private
@@ -30,24 +30,19 @@ class Updaters::RedGirasol
     @auth_headers ||= {"Authorization" => "Bearer #{token}", "Content-Type" => "application/json"}
   end
 
+  def api_call(url, param)
+    HTTParty.get(BASE_URL + url, headers: auth_headers).parsed_response.fetch(param)
+  end
+
   def investor_id
-    @investor_id ||= HTTParty.get(
-      "#{BASE_URL}/v1/users/getRgUserInfo",
-      headers: auth_headers
-    ).parsed_response.fetch("investor_id")
+    @investor_id ||= api_call("/v1/users/getRgUserInfo", "investor_id")
   end
 
   def invested_funds
-    HTTParty.get(
-      "#{BASE_URL}/v2/investor/#{investor_id}/getLevelData",
-      headers: auth_headers
-    ).parsed_response.fetch("invested")
+    BigDecimal(api_call("/v2/investor/#{investor_id}/getLevelData", "invested").to_s)
   end
 
   def available_funds
-    HTTParty.get(
-      "#{BASE_URL}/v2/investor/#{investor_id}/getGeneralData",
-      headers: auth_headers
-    ).parsed_response.fetch("balance")
+    BigDecimal(api_call("/v2/investor/#{investor_id}/getGeneralData", "balance").to_s)
   end
 end
