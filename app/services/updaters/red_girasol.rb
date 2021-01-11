@@ -1,28 +1,53 @@
-class Updaters::RedGirasol < BaseScraper
+class Updaters::RedGirasol
+  BASE_URL = "https://www.redgirasol.com/api"
+
+  def self.current_balance_for(account)
+    new(account).run
+  end
+
+  def initialize(account)
+    @username = account.settings.fetch("username")
+    @password = account.settings.fetch("password")
+  end
+
+  attr_reader :username, :password
+
+  def run
+    BigDecimal(invested_funds.to_s) + BigDecimal(available_funds.to_s)
+  end
+
   private
 
-  def login_url
-    "https://www.redgirasol.com/login"
+  def token
+    @token ||= HTTParty.post(
+      "#{BASE_URL}/v1/auth/loginViaApp",
+      body: {email: username, password: password}.to_json,
+      headers: {"Content-Type" => "application/json"}
+    ).parsed_response.fetch("access_token")
   end
 
-  def login
-    browser.text_field(class: "form-control", visible: true).set(username)
-    browser.button(class: %w[btn btn-md], visible: true).click
-
-    sleep 3
-
-    browser.text_field(class: "form-control", visible: true).set(password)
-    browser.button(class: %w[btn btn-md], visible: true).click
-
-    sleep 3
+  def auth_headers
+    @auth_headers ||= {"Authorization" => "Bearer #{token}", "Content-Type" => "application/json"}
   end
 
-  def logout
-    browser.goto "https://www.redgirasol.com/logout"
+  def investor_id
+    @investor_id ||= HTTParty.get(
+      "#{BASE_URL}/v1/users/getRgUserInfo",
+      headers: auth_headers
+    ).parsed_response.fetch("investor_id")
   end
 
-  def raw_value
-    browser.goto "https://www.redgirasol.com/inversionistas/mis-inversiones/portafolio"
-    browser.div(class: %w[briefcase-total outside]).text
+  def invested_funds
+    HTTParty.get(
+      "#{BASE_URL}/v2/investor/#{investor_id}/getLevelData",
+      headers: auth_headers
+    ).parsed_response.fetch("invested")
+  end
+
+  def available_funds
+    HTTParty.get(
+      "#{BASE_URL}/v2/investor/#{investor_id}/getGeneralData",
+      headers: auth_headers
+    ).parsed_response.fetch("balance")
   end
 end
