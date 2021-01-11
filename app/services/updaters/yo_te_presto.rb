@@ -1,43 +1,40 @@
-class Updaters::YoTePresto < BaseScraper
-  API_URL = "https://api.yotepresto.com/v1/investor/account_statements"
-
-  private
-
-  def login_url
-    "https://www.yotepresto.com/login"
+class Updaters::YoTePresto
+  def self.current_balance_for(account)
+    new(account).run
   end
 
-  def login
-    browser.execute_script(username_script)
-    sleep(2)
-    browser.form(action: "/sign_in").submit
-    sleep(2)
+  def initialize(account)
+    @username = account.settings.fetch("username")
+    @password = account.settings.fetch("password")
   end
 
-  def raw_value
-    data_hash = browser.cookies.to_a
-      .filter { |cookie| cookie[:name].start_with?("ytp_") }
-      .map { |cookie| [cookie[:name].delete_prefix("ytp_").tr("_", "-"), cookie[:value]] }
+  attr_reader :username, :password
+
+  def run
+    login = HTTParty.post("https://www.yotepresto.com/sign_in", {
+      body: {
+        "sessions[email]" => username,
+        "sessions[password]" => password
+      }
+    })
+
+    cookies = login.headers["set-cookie"]
+      .split(";")
+      .map(&:strip)
+      .map { |s| s.start_with?("expires") ? s[39..-1] : s }
+      .filter { |s| s.start_with? "ytp" }
+      .map { |s| s.split("=") }
       .to_h
 
-    HTTParty.get(API_URL, headers: data_hash.merge({"uid" => username})).dig("valor_cuenta")
-  end
+    user_data = HTTParty.get("https://api.yotepresto.com/v1/investor/account_statements", {headers: {
+      "uid" => username,
+      "token-type" => "Bearer",
+      "access-token" => cookies.fetch("ytp_access_token"),
+      "expiry" => cookies.fetch("ytp_expiry"),
+      "client" => cookies.fetch("ytp_client"),
+      "Origin" => "https://investor.yotepresto.com"
+    }})
 
-  def logout
-    browser.execute_script(
-      "document.querySelectorAll('[data-testid=\"header-button\"]:last-child')[0].click()"
-    )
-    browser.button(class: "end__session").click
-  end
-
-  def username_script
-    <<~JAVASCRIPT
-      $('#full_name').append("<h1 class='h3 mt-0' id='name'>CHAFA</h1>");
-      $('#your-initials').removeClass('hidden');
-      $("[name='sessions[email]']").val('#{username}');
-      $('#sessions_password').val('#{password}');
-      $('#login-carousel').carousel('next');
-      $('#no-register-link').hide();
-    JAVASCRIPT
+    BigDecimal(user_data.parsed_response.fetch("valor_cuenta"))
   end
 end
