@@ -18,20 +18,24 @@ class Updaters::RedGirasol
 
   private
 
+  def base_headers
+    {"Content-Type" => "application/json", "Origin" => "https://app.redgirasol.com"}
+  end
+
   def token
     @token ||= HTTParty.post(
       "#{BASE_URL}/v1/auth/loginViaApp",
       body: {email: username, password: password}.to_json,
-      headers: {"Content-Type" => "application/json"}
+      headers: base_headers.merge("Referer" => "https://app.redgirasol.com/login")
     ).parsed_response.fetch("access_token")
   end
 
   def auth_headers
-    @auth_headers ||= {"Authorization" => "Bearer #{token}", "Content-Type" => "application/json"}
+    @auth_headers ||= base_headers.merge("Authorization" => "Bearer #{token}")
   end
 
   def api_call(url, param)
-    HTTParty.get(BASE_URL + url, headers: auth_headers).parsed_response.fetch(param)
+    HTTParty.get(BASE_URL + url, headers: auth_headers).parsed_response.fetch(param).to_s
   end
 
   def investor_id
@@ -39,10 +43,10 @@ class Updaters::RedGirasol
   end
 
   def invested_funds
-    BigDecimal(api_call("/v2/investor/#{investor_id}/getLevelData", "invested").to_s)
+    BigDecimal api_call("/v2/investor/#{investor_id}/getLevelData", "invested")
   end
 
   def available_funds
-    BigDecimal(api_call("/v2/investor/#{investor_id}/getGeneralData", "balance").to_s)
+    BigDecimal api_call("/v2/investor/#{investor_id}/getGeneralData", "balance")
   end
 end
