@@ -22,12 +22,18 @@ class Updaters::RedGirasol
     {"Content-Type" => "application/json", "Origin" => "https://app.redgirasol.com"}
   end
 
-  def token
-    @token ||= HTTParty.post(
+  def token_response
+    @token_response ||= HTTParty.post(
       "#{BASE_URL}/v1/auth/loginViaApp",
       body: {email: username, password: password}.to_json,
       headers: base_headers.merge("Referer" => "https://app.redgirasol.com/login")
-    ).parsed_response.fetch("access_token")
+    ).parsed_response
+  end
+
+  def token
+    @token ||= token_response.fetch("access_token")
+  rescue NoMethodError
+    ErrorsMailer.generic(token_response.to_s, title: "RedGirasol #{Date.current}")
   end
 
   def auth_headers
