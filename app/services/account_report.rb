@@ -23,15 +23,15 @@ class AccountReport
   end
 
   def earnings
-    @earnings ||= summary.earnings / 100.0
+    @earnings ||= summary.earnings ? summary.earnings / 100.0 : 0.0
   end
 
   def deposits
-    @deposits ||= summary.deposits / 100.0
+    @deposits ||= summary.deposits ? summary.deposits / 100.0 : 0.0
   end
 
   def withdrawals
-    @withdrawals ||= summary.withdrawals / -100.0
+    @withdrawals ||= summary.withdrawals ? summary.withdrawals / -100.0 : 0.0
   end
 
   def irr
