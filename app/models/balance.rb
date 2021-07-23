@@ -1,6 +1,5 @@
 class Balance < ApplicationRecord
   belongs_to :account
-  # belongs_to :user
 
   monetize :amount_cents
   monetize :transfers_cents
@@ -33,6 +32,10 @@ class Balance < ApplicationRecord
     else
       1.0
     end
+  end
+
+  def self.earliest_date
+    select(:date).order(date: :asc).limit(1).first&.date || Date.current
   end
 
   private

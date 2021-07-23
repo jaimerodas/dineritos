@@ -29,8 +29,12 @@ class InvestmentSummary
       .order("1").first.amount.amount
   end
 
+  def earliest_date
+    @earliest_date ||= user.balances.earliest_date
+  end
+
   def earliest_year
-    @earliest_year ||= Total.where(user: user).earliest_year
+    @earliest_year ||= earliest_date.year
   end
 
   def earnings
