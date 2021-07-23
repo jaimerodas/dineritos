@@ -29,6 +29,10 @@ class InvestmentSummary
       .order("1").first.amount.amount
   end
 
+  def earliest_year
+    @earliest_year ||= Total.where(user: user).earliest_year
+  end
+
   def earnings
     @earnings ||= BigDecimal(period_aggregate.earnings)
   end

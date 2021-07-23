@@ -13,4 +13,8 @@ class Total < ApplicationRecord
   def self.prev_date_from(date)
     where("date < ?", date).order(date: :desc).limit(1).first&.date
   end
+
+  def self.earliest_year()
+    order(date: :asc).limit(1).first&.date&.year || Date.current.year
+  end
 end

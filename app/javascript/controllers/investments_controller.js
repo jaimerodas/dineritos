@@ -6,11 +6,32 @@ export default class extends Controller {
   static targets = ["chart", "summary", "summaryButtons", "chartButtons"]
 
   connect() {
+    this.addYearNav()
     this.addChartsNav()
   }
 
   chartGenerator(name) {
     return {"Saldos": InvestmentChart, "Rendimientos": BalanceChangeChart}[name]
+  }
+
+  changeYear(operator) {
+    const buttons = this.summaryButtonsTarget
+    const yearButton = buttons.querySelector("a.year")
+    const year = Number(yearButton.innerHTML) + Number(operator)
+
+    yearButton.innerHTML = year
+    yearButton.dataset.url = yearButton.dataset.url.replace(/\d{4}$/, year)
+    yearButton.click()
+
+    this.addYearNav()
+  }
+
+  nextYear() {
+    this.changeYear(1)
+  }
+
+  prevYear() {
+    this.changeYear(-1)
   }
 
   updateSummary(event) {
@@ -47,6 +68,29 @@ export default class extends Controller {
         chartContainer.innerHTML = ''
         new chartGenerator(this.chartTarget, JSON.parse(raw)).draw()
       })
+  }
+
+  addYearNav() {
+    this.summaryButtonsTarget.querySelectorAll("button, a").forEach((e,i) => {
+      if (i > 1) { e.remove() }
+    })
+
+    const createButton = (label) => {
+      const button = document.createElement("button")
+      button.dataset.action = `click->investments#${label}Year`
+      button.innerHTML = (label == "prev") ? "&raquo;" : "&laquo;"
+      return button
+    }
+
+    const year = Number(this.summaryButtonsTarget.querySelector("a.year").innerHTML)
+
+    if (year !== new Date().getFullYear()) {
+      this.summaryButtonsTarget.append(createButton("next"))
+    }
+
+    if (year !== Number(this.summaryTarget.dataset.earliestYear)) {
+      this.summaryButtonsTarget.append(createButton("prev"))
+    }
   }
 
   addChartsNav() {

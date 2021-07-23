@@ -7,7 +7,7 @@
 
   <aside>
     <%= summary_buttons %>
-    <section id="investmentSummary" data-target="investments.summary">
+    <section id="investmentSummary" data-target="investments.summary" data-earliest-year="<%= @summary.earliest_year %>">
       <%= render "shared/investments_summary" %>
     </section>
   </aside>
