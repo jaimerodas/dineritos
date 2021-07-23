@@ -7,16 +7,17 @@ module InvestmentsHelper
       data: {target: "investments.summaryButtons"}
     ) do
       concat summary_button(period: "past_year")
+      concat summary_button(period: "all")
       concat summary_button(period: Date.current.year)
       concat summary_button(period: Date.current.year - 1)
     end
   end
 
   def summary_button(period: "past_year")
-    year = period == "past_year" ? "1Y" : period.to_s
+    year = period == "past_year" ? "1Y" : period.to_s.upcase
     classes = ["btn"]
     classes << "active" if current_period.to_s == period.to_s
-    classes << "year" unless period == "past_year"
+    classes << "year" if period.is_a? Integer
 
     link_to(
       year,

@@ -48,6 +48,10 @@ class IrrReport
     end
   end
 
+  def earliest_date
+    @earliest_date ||= user.balances.earliest_date
+  end
+
   def diffs
     @diffs ||= Balance
       .select("SUM(diff_cents) AS diff_cents", "DATE_TRUNC('month', date)::DATE AS month")
@@ -87,6 +91,7 @@ class IrrReport
 
   def calculate_period_from(year)
     return 1.year.ago.beginning_of_month - 1.month..Date.current if year == "past_year"
+    return earliest_date..Date.current if year == "all"
     year = year.to_i if year.is_a? String
     (Date.new(year) - 1.month)...Date.new(year + 1)
   end

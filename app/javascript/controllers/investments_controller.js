@@ -72,7 +72,7 @@ export default class extends Controller {
 
   addYearNav() {
     this.summaryButtonsTarget.querySelectorAll("button, a").forEach((e,i) => {
-      if (i > 1) { e.remove() }
+      if (i > 2) { e.remove() }
     })
 
     const createButton = (label) => {

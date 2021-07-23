@@ -61,6 +61,7 @@ class InvestmentSummary
 
   def calculate_period_from(year)
     return 1.year.ago..Date.current if year == "past_year"
+    return earliest_date..Date.current if year == "all"
     year = year.to_i if year.instance_of?(String)
     Date.new(year)...Date.new(year + 1)
   end
