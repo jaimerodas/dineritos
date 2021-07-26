@@ -26,6 +26,10 @@ export default class extends Controller {
     this.addYearNav()
   }
 
+  currentYear() {
+    return this.summaryTarget.dataset.currentYear
+  }
+
   nextYear() {
     this.changeYear(1)
   }
@@ -39,8 +43,10 @@ export default class extends Controller {
 
     const buttons = this.summaryButtonsTarget
     const summary = this.summaryTarget
+    const url = event.target.dataset.url
+    const year = url.match(/\?period=([\w\d]+)$/)[1]
 
-    fetch(event.target.dataset.url)
+    fetch(url)
       .then(response => response.text())
       .then(html => {
         buttons
@@ -49,6 +55,8 @@ export default class extends Controller {
 
         event.target.classList.add("active")
         summary.innerHTML = html
+        summary.dataset.currentYear = year
+        this.refreshChart()
       })
   }
 
@@ -56,8 +64,9 @@ export default class extends Controller {
     const buttons = this.chartButtonsTarget
     const chartContainer = this.chartTarget
     const chartGenerator = this.chartGenerator(event.target.textContent)
+    const url = event.target.dataset.url
 
-    fetch(event.target.dataset.url)
+    fetch(`${url}?period=${this.currentYear()}`)
       .then(response => response.text())
       .then(raw => {
         buttons
@@ -68,6 +77,11 @@ export default class extends Controller {
         chartContainer.innerHTML = ''
         new chartGenerator(this.chartTarget, JSON.parse(raw)).draw()
       })
+  }
+
+  refreshChart() {
+    const activeButton = this.chartButtonsTarget.querySelector("button.active")
+    this.updateChart({target: activeButton})
   }
 
   addYearNav() {

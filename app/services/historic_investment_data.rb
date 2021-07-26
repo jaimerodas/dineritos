@@ -1,13 +1,15 @@
 class HistoricInvestmentData
-  def self.for(user)
-    new(user)
+  def self.for(user, period: "past_year")
+    new(user, period)
   end
 
-  def initialize(user)
+  def initialize(user, period_string)
     @user = user
+    @period_string = period_string
+    @period = calculate_period_from(@period_string)
   end
 
-  attr_reader :user
+  attr_reader :user, :period
 
   def data
     {accounts: account_details, balances: balances}
@@ -22,6 +24,17 @@ class HistoricInvestmentData
   end
 
   private
+
+  def earliest_date
+    @earliest_date ||= user.balances.earliest_date
+  end
+
+  def calculate_period_from(year)
+    return 1.year.ago..Date.current if year == "past_year"
+    return earliest_date..Date.current if year == "all"
+    year = year.to_i if year.instance_of?(String)
+    Date.new(year)...Date.new(year + 1)
+  end
 
   def balances
     @balances ||= begin
@@ -60,8 +73,7 @@ class HistoricInvestmentData
     user.balances
       .select(:date, :account_id, :amount_cents)
       .where(currency: "MXN")
-      .where("date > ?", 1.year.ago)
-      .where(account_id: account_ids)
+      .where(date: period, account_id: account_ids)
       .order(:date, :account_id)
   end
 end
