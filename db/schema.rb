@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_23_183441) do
+ActiveRecord::Schema.define(version: 2021_10_23_222204) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -61,16 +61,6 @@ ActiveRecord::Schema.define(version: 2021_10_23_183441) do
     t.index ["user_id"], name: "index_sessions_on_user_id"
   end
 
-  create_table "totals", force: :cascade do |t|
-    t.integer "amount_cents", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.date "date", null: false
-    t.bigint "user_id"
-    t.index ["date"], name: "index_totals_on_date", unique: true
-    t.index ["user_id"], name: "index_totals_on_user_id"
-  end
-
   create_table "users", force: :cascade do |t|
     t.string "email"
     t.string "uid"
@@ -84,5 +74,4 @@ ActiveRecord::Schema.define(version: 2021_10_23_183441) do
   add_foreign_key "accounts", "users"
   add_foreign_key "balances", "accounts"
   add_foreign_key "sessions", "users"
-  add_foreign_key "totals", "users"
 end
