@@ -10,10 +10,6 @@ class AccountReport
     account.name
   end
 
-  def account_type
-    account.account_type
-  end
-
   def latest_balance
     account.last_amount
   end

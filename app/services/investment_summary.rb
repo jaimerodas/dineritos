@@ -67,7 +67,7 @@ class InvestmentSummary
   end
 
   def elegible_account_ids
-    @elegible_account_ids ||= user.accounts.where(account_type: :investment).pluck(:id)
+    @elegible_account_ids ||= user.accounts.pluck(:id)
   end
 
   def period_aggregate

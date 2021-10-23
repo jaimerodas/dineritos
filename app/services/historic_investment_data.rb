@@ -56,7 +56,7 @@ class HistoricInvestmentData
   end
 
   def accounts
-    @accounts ||= user.accounts.where(account_type: :investment).order(:id)
+    @accounts ||= user.accounts.order(:id)
   end
 
   def account_ids

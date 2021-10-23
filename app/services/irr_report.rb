@@ -86,7 +86,7 @@ class IrrReport
   end
 
   def accounts
-    user.accounts.select(:id).where(account_type: :investment)
+    user.accounts.select(:id)
   end
 
   def calculate_period_from(year)

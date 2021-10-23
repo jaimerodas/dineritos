@@ -5,7 +5,6 @@ class Account < ApplicationRecord
   PLATFORMS = %i[no_platform bitso yo_te_presto briq afluenta la_tasa cetes_directo red_girasol]
 
   enum platform: PLATFORMS
-  enum account_type: %i[checking investment]
 
   encrypts :settings, type: :json
   scope :updateable, -> { where.not(platform: :no_platform) }
