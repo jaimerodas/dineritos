@@ -25,7 +25,6 @@
 
 <%= amount_field_for f %>
 
-<% if @balance.account.investment? %>
 <div class="field">
   <%= f.label :transfers %>
   <%= f.text_field(
@@ -38,7 +37,6 @@
     }
   ) %>
 </div>
-<% end %>
 
 <%= f.button 'Guardar' %>
 <% end %>
