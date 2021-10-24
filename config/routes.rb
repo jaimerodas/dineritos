@@ -8,6 +8,7 @@ Rails.application.routes.draw do
       resources :movements, path: "movimientos", only: [:index]
     end
 
+    resources :missing_balances, path: "saldos_faltantes", only: [:index]
     resources :account_balances, path: "saldos_de_cuenta", only: [:edit, :update]
 
     resource :login, path: "ingresar", only: [:show, :create]

@@ -39,4 +39,12 @@ class Account < ApplicationRecord
     balance.update(amount: update_service.current_balance_for(self))
     BigDecimal(balance.amount.to_d)
   end
+
+  def self.missing_todays_balance
+    joins(:balances)
+      .select(:id, :name, "MAX(balances.date) AS date")
+      .group(:id, :name)
+      .order(date: :desc, name: :asc)
+      .reject { |account| account.date == Date.current }
+  end
 end
