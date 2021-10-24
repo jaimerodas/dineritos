@@ -37,7 +37,7 @@ class IRRChart {
     const xAxis = g => g
       .attr("transform", `translate(0, ${height - margin.bottom})`)
       .call(d3.axisBottom(x))
-    
+
     const yAxis = g => g
       .attr("transform", `translate(${margin.left}, 0)`)
       .call(d3.axisLeft(y)
@@ -69,9 +69,13 @@ class IRRChart {
       .attr("stroke-linejoin", "round")
       .attr("stroke-linecap", "round")
       .attr("d", line)
-    
-    const hoverDot = svg.append("circle").attr("r", 4).attr("fill", "var(--fg-color)")
 
+    const hoverLine = svg.append("line")
+      .classed('hover-line', true)
+      .attr('y1', margin.top - 4)
+      .attr('y2', height - margin.bottom)
+
+    const hoverDot = svg.append("circle").attr("r", 4).attr("fill", "var(--fg-color)")
     const tooltip = svg.append("g")
 
     const bisect = (mx) => {
@@ -96,11 +100,11 @@ class IRRChart {
         .call(
           this.callout,
           `${this.valueFormatter(value)}|${this.dateFormatter(date)}`)
-          
-      hoverDot.attr('cx', x(date)).attr('cy', y(value))
-    })
 
-    svg.on("touchend mouseleave", () => tooltip.call(this.callout, null))
+      hoverDot.attr('cx', x(date)).attr('cy', y(value))
+
+      hoverLine.attr('x1', x(date)).attr('x2', x(date))
+    })
   }
 
   curve() {
@@ -114,14 +118,12 @@ class IRRChart {
   dateFormatter(value) {
     return d3.utcFormat("%b %Y")(value)
   }
-  
+
   axisFormatter() {
     return d3.format(".0%")
   }
 
   callout(g, value) {
-    if (!value) return g.style("display", "none")
-
     g.style("display", null)
       .style("pointer-events", "none")
       .style("text-anchor", "end")
