@@ -28,20 +28,25 @@ class IRRChart {
       .range([margin.left, width - margin.right])
 
     const y = d3.scaleLinear()
-      .domain([this.axisFloor(), d3.max(data, d => d.value)]).nice()
+      .domain([
+        d3.min(data, d => d.value),
+        d3.max([0, d3.max(data, d => d.value)])
+      ]).nice()
       .range([height - margin.bottom, margin.top])
 
     const xAxis = g => g
       .attr("transform", `translate(0, ${height - margin.bottom})`)
-      .call(d3.axisBottom(x).ticks(width / 80).tickSizeOuter(0))
-
+      .call(d3.axisBottom(x))
+    
     const yAxis = g => g
-      .attr("transform", `translate(${margin.left},0)`)
-      .call(d3.axisLeft(y).tickFormat(this.axisFormatter()))
-      .call(g => g.selectAll(".tick line").clone()
-        .attr("stroke-opacity", d => d === 0 ? null : 0.2)
-        .attr("stroke-dasharray", "4, 4")
-        .attr("x2", width - margin.left - margin.right))
+      .attr("transform", `translate(${margin.left}, 0)`)
+      .call(d3.axisLeft(y)
+        .tickFormat(this.axisFormatter())
+        .tickSize(-(width-margin.left-margin.right))
+        .ticks(10))
+      .call(g => g.selectAll(".tick:not(:first-of-type) line")
+        .attr("stroke-opacity", 0.3)
+        .attr("stroke-dasharray", "2,2"))
       .call(g => g.select(".domain").remove())
 
     const line = d3.line()
@@ -59,10 +64,13 @@ class IRRChart {
       .datum(data)
       .attr("fill", "none")
       .attr("stroke", "var(--fg-color)")
-      .attr("stroke-width", 3)
+      .attr("stroke-width", 2)
+      .attr("stroke-opacity", 0.5)
       .attr("stroke-linejoin", "round")
       .attr("stroke-linecap", "round")
       .attr("d", line)
+    
+    const hoverDot = svg.append("circle").attr("r", 4).attr("fill", "var(--fg-color)")
 
     const tooltip = svg.append("g")
 
@@ -84,10 +92,12 @@ class IRRChart {
       const {date, value} = bisect(d3.mouse(this.container)[0])
 
       tooltip
-        .attr("transform", `translate(${x(date)}, ${y(value)})`)
+        .attr("transform", `translate(${width - margin.right}, ${height - 60})`)
         .call(
           this.callout,
           `${this.valueFormatter(value)}|${this.dateFormatter(date)}`)
+          
+      hoverDot.attr('cx', x(date)).attr('cy', y(value))
     })
 
     svg.on("touchend mouseleave", () => tooltip.call(this.callout, null))
@@ -97,20 +107,16 @@ class IRRChart {
     return d3.curveLinear
   }
 
-  axisFloor() {
-    return d3.min([0, d3.min(this.data, d => d.value)])
-  }
-
-  axisFormatter() {
-    return d3.format(".0%")
-  }
-
   valueFormatter(value) {
     return d3.format(".2~%")(value)
   }
 
   dateFormatter(value) {
-    return d3.utcFormat("%Y-%m")(value)
+    return d3.utcFormat("%b %Y")(value)
+  }
+  
+  axisFormatter() {
+    return d3.format(".0%")
   }
 
   callout(g, value) {
@@ -118,16 +124,8 @@ class IRRChart {
 
     g.style("display", null)
       .style("pointer-events", "none")
-      .style("font-size", "0.75em")
-      .style("text-anchor", "center")
+      .style("text-anchor", "end")
       .style("fill", "var(--fg-color)")
-
-    const box = g.selectAll("rect")
-      .data([null])
-      .join("rect")
-      .attr("fill", "var(--bg-color)")
-      .attr("stroke", "var(--fg-color)")
-      .attr("stroke-width", 2)
 
     const text = g.selectAll("text")
       .data([null])
@@ -139,17 +137,9 @@ class IRRChart {
       .attr("x", 0)
       .attr("y", (d, i) => `${i * 1.1}em`)
       .style("font-weight", (_, i) => i ? null : "bold")
+      .style("font-size", (_, i) => i ? "1em" : "1.5em")
+      .style("opacity", (_, i) => i ? 0.5 : 1)
       .text(d => d))
-
-    const {x, y, width: w, height: h} = text.node().getBBox()
-
-    const width = w + 10
-    const height = h + 10
-
-    text.attr("text-anchor", "middle")
-    box.attr("width", width).attr("height", height)
-      .attr("transform", `translate(${-width / 2},${(-height/2)+3})`)
-
   }
 
   setLocale() {
@@ -160,7 +150,7 @@ class IRRChart {
       periods: ["AM", "PM"],
       days: ["domingo", "lunes", "martes", "miércoles", "jueves", "viernes", "sábado"],
       shortDays: ["dom", "lun", "mar", "mié", "jue", "vie", "sáb"],
-      months: ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"],
+      months: ["ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sep", "oct", "nov", "dic"],
       shortMonths: ["ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sep", "oct", "nov", "dic"]
     })
   }
