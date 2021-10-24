@@ -17,7 +17,7 @@ class Updaters::YoTePresto
   private
 
   def cookies
-    @cookies ||= HTTParty.post("https://www.yotepresto.com/sign_in", {
+    @cookies ||= HTTParty.post("https://mx1.yotepresto.com/sign_in", {
       body: {"sessions[email]" => username, "sessions[password]" => password}
     }).headers["set-cookie"]
       .split(";").map(&:strip)
