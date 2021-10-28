@@ -13,6 +13,6 @@ class Updaters::LaTasa < BaseScraper
   end
 
   def raw_value
-    browser.dt(text: /Valor de la cuenta/).following_sibling.child.text
+    browser.h2(text: /Valor de la cuenta/).parent.previous_sibling.text
   end
 end
