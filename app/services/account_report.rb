@@ -1,10 +1,11 @@
 class AccountReport
-  def initialize(user:, account:)
+  def initialize(user:, account:, period: "all")
     raise unless account.user == user
     @account = account
+    @period = calculate_period_from(period)
   end
 
-  attr_reader :account
+  attr_reader :account, :period
 
   def account_name
     account.name
@@ -14,8 +15,15 @@ class AccountReport
     account.last_amount
   end
 
-  def period
-    1.year.ago.beginning_of_month..Date.current
+  def earliest_date
+    @earliest_date ||= account.balances.earliest_date
+  end
+
+  def calculate_period_from(year)
+    return 1.year.ago..Date.current if year == "past_year"
+    return earliest_date..Date.current if year == "all"
+    year = year.to_i if year.instance_of?(String)
+    Date.new(year)...Date.new(year + 1)
   end
 
   def earnings
