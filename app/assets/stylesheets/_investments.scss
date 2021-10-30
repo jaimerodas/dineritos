@@ -121,6 +121,19 @@
   }
 }
 
+@media (prefers-color-scheme: dark) {
+  #charts .current-data {
+    text-shadow: rgba(0, 0, 0, 0.5) 0 0.1em 0.5em;
+  }
+  #barChart text {
+    text-shadow: rgba(0, 0, 0, 0.5) 0 0.1em 0.25em;
+  }
+  .investment-summary dd,
+  .chart-options .chart-date {
+    text-shadow: rgba(0, 0, 0, 0.5) 0 0.1em 0.25em;
+  }
+}
+
 @media screen and (min-width: 24em) {
   .investment-summary {
     dd {
