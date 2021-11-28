@@ -12,6 +12,6 @@ class Updaters::Briq < BaseScraper
   end
 
   def raw_value
-    browser.div(id: "global-portfolio").children[3].children[1].text
+    browser.div(id: "global-portfolio").children[4].children[1].text
   end
 end
