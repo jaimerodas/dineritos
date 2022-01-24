@@ -5,12 +5,13 @@ class BaseScraper
 
   def initialize(account, headless: true)
     @browser = Watir::Browser.new(:chrome, headless: headless)
-    @username = account.settings.fetch("username")
-    @password = account.settings.fetch("password")
+    @settings = account.settings
+    @username = @settings.fetch("username")
+    @password = @settings.fetch("password")
   end
 
   attr_accessor :browser
-  attr_reader :username, :password
+  attr_reader :username, :password, :settings
 
   def run
     browser.goto login_url

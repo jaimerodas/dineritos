@@ -1,7 +1,7 @@
 import { Controller } from "stimulus"
 
 export default class extends Controller {
-  static targets = [ "type", "currency", "apiKey", "apiSecret", "username", "password" ]
+  static targets = [ "type", "currency", "apiKey", "apiSecret", "username", "password", "issuer", "secret" ]
   connect() {
     this.change()
   }
@@ -11,53 +11,63 @@ export default class extends Controller {
 
     switch (type) {
       case "bitso":
-        this.enableBitsoFields()
-        this.disableRegularFields()
-        this.disableCredentialsFields()
+        this.bitsoFieldsVisible(true)
+        this.regularFieldsVisible(false)
+        this.credentialFieldsVisible(false)
+        this.twoFactorFieldsVisible(false)
         break
       case "no_platform":
-        this.enableRegularFields()
-        this.disableBitsoFields()
-        this.disableCredentialsFields()
+        this.regularFieldsVisible(true)
+        this.bitsoFieldsVisible(false)
+        this.credentialFieldsVisible(false)
+        this.twoFactorFieldsVisible(false)
+        break
+      case "afluenta":
+        this.credentialFieldsVisible(true)
+        this.bitsoFieldsVisible(false)
+        this.regularFieldsVisible(false)
+        this.twoFactorFieldsVisible(true)
         break
       default:
-        this.enableCredentialsFields()
-        this.disableBitsoFields()
-        this.disableRegularFields()
+        this.credentialFieldsVisible(true)
+        this.bitsoFieldsVisible(false)
+        this.regularFieldsVisible(false)
+        this.twoFactorFieldsVisible(false)
     }
   }
 
-  enableRegularFields() {
-    document.getElementById("account_currency_field").style.display = "block"
+  regularFieldsVisible(visible) {
+    this.elementVisible("account_currency_field", visible)
   }
 
-  disableRegularFields() {
-    document.getElementById("account_currency_field").style.display = "none"
+  bitsoFieldsVisible(visible) {
+    this.elementVisible("bitso_account_settings_field", visible)
+    this.hideCurrencyIfVisible(visible)
+    this.toggleTargetAbility([this.apiKeyTarget, this.apiSecretTarget], visible)
   }
 
-  enableBitsoFields() {
-    document.getElementById("bitso_account_settings_field").style.display = "block"
+  credentialFieldsVisible(visible) {
+    this.elementVisible("account_settings_credentials_field", visible)
+    this.hideCurrencyIfVisible(visible)
+    this.toggleTargetAbility([this.usernameTarget, this.passwordTarget], visible)
+  }
+
+  twoFactorFieldsVisible(visible) {
+    this.elementVisible("two_factor_field", visible)
+    this.toggleTargetAbility([this.issuerTarget, this.secretTarget], visible)
+  }
+
+  elementVisible(name, visible) {
+    var display = visible ? "block" : "none"
+    document.getElementById(name).style.display = display
+  }
+
+  hideCurrencyIfVisible(visible) {
+    if (visible) { return }
     document.getElementById("account_currency_field").value = "MXN"
-    this.apiKeyTarget.disabled = false
-    this.apiSecretTarget.disabled = false
   }
 
-  disableBitsoFields() {
-    document.getElementById("bitso_account_settings_field").style.display = "none"
-    this.apiKeyTarget.disabled = true
-    this.apiSecretTarget.disabled = true
-  }
-
-  enableCredentialsFields() {
-    document.getElementById("account_settings_credentials_field").style.display = "block"
-    document.getElementById("account_currency_field").value = "MXN"
-    this.usernameTarget.disabled = false
-    this.passwordTarget.disabled = false
-  }
-
-  disableCredentialsFields() {
-    document.getElementById("account_settings_credentials_field").style.display = "none"
-    this.usernameTarget.disabled = true
-    this.passwordTarget.disabled = true
+  toggleTargetAbility(targets, enabled) {
+    targets.map(e => e.disabled = !enabled)
   }
 }

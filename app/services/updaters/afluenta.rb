@@ -10,6 +10,11 @@ class Updaters::Afluenta < BaseScraper
     form.text_field(id: "login_username").set(username)
     form.text_field(id: "login_password").set(password)
     form.submit
+
+    totp = ROTP::TOTP.new(settings.fetch("secret"), issuer: settings.fetch("issuer"))
+    browser.text_field(data_target_function: "two_factor_verified").set(totp.now)
+    browser.send_keys :enter
+    sleep(5)
   end
 
   def raw_value

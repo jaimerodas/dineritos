@@ -51,5 +51,22 @@
            disabled>
   </div>
 
+  <div class="field" id="two_factor_field" style="display: none;">
+    <label for="account_settings_issuer">2FA Issuer</label>
+    <input type="text"
+           name="account[settings][issuer]"
+           id="account_settings_issuer"
+           data-target="edit-account.issuer"
+           value="<%= @account.settings&.fetch("issuer", nil) %>"
+           disabled>
+    <label for="account_settings_secret">2FA Secret</label>
+    <input type="text"
+           name="account[settings][secret]"
+           id="account_settings_secret"
+           data-target="edit-account.secret"
+           value="<%= @account.settings&.fetch("secret", nil) %>"
+           disabled>
+  </div>
+
   <%= f.button %>
 <% end %>

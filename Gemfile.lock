@@ -200,6 +200,7 @@ GEM
       ffi (~> 1.0)
     regexp_parser (2.2.0)
     rexml (3.2.5)
+    rotp (6.2.0)
     rspec-core (3.10.1)
       rspec-support (~> 3.10.0)
     rspec-expectations (3.10.2)
@@ -311,6 +312,7 @@ DEPENDENCIES
   pry
   puma (~> 4.3)
   rails (~> 7)
+  rotp
   rspec-rails
   sass-rails (~> 6)
   spring
