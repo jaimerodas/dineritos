@@ -7,33 +7,21 @@ export default class extends Controller {
   }
 
   change() {
-    var type = this.typeTarget.value
+    var fields = new Array
 
-    switch (type) {
+    switch (this.typeTarget.value) {
       case "bitso":
-        this.bitsoFieldsVisible(true)
-        this.regularFieldsVisible(false)
-        this.credentialFieldsVisible(false)
-        this.twoFactorFieldsVisible(false)
+        fields.push("bitso")
         break
       case "no_platform":
-        this.regularFieldsVisible(true)
-        this.bitsoFieldsVisible(false)
-        this.credentialFieldsVisible(false)
-        this.twoFactorFieldsVisible(false)
+        fields.push("regular")
         break
       case "afluenta":
-        this.credentialFieldsVisible(true)
-        this.bitsoFieldsVisible(false)
-        this.regularFieldsVisible(false)
-        this.twoFactorFieldsVisible(true)
-        break
+        fields.push("twoFactor")
       default:
-        this.credentialFieldsVisible(true)
-        this.bitsoFieldsVisible(false)
-        this.regularFieldsVisible(false)
-        this.twoFactorFieldsVisible(false)
+        fields.push("credential")
     }
+    ["bitso","regular","credential","twoFactor"].forEach(e => this[e + "FieldsVisible"](fields.includes(e)))
   }
 
   regularFieldsVisible(visible) {
@@ -68,6 +56,6 @@ export default class extends Controller {
   }
 
   toggleTargetAbility(targets, enabled) {
-    targets.map(e => e.disabled = !enabled)
+    targets.forEach(e => e.disabled = !enabled)
   }
 }
