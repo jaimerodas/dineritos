@@ -55,7 +55,6 @@ es:
           red_girasol: "RedGirasol"
       balance:
         amount: "Saldo"
-        original_amount: "Saldo en moneda original"
         transfers: "Depósitos / Retiros"
     models:
       account: "Cuenta"
