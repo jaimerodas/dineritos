@@ -92,8 +92,8 @@ class IRRChart {
       return date - a.date > b.date - date ? b : a
     }
 
-    svg.on("touchmove mousemove", () => {
-      const {date, value} = bisect(d3.mouse(this.container)[0])
+    svg.on("touchmove mousemove", (event) => {
+      const {date, value} = bisect(d3.pointer(event, this.container)[0])
 
       tooltip
         .attr("transform", `translate(${width - margin.right}, ${height - 60})`)

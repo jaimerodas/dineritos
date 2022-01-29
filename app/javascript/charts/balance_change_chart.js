@@ -112,8 +112,8 @@ class BalanceChangeChart {
       .attr("x", this.margin.left + 10)
       .text(d3.format(".2%")(datum.irr))
 
-    svg.on("touchmove mousemove", () => {
-      this.updateCharts()
+    svg.on("touchmove mousemove", (event) => {
+      this.updateCharts(event)
     })
 
     return Object.assign(svg.node(), {
@@ -174,8 +174,8 @@ class BalanceChangeChart {
       .attr("x", this.margin.left + 10)
       .text(d3.format(",.2f")(this.data[this.data.length - 1].diff))
 
-    svg.on("touchmove mousemove", () => {
-      this.updateCharts()
+    svg.on("touchmove mousemove", (event) => {
+      this.updateCharts(event)
     })
 
     return Object.assign(svg.node(), {
@@ -236,8 +236,8 @@ class BalanceChangeChart {
       .attr("x", this.margin.left + 10)
       .text(d3.format(",.2f")(this.data[this.data.length - 1].transfers))
 
-    svg.on("touchmove mousemove", () => {
-      this.updateCharts()
+    svg.on("touchmove mousemove", (event) => {
+      this.updateCharts(event)
     })
 
     return Object.assign(svg.node(), {
@@ -249,10 +249,10 @@ class BalanceChangeChart {
     })
   }
 
-  updateCharts() {
+  updateCharts(event) {
     if (!this.navBar.shouldFollow()) { return }
 
-    const mouseX = d3.mouse(this.container)[0]
+    const mouseX = d3.pointer(event, this.container)[0]
     const x = mouseX > (this.width - this.margin.right) ? this.width - this.margin.right : mouseX
     const date = this.x.invert(x)
     const bisector = d3.bisector(d => d.date).left

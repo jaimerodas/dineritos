@@ -251,8 +251,8 @@ class InvestmentChart {
       .attr('cy', y(datum.value))
       .attr('r', 3)
 
-    svg.on("touchmove mousemove", () => {
-      this.updateCharts()
+    svg.on("touchmove mousemove", (event) => {
+      this.updateCharts(event)
     })
 
     return Object.assign(svg.node(), {
@@ -266,11 +266,11 @@ class InvestmentChart {
     })
   }
 
-  updateCharts() {
+  updateCharts(event) {
     if (!this.navBar.shouldFollow()) { return }
 
     const bisector = d3.bisector(d => d.date).left
-    const mouseX = d3.mouse(this.container)[0]
+    const mouseX = d3.pointer(event, this.container)[0]
     const realX = mouseX > (this.width - this.margin.right) ? this.width - this.margin.right : mouseX
     const date = this.x.invert(realX)
     const i = bisector(this.totals, date, 1)
