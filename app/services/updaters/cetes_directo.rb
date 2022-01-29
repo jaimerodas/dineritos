@@ -12,9 +12,9 @@ class Updaters::CetesDirecto < BaseScraper
   def login
     form = browser.form(id: "accesoWebForm")
     form.text_field(id: "userId").set(username)
-    browser.button(id: "continuarBtn").click
+    browser.execute_script("obtenerAccesoWeb()")
     form.text_field(id: "pwdId").set(password)
-    browser.button(id: "accederBtn").click
+    browser.execute_script("loginWeb()")
   end
 
   def logout
