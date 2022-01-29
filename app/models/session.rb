@@ -5,6 +5,7 @@ class Session < ApplicationRecord
 
   attr_accessor :token, :remember_token
 
+  scope :expired, -> { where("expires_at < ?", Time.current) }
   scope :available, -> { where("expires_at > ?", Time.current).where(remember_digest: nil) }
 
   def token_matches?(t)
@@ -15,10 +16,18 @@ class Session < ApplicationRecord
     BCrypt::Password.new(remember_digest).is_password?(t)
   end
 
+  def expired?
+    expires_at < Time.current
+  end
+
   def remember
     raise unless remember_digest.nil?
     self.remember_token = SecureRandom.urlsafe_base64
     update_attribute(:remember_digest, BCrypt::Password.create(remember_token))
+  end
+
+  def refresh
+    update_attribute(:expires_at, 30.days.from_now)
   end
 
   private

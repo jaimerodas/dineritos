@@ -14,7 +14,7 @@ class SessionsController < ApplicationController
   def create_session_for(user)
     user.sessions.available.each do |s|
       next unless s.token_matches? params[:token]
-      s.remember
+      s.refresh && s.remember
       log_in(user)
       cookies.permanent.signed[:session_id] = s.id
       cookies.permanent[:remember_token] = s.remember_token

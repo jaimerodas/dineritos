@@ -28,7 +28,8 @@ class ApplicationController < ActionController::Base
       @current_user ||= User.find(user_id)
     elsif (session_id = cookies.signed[:session_id])
       session = Session.find_by(id: session_id)
-      if session&.authenticated?(cookies[:remember_token])
+      if session&.authenticated?(cookies[:remember_token]) && !session&.expired?
+        session.refresh!
         log_in(session.user)
         @current_user = session.user
       end
