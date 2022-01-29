@@ -21,7 +21,7 @@ class Updaters::YoTePresto
       body: {"sessions[email]" => username, "sessions[password]" => password}
     }).headers["set-cookie"]
       .split(";").map(&:strip)
-      .map { |s| s.start_with?("expires") ? s[39..-1] : s }
+      .map { |s| s.start_with?("expires") ? s[39..] : s }
       .filter { |s| s.start_with? "ytp" }
       .map { |s| s.split("=") }
       .to_h

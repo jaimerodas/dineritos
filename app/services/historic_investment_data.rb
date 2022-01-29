@@ -20,7 +20,7 @@ class HistoricInvestmentData
   end
 
   def latest_total
-    @latest_total ||= balances.last.reject { |k, _| k == :date }.values.sum
+    @latest_total ||= balances.last.except(:date).values.sum
   end
 
   private
