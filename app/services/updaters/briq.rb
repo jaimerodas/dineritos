@@ -12,6 +12,7 @@ class Updaters::Briq < BaseScraper
   end
 
   def raw_value
+    browser.goto "https://www.briq.mx/user/portafolio"
     browser.span(data_role: "current-value").text
   end
 end
