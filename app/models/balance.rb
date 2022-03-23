@@ -46,12 +46,14 @@ class Balance < ApplicationRecord
       date: date,
       currency: "MXN"
     ).update(
+      validated: validated,
       amount_cents: (amount_cents * exchange_rate).to_i,
       transfers_cents: (transfers_cents * exchange_rate).to_i
     )
   end
 
   def calculate_diffs
+    @prev = nil
     return unless prev
     self.diff_cents = amount_cents - transfers_cents - prev.amount_cents
     self.diff_days = date - prev.date

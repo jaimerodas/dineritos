@@ -5,7 +5,7 @@ class UpdateBalance
 
   def initialize(balance:, params:)
     @balance = balance
-    balance.assign_attributes(params)
+    balance.assign_attributes(params.merge(validated: true))
     invalidated_todays_email?
     modified_history?
   end

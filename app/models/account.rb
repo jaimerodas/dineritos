@@ -9,6 +9,7 @@ class Account < ApplicationRecord
   lockbox_encrypts :settings, type: :json
   scope :updateable, -> { where.not(platform: :no_platform) }
   scope :foreign_currency, -> { where(platform: :no_platform).where.not(currency: "MXN") }
+  scope :active, -> { where(active: true) }
 
   validates :name, presence: true
 
@@ -36,15 +37,7 @@ class Account < ApplicationRecord
   def latest_balance(force: false)
     return last_amount.amount if last_amount.date == Date.current && !force
     balance = balances.find_or_initialize_by(date: Date.current, currency: currency)
-    balance.update(amount: update_service.current_balance_for(self))
+    balance.update(amount: update_service.current_balance_for(self), validated: true)
     BigDecimal(balance.amount.to_d)
-  end
-
-  def self.missing_todays_balance
-    joins(:balances)
-      .select(:id, :name, "MAX(balances.date) AS date")
-      .group(:id, :name)
-      .order(date: :desc, name: :asc)
-      .reject { |account| account.date == Date.current }
   end
 end

@@ -19,8 +19,16 @@ class UpdateAllAccounts
   private
 
   def process_accounts_for(user)
+    # 1. Crear saldos nuevos para todas las cuentas
+    user.accounts.active.each do |account|
+      last_balance = account.last_amount
+      account.balances
+        .find_or_initialize_by(date: Date.current, currency: account.currency)
+        .update(amount_cents: last_balance.amount_cents)
+    end
+
+    # 2. Ir y buscar saldos nuevos para las que son actualizables
     user.accounts.updateable.each { |account| update_account(account) }
-    user.accounts.foreign_currency.each { |account| update_foreign_currency_account(account) }
   end
 
   def update_account(account)
@@ -31,12 +39,5 @@ class UpdateAllAccounts
     return if (tries -= 1) == 0
     sleep 5
     retry
-  end
-
-  def update_foreign_currency_account(account)
-    last_balance = account.last_amount
-    account.balances
-      .find_or_initialize_by(date: Date.current, currency: account.currency)
-      .update(amount_cents: last_balance.amount_cents)
   end
 end

@@ -10,8 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_01_29_011400) do
-
+ActiveRecord::Schema[7.0].define(version: 2022_03_21_005344) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -19,8 +18,8 @@ ActiveRecord::Schema.define(version: 2022_01_29_011400) do
     t.string "name", null: false
     t.string "currency", default: "MXN", null: false
     t.boolean "active", default: true, null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.bigint "user_id", null: false
     t.integer "platform", default: 0, null: false
     t.text "settings_ciphertext"
@@ -30,13 +29,14 @@ ActiveRecord::Schema.define(version: 2022_01_29_011400) do
   create_table "balances", force: :cascade do |t|
     t.bigint "account_id", null: false
     t.integer "amount_cents", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.date "date", null: false
     t.integer "transfers_cents", default: 0, null: false
     t.integer "diff_cents"
     t.integer "diff_days"
     t.text "currency", default: "MXN", null: false
+    t.boolean "validated", default: false
     t.index ["account_id"], name: "index_balances_on_account_id"
     t.index ["date", "account_id", "currency"], name: "one_currency_balance_per_day", unique: true
   end
@@ -44,8 +44,8 @@ ActiveRecord::Schema.define(version: 2022_01_29_011400) do
   create_table "currency_rates", force: :cascade do |t|
     t.string "currency", null: false
     t.bigint "rate_subcents", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.date "date", null: false
     t.index ["date", "currency"], name: "index_currency_rates_on_date_and_currency", unique: true
   end
@@ -54,7 +54,7 @@ ActiveRecord::Schema.define(version: 2022_01_29_011400) do
     t.bigint "user_id", null: false
     t.string "token_digest", null: false
     t.string "remember_digest"
-    t.datetime "expires_at", null: false
+    t.datetime "expires_at", precision: nil, null: false
     t.index ["remember_digest"], name: "index_sessions_on_remember_digest", unique: true, where: "(remember_digest IS NOT NULL)"
     t.index ["token_digest"], name: "index_sessions_on_token_digest", unique: true
     t.index ["user_id"], name: "index_sessions_on_user_id"
@@ -63,8 +63,8 @@ ActiveRecord::Schema.define(version: 2022_01_29_011400) do
   create_table "users", force: :cascade do |t|
     t.string "email"
     t.string "uid"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.jsonb "settings"
     t.index ["email"], name: "index_users_on_email", unique: true, where: "(email IS NOT NULL)"
     t.index ["uid"], name: "index_users_on_uid", unique: true, where: "(uid IS NOT NULL)"
