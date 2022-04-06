@@ -1,7 +1,10 @@
 import { Controller } from "stimulus"
 
 export default class extends Controller {
-  static targets = [ "type", "currency", "apiKey", "apiSecret", "username", "password", "issuer", "secret" ]
+  static targets = [
+    "type", "currency", "apiKey", "apiSecret", "username", "password", "issuer", "secret",
+    "rgtoken", "rgpassword", "rgusername"
+  ]
   connect() {
     this.change()
   }
@@ -18,10 +21,15 @@ export default class extends Controller {
         break
       case "afluenta":
         fields.push("twoFactor")
+      case "red_girasol":
+        fields.push("redGirasol")
+        break
       default:
         fields.push("credential")
     }
-    ["bitso","regular","credential","twoFactor"].forEach(e => this[e + "FieldsVisible"](fields.includes(e)))
+    [
+      "bitso","regular","credential","twoFactor", "redGirasol"
+    ].forEach(e => this[e + "FieldsVisible"](fields.includes(e)))
   }
 
   regularFieldsVisible(visible) {
@@ -32,6 +40,12 @@ export default class extends Controller {
     this.elementVisible("bitso_account_settings_field", visible)
     this.hideCurrencyIfVisible(visible)
     this.toggleTargetAbility([this.apiKeyTarget, this.apiSecretTarget], visible)
+  }
+
+  redGirasolFieldsVisible(visible) {
+    this.elementVisible("red_girasol_field", visible)
+    this.hideCurrencyIfVisible(visible)
+    this.toggleTargetAbility([this.rgpasswordTarget, this.rgusernameTarget, this.rgtokenTarget], visible)
   }
 
   credentialFieldsVisible(visible) {

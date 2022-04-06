@@ -20,7 +20,7 @@ label, form .label {
   cursor: pointer
 }
 
-input {
+input, textarea {
   color: var(--fg-color);
   font-family: inherit;
   font-size: 1em;
@@ -40,16 +40,22 @@ input {
 
   transition: ease all 0.2s;
 
+  &:active, &:focus {
+    box-shadow: 0 0 0 0.125em var(--focus-color);
+    background-color: var(--bg-alt-color);
+  }
+}
+
+input {
   &[type=number]::-webkit-inner-spin-button,
   &[type=number]::-webkit-outer-spin-button {
     -webkit-appearance: none;
     margin: 0;
   }
+}
 
-  &:active, &:focus {
-  	box-shadow: 0 0 0 0.125em var(--focus-color);
-  	background-color: var(--bg-alt-color);
-  }
+textarea {
+  height: 4.725em;
 }
 
 .input-field {

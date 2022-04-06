@@ -18,7 +18,7 @@ class Account < ApplicationRecord
   end
 
   def can_be_updated?
-    !last_amount.date || last_amount.date < Date.current
+    !last_amount.validated
   end
 
   def can_be_updated_automatically?

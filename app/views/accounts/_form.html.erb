@@ -51,6 +51,29 @@
            disabled>
   </div>
 
+  <div class="field" id="red_girasol_field" style="display: none;">
+    <label for="account_settings_username">Usuario</label>
+    <input type="text"
+           name="account[settings][username]"
+           id="account_settings_username"
+           data-target="edit-account.rgusername"
+           value="<%= @account.settings&.fetch("username", nil) %>"
+           disabled>
+    <label for="account_settings_password">Contraseña</label>
+    <input type="text"
+           name="account[settings][password]"
+           id="account_settings_password"
+           data-target="edit-account.rgpassword"
+           value="<%= @account.settings&.fetch("password", nil) %>"
+           disabled>
+    <label for="account_settings_token">API Token</label>
+    <textarea
+      id="account_settings_token"
+      name="account[settings][token]"
+      data-target="edit-account.rgtoken"
+      disabled><%= @account.settings&.fetch("token", nil) %></textarea>
+  </div>
+
   <div class="field" id="two_factor_field" style="display: none;">
     <label for="account_settings_issuer">2FA Issuer</label>
     <input type="text"

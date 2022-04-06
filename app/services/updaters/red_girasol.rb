@@ -8,6 +8,7 @@ class Updaters::RedGirasol
   def initialize(account)
     @username = account.settings.fetch("username")
     @password = account.settings.fetch("password")
+    @token = account.settings.fetch("token")
   end
 
   attr_reader :username, :password
@@ -28,7 +29,7 @@ class Updaters::RedGirasol
       body: {email: username, password: password}.to_json,
       headers: base_headers.merge(
         "Referer" => "https://app.redgirasol.com/login",
-        "Authorization" => "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI5IiwianRpIjoiMjdjYTllZWNkZDFiNTI2ZmUxY2EzMmEwMDNlNDg5MTY3NzFmNDM0MWM3ZTViMTNkMGUxMGRkYzUyMzgxN2YzNjcwZTRlZTM2ODNlNGU2OTkiLCJpYXQiOjE2MTkxODc4MjUuMDE0OTM4LCJuYmYiOjE2MTkxODc4MjUuMDE0OTQ1LCJleHAiOjE2NTA3MjM4MjQuOTk5Mjk0LCJzdWIiOiIxIiwic2NvcGVzIjpbImxvZ2luLXVzZXIiLCJsb2dpbi1wYXNzd29yZCJdfQ.kcF4BmZdd2szU4VnpJTa4jp6avbOynr3AqrYcyRnIyf4hWNm6XV_DDE8sPCMexTnSS0u3jDPHH-QEYmt0T3fcG8EGBjqerXf79Krn-j2FCzA7ugH3U4T5kxQPSX0CBmH2ypXh3iMjbsVQjR8wfVy1YgY1VY3dcpbEIddy_m2Kja4Gx_s4ccXkpxtzGuRsOf9I6RG-iD1Q1NbX2zPZ_ybg82Bxfqweyp0EQbsU-8OmBx2R6uoHLdUod4Fw7UO6bxnA3nNLFym_0cqIk215w72drh6a2qHySjbldmbdbrK2jv1-hWjciSy_-s6M8VXWYKGajv5Z-IygtOkOgEOfwbIu-YdZfScULVRQMFK16O6wF_RbDFUQFJxaqqK6d8STCLbtyUEYxRSqnq3_PQVhiD2aFfazo2-6L37Kin8NsPRCKEdxNUe_uo6vNFvDfQbWO37iirLiNIdQR9-_VBgnzGZ4gqUTttt_xkOgxjjZmHYlL7QJynlD4kotT7F8OvuRXfNRsH2rpqKswPScovRQ3rTpqpqaOnPXsQKOE2lWixlWVKVHAT6FSLrWO_F2GIKlelz2f8qtvjuMw8D9mDICgFIGIwUBEl0occ5ZqLPmhGM_VkxmC1Fr510hXCK5dwKnHntKZOizI1W_7oiM2i8B3_lwrmXBy5kqiZ7MpU-V6WvCWI"
+        "Authorization" => "Bearer #{token}"
       )
     ).parsed_response
   end
