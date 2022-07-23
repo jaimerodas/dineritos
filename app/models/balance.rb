@@ -9,10 +9,11 @@ class Balance < ApplicationRecord
   after_save :convert_currency, if: proc { currency != "MXN" && account.currency != "MXN" }
 
   def prev
-    @prev ||= self.class
-      .where(account: account, currency: currency)
-      .where("date < ?", date)
-      .order(date: :desc).limit(1).first
+    @prev ||= prev_set.limit(1).first
+  end
+
+  def prev_validated
+    @prev_validated ||= prev_set.where(validated: true).limit(1).first
   end
 
   def next
@@ -39,6 +40,13 @@ class Balance < ApplicationRecord
   end
 
   private
+
+  def prev_set
+    self.class
+      .where(account: account, currency: currency)
+      .where("date < ?", date)
+      .order(date: :desc)
+  end
 
   def convert_currency
     Balance.find_or_initialize_by(
