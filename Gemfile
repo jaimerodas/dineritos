@@ -13,9 +13,9 @@ gem "postmark-rails"
 gem "puma", "~> 4.3"
 gem "rotp"
 gem "sass-rails", "~> 6"
+gem "stimulus-rails"
 gem "turbolinks", "~> 5"
 gem "watir"
-gem "webpacker", "~> 5.4"
 gem "will_paginate", "~> 3.3"
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem "jbuilder", "~> 2"
@@ -47,3 +47,5 @@ end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "tzinfo-data", platforms: [:mingw, :mswin, :x64_mingw, :jruby]
+
+gem "importmap-rails", "~> 1.1"

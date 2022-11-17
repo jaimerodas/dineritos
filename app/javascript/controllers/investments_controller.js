@@ -1,6 +1,6 @@
 import { Controller } from "stimulus"
-import { InvestmentChart } from "../charts/investment_chart"
-import { BalanceChangeChart } from "../charts/balance_change_chart"
+import { InvestmentChart } from "charts/investment_chart"
+import { BalanceChangeChart } from "charts/balance_change_chart"
 
 export default class extends Controller {
   static targets = ["chart", "summary", "summaryButtons", "chartButtons"]

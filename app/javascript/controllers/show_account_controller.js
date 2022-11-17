@@ -1,5 +1,5 @@
 import { Controller } from "stimulus"
-import { IRRChart, BalanceChart } from "../charts/account_charts"
+import { IRRChart, BalanceChart } from "charts/account_charts"
 
 export default class extends Controller {
   static targets = ["chart", "balanceButton", "irrButton"]
