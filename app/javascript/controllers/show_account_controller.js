@@ -22,12 +22,12 @@ export default class extends Controller {
   addButtons() {
     var balanceButton = document.createElement("button")
     balanceButton.dataset.action = "click->show-account#showBalance"
-    balanceButton.dataset.target = "show-account.balanceButton"
+    balanceButton.dataset.showAccountTarget = "balanceButton"
     balanceButton.textContent = "Saldo"
 
     var irrButton = document.createElement("button")
     irrButton.dataset.action = "click->show-account#showIRR"
-    irrButton.dataset.target = "show-account.irrButton"
+    irrButton.dataset.showAccountTarget = "irrButton"
     irrButton.textContent = "TIR"
 
     var buttonContainer = document.createElement("div")

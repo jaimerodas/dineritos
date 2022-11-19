@@ -7,7 +7,7 @@ module AccountBalanceFormHelper
         pattern: '^\-?\d*(\.\d{1,2})?$',
         class: "amount",
         data: {
-          target: "edit-balance.amount",
+          "edit-balance-target": "amount",
           action: "change->edit-balance#updateResults"
         }
       )

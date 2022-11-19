@@ -4,7 +4,7 @@ module InvestmentsHelper
       :div,
       id: "investment-summary-nav",
       class: "chart-toggle",
-      data: {target: "investments.summaryButtons"}
+      "data-investments-target": "summaryButtons"
     ) do
       concat summary_button(period: "past_year")
       concat summary_button(period: "all")

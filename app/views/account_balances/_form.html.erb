@@ -9,12 +9,12 @@
 <dl class="balance-results-summary">
   <div>
     <dt>TIR</dt>
-    <dd data-target="edit-balance.irr">0%</dd>
+    <dd data-edit-balance-target="irr">0%</dd>
   </div>
 
   <div>
     <dt>Rendimiento</dt>
-    <dd data-target="edit-balance.diff">0.00</dd>
+    <dd data-edit-balance-target="diff">0.00</dd>
   </div>
 </dl>
 
@@ -32,7 +32,7 @@
     pattern: '^\-?\d*(\.\d{1,2})?$',
     class: "amount",
     data: {
-      target: "edit-balance.transfers",
+      "edit-balance-target": "transfers",
       action: "change->edit-balance#updateResults"
     }
   ) %>

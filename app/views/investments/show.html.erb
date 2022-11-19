@@ -7,7 +7,7 @@
 
   <aside>
     <%= summary_buttons %>
-    <section id="investmentSummary" data-target="investments.summary" data-earliest-year="<%= @summary.earliest_year %>" data-current-year="past_year">
+    <section id="investmentSummary" data-investments-target="summary" data-earliest-year="<%= @summary.earliest_year %>" data-current-year="past_year">
       <%= render "shared/investments_summary" %>
     </section>
   </aside>
@@ -16,12 +16,12 @@
     <div
       id="investment-charts-nav"
       class="chart-toggle"
-      data-target="investments.chartButtons"></div>
+      data-investments-target="chartButtons"></div>
     <section id="charts">
       <script type="text/javascript">
         var data = <%= @report.to_json.html_safe %>
       </script>
-      <div id="chart-container" data-target="investments.chart"></div>
+      <div id="chart-container" data-investments-target="chart"></div>
     </section>
   </main>
 </article>
