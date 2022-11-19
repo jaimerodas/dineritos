@@ -38,7 +38,7 @@ class HistoricInvestmentData
 
   def balances
     @balances ||= begin
-      empty = account_ids.zip(Array.new(account_ids.size, 0)).to_h
+      empty = ids_with_positive_balance.zip(Array.new(ids_with_positive_balance.size, 0)).to_h
       current = -1
 
       data_from_db.each_with_object([]) do |balance, result|
@@ -65,6 +65,7 @@ class HistoricInvestmentData
 
   def account_details
     accounts.select(:id, :name)
+      .where(id: ids_with_positive_balance)
       .map { |account| [account.id, {name: account.name, url: "/cuentas/#{account.id}"}] }
       .to_h
   end
@@ -73,7 +74,17 @@ class HistoricInvestmentData
     user.balances
       .select(:date, :account_id, :amount_cents)
       .where(currency: "MXN")
-      .where(date: period, account_id: account_ids)
+      .where(date: period, account_id: ids_with_positive_balance)
       .order(:date, :account_id)
+  end
+  
+  def ids_with_positive_balance
+    @ids_with_positive_balance ||= user.balances
+      .group(:account_id)
+      .select(:account_id, 'sum(balances.amount_cents) sum')
+      .where(currency: "MXN")
+      .where(date: period, account_id: account_ids)
+      .map {|d| d.account_id }
+      .sort
   end
 end
