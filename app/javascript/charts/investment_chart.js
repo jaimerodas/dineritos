@@ -31,12 +31,12 @@ class InvestmentChart {
 
     this.lastDate = this.data.length - 1
 
-    this.barData = (index) => {
-      const dataset = this.data[index]
-      return this.keys
-        .map(d => ({ key: d, value: dataset[d] }))
-        .sort((a,b) => (b.value - a.value))
-    }
+    // this.barData = (index) => {
+    //   const dataset = this.data[index]
+    //   return this.keys
+    //     .map(d => ({ key: d, value: dataset[d] }))
+    //     .sort((a,b) => (b.value - a.value))
+    // }
 
     this.x = d3.scaleTime()
       .domain(d3.extent(this.data, d => d.date))
@@ -81,25 +81,44 @@ class InvestmentChart {
   }
 
   barChart() {
+    const nonZeroAccounts = this.data.map(d => {
+      return Object.values(d).filter(e => e > 0).length - 1
+    })
+
+    const data = this.data.map((d, index) => {
+      const row = Array.from(this.keys, key => ({
+        account: this.accounts[key].name,
+        url: this.accounts[key].url,
+        value: d[key] ? d[key] : 0,
+        id: key
+      }))
+      row.sort((a,b) => d3.descending(a.value, b.value))
+      for (let i = 0; i < row.length; ++i) row[i].rank = Math.min(nonZeroAccounts[index], i)
+      return row
+    })
+
+    const bottomRange = (i) => {
+      return height - margin.bottom + (this.keys.length * 36 / nonZeroAccounts[i])
+    }
+
+    let currentData = data[this.lastDate]
+    const color = this.color
+    const formatCurrency = this.formatCurrency
+
     const margin = ({top: 20, right: 20, bottom: 0, left: 10})
     const height = (this.keys.length * 36) + margin.top + margin.bottom
 
     const svg = this.svg("barChart", height)
 
-    const dataset = this.barData
-    const data = dataset(this.lastDate)
-
     const x = d3.scaleLinear()
-      .domain([0, d3.max(data, d => d.value)])
+      .domain([0, d3.max(currentData, d => d.value)])
       .range([margin.left, this.width - margin.right])
 
     const y = d3.scaleBand()
-      .domain(data.map(d => d.key))
-      .range([margin.top, height - margin.bottom])
+      .domain(d3.range(nonZeroAccounts[this.lastDate] + 1))
+      .range([margin.top, bottomRange(this.lastDate)])
       .padding(0.1)
 
-
-    const accounts = this.accounts
     const xAxis = g => g
       .attr("transform", `translate(0, ${margin.top})`)
       .call(d3.axisTop(x)
@@ -110,63 +129,86 @@ class InvestmentChart {
         .attr("stroke-dasharray", "2,2"))
       .call(g => g.select(".domain").attr("stroke-opacity", 0))
 
-    const formatCurrency = this.formatCurrency
+    function bars(svg) {
+      let bar = svg.append("g")
+        .attr("class", "color-container")
+        .selectAll("a")
 
-    const labelTransform = (d) => {
-      const xOffset = d3.max([x(d.value) - 10, margin.left + 100])
-      const yOffset = y(d.key) + y.bandwidth() / 2
-      return `translate(${xOffset}, ${yOffset})`
+      return (datum, transition) => bar = bar
+        .data(datum, d => d.account)
+        .join(
+          enter => enter.append("a")
+            .attr("xlink:href", d => d.url)
+            .append("rect")
+            .attr("fill", d => color(d.id))
+            .attr("x", x(0))
+            .attr("y", d => y(d.rank))
+            .attr("width", d => x(d.value) - x(0))
+            .attr("height", y.bandwidth()),
+          update => update,
+          exit => exit.transition(transition).remove()
+        )
+        .call(bar => bar.transition(transition)
+          .attr("y", d => y(d.rank))
+          .attr("width", d => x(d.value) - x(0))
+          .attr("height", y.bandwidth())
+          .attr("fill", d => color(d.id)),
+        )
     }
 
-    const detailsHTML = (d) => {
-      return `<tspan dy="-0.15em" dx="0.4em" x="0" y="0">${accounts[d.key].name}</tspan>
-              <tspan class="money" dy="0.85em" dx="0" x="0" y="0">${formatCurrency(d)}</tspan>`
+    function labels(svg) {
+      let label = svg.append("g")
+        .attr("class", "barchart-text")
+        .attr("text-anchor", "end")
+        .selectAll("a")
+
+      return (datum, transition) => {
+        const labelText = (d) => {
+          return `<tspan dy="-0.15em" dx="0.4em" x="0" y="0">${d.account}</tspan>
+                  <tspan class="money" dy="0.85em" dx="0" x="0" y="0">${formatCurrency(d)}</tspan>`
+        }
+
+        const labelTransform = (d) => {
+          const xOffset = d3.max([x(d.value) - 10, margin.left + 100])
+          const yOffset = y(d.rank) + y.bandwidth() / 2
+          return `translate(${xOffset}, ${yOffset})`
+        }
+
+        label = label
+          .data(datum, d => d.account)
+          .join(
+            enter => enter.append("a")
+              .attr("xlink:href", d => d.url)
+              .append("text")
+              .attr("transform", labelTransform)
+              .html(labelText),
+            update => update,
+            exit => exit.transition(transition).remove()
+          )
+          .call(label => label.transition(transition)
+            .attr("transform", labelTransform)
+            .select("tspan.money").text(formatCurrency)
+          )
+      }
     }
 
-    const bars = svg.append("g")
-      .attr("class", "color-container")
-      .selectAll("a")
-      .data(data)
-      .join("a")
-      .attr("xlink:href", d => accounts[d.key].url)
-      .append("rect")
-      .attr("fill", d => this.color(d.key))
-      .attr("x", x(0))
-      .attr("y", d => y(d.key))
-      .attr("width", d => x(d.value) - x(0))
-      .attr("height", y.bandwidth())
-
-    const details = svg.append("g")
-      .attr("class", "barchart-text")
-      .attr("text-anchor", "end")
-      .selectAll("a")
-      .data(data)
-      .join("a")
-      .attr("xlink:href", d => accounts[d.key].url)
-      .append("text")
-      .attr("transform", labelTransform)
-      .style("fill-opacity", d => (d.value > 0) ? "1" : "0")
-      .html(detailsHTML)
-
+    const updateBars = bars(svg)
+    const updateLabels = labels(svg)
     const gx = svg.append("g").attr("class", "axis").call(xAxis).attr("font-family", null)
+
+    updateBars(currentData)
+    updateLabels(currentData)
 
     return Object.assign(svg.node(), {
       update(index) {
-        const data = dataset(index)
+        currentData = data[index]
         const t = svg.transition().duration(400).ease(d3.easeLinear)
 
-        x.domain([0, d3.max(data, d => d.value)])
-        y.domain(data.map(d => d.key))
+        x.domain([0, d3.max(currentData, d => d.value)])
+        y.domain(d3.range(nonZeroAccounts[index] + 1)).range([margin.top, bottomRange(index)])
 
-        bars.data(data, d => d.key).transition(t)
-          .attr("width", d => x(d.value) - x(0))
-          .attr("y", d => y(d.key))
-
-        details.data(data, d => d.key).transition(t)
-          .attr("transform", labelTransform)
-          .style("fill-opacity", d => (d.value > 0) ? "1" : "0")
-          .select("tspan.money").text(formatCurrency)
-
+        updateBars(currentData, t)
+        updateLabels(currentData, t)
         gx.transition(t).call(xAxis)
       }
     })
