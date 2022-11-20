@@ -77,14 +77,14 @@ class HistoricInvestmentData
       .where(date: period, account_id: ids_with_positive_balance)
       .order(:date, :account_id)
   end
-  
+
   def ids_with_positive_balance
     @ids_with_positive_balance ||= user.balances
       .group(:account_id)
-      .select(:account_id, 'sum(balances.amount_cents) sum')
+      .select(:account_id, "sum(balances.amount_cents) sum")
       .where(currency: "MXN")
       .where(date: period, account_id: account_ids)
-      .map {|d| d.account_id }
+      .map { |d| d.account_id }
       .sort
   end
 end
