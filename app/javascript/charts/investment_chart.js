@@ -31,13 +31,6 @@ class InvestmentChart {
 
     this.lastDate = this.data.length - 1
 
-    // this.barData = (index) => {
-    //   const dataset = this.data[index]
-    //   return this.keys
-    //     .map(d => ({ key: d, value: dataset[d] }))
-    //     .sort((a,b) => (b.value - a.value))
-    // }
-
     this.x = d3.scaleTime()
       .domain(d3.extent(this.data, d => d.date))
       .range([this.margin.left, this.width - this.margin.right])
@@ -137,22 +130,26 @@ class InvestmentChart {
       return (datum, transition) => bar = bar
         .data(datum, d => d.account)
         .join(
-          enter => enter.append("a")
-            .attr("xlink:href", d => d.url)
-            .append("rect")
-            .attr("fill", d => color(d.id))
-            .attr("x", x(0))
+          enter => {
+            let root = enter.append("a")
+              .attr("xlink:href", d => d.url)
+            root.append("rect")
+              .attr("fill", d => color(d.id))
+              .attr("x", x(0))
+              .attr("y", d => y(d.rank))
+              .attr("width", d => x(d.value) - x(0))
+              .attr("height", y.bandwidth())
+            return root
+          },
+          update => {
+            update.select("rect")
+            .transition(transition)
             .attr("y", d => y(d.rank))
             .attr("width", d => x(d.value) - x(0))
-            .attr("height", y.bandwidth()),
-          update => update,
+            .attr("height", y.bandwidth())
+            return update
+          },
           exit => exit.transition(transition).remove()
-        )
-        .call(bar => bar.transition(transition)
-          .attr("y", d => y(d.rank))
-          .attr("width", d => x(d.value) - x(0))
-          .attr("height", y.bandwidth())
-          .attr("fill", d => color(d.id)),
         )
     }
 
@@ -177,17 +174,22 @@ class InvestmentChart {
         label = label
           .data(datum, d => d.account)
           .join(
-            enter => enter.append("a")
-              .attr("xlink:href", d => d.url)
-              .append("text")
-              .attr("transform", labelTransform)
-              .html(labelText),
-            update => update,
+            enter => {
+              let root = enter.append("a")
+                .attr("xlink:href", d => d.url)
+              root.append("text")
+                .attr("transform", labelTransform)
+                .html(labelText)
+              return root
+            },
+            update => {
+              update.select("text")
+                .transition(transition)
+                .attr("transform", labelTransform)
+                .select("tspan.money").text(formatCurrency)
+              return update
+            },
             exit => exit.transition(transition).remove()
-          )
-          .call(label => label.transition(transition)
-            .attr("transform", labelTransform)
-            .select("tspan.money").text(formatCurrency)
           )
       }
     }
