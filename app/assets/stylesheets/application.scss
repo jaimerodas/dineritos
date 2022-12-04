@@ -119,6 +119,10 @@ td {
     color: var(--disabled-color);
   }
 
+  &.small {
+    font-size: 0.8em;
+  }
+
   a {
     color: inherit;
     text-decoration: none;

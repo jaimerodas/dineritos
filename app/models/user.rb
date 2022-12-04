@@ -7,11 +7,18 @@ class User < ApplicationRecord
 
   def accounts_missing_todays_balance
     account_ids = balances
-      .select("DISTINCT ON (balances.account_id) balances.account_id, balances.date, balances.validated")
-      .order("balances.account_id ASC").order("balances.date DESC")
-      .reject { |balance| balance.date == Date.current && balance.validated }
-      .map(&:account_id)
+      .select(:account_id)
+      .where(date: Balance.latest_date, validated: false, amount_cents: 1..)
 
-    accounts.where(id: account_ids)
+    accounts.where(id: account_ids).order(name: :asc)
+  end
+
+  def inactive_accounts_missing_todays_balance
+    account_ids = balances
+      .select(:account_id)
+      .where(date: Balance.latest_date, validated: false, amount_cents: ..0)
+      .order(name: :asc)
+
+    accounts.where(id: account_ids).order(name: :asc)
   end
 end

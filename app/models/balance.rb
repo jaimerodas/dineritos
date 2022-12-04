@@ -39,6 +39,10 @@ class Balance < ApplicationRecord
     select(:date).order(date: :asc).limit(1).first&.date || Date.current
   end
 
+  def self.latest_date
+    select(:date).order(date: :desc).limit(1).first&.date || Date.current
+  end
+
   private
 
   def prev_set

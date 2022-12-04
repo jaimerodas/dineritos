@@ -1,11 +1,11 @@
-<% if @accounts.any? %>
+<% if @current_user.accounts_missing_todays_balance.size > 0 %>
 <header class="simple">
-  <h1>Agregar Saldos Faltantes</h1>
+  <h1>Cuentas con saldos faltantes para hoy</h1>
 </header>
 
 <table>
   <tbody>
-    <% @accounts.each do |account| %>
+    <% @current_user.accounts_missing_todays_balance.each do |account| %>
     <tr>
       <td>
         <%= link_to account.name, new_account_account_balance_path(account.id) %>
@@ -16,7 +16,20 @@
 </table>
 <% else %>
 <header class="simple">
-  <h1>No hay saldos faltantes para hoy</h1>
+  <h1>Todas las cuentas activas tienen saldos para hoy</h1>
 </header>
+<% end %>
+<% if @current_user.inactive_accounts_missing_todays_balance.size > 0 %>
+<table>
+  <tbody>
+    <% @current_user.inactive_accounts_missing_todays_balance.each do |account| %>
+    <tr>
+      <td class="disabled small">
+        <%= link_to account.name, new_account_account_balance_path(account.id) %>
+      </td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>
 <% end %>
 
