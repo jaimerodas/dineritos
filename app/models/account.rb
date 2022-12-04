@@ -10,6 +10,12 @@ class Account < ApplicationRecord
   scope :updateable, -> { where.not(platform: :no_platform) }
   scope :foreign_currency, -> { where(platform: :no_platform).where.not(currency: "MXN") }
   scope :active, -> { where(active: true) }
+  scope :by_status, -> {
+    joins(:balances)
+    .select("accounts.*", "balances.amount_cents > 0 as valid")
+    .where("balances.date": Balance.latest_date, "balances.currency": "MXN")
+    .order(valid: :desc, name: :asc)
+  }
 
   validates :name, presence: true
 

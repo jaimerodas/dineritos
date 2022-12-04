@@ -2,7 +2,7 @@ class AccountsController < ApplicationController
   before_action :auth
 
   def index
-    @accounts = current_user.accounts.order(active: :desc, id: :asc)
+    @accounts = current_user.accounts.by_status
   end
 
   def new
