@@ -29,7 +29,7 @@ class AccountBalancesController < ApplicationController
 
   def update
     if UpdateBalance.run(balance: @balance, params: account_balance_params)
-      redirect_to account_movements_path(@balance.account, month: @balance.date.strftime('%Y-%m'))
+      redirect_to account_movements_path(@balance.account, month: @balance.date.strftime("%Y-%m"))
     else
       render :edit
     end

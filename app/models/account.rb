@@ -12,9 +12,9 @@ class Account < ApplicationRecord
   scope :active, -> { where(active: true) }
   scope :by_status, -> {
     joins(:balances)
-    .select("accounts.*", "balances.amount_cents > 0 as valid")
-    .where("balances.date": Balance.latest_date, "balances.currency": "MXN")
-    .order(valid: :desc, name: :asc)
+      .select("accounts.*", "balances.amount_cents > 0 as valid")
+      .where("balances.date": Balance.latest_date, "balances.currency": "MXN")
+      .order(valid: :desc, name: :asc)
   }
 
   validates :name, presence: true

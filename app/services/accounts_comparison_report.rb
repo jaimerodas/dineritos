@@ -20,7 +20,7 @@ class AccountsComparisonReport
   end
 
   def totals
-    accounts.reduce({balance: BigDecimal(0), earnings: BigDecimal(0), transfers: BigDecimal(0)}) do |result, account|
+    accounts.reduce({balance: BigDecimal("0"), earnings: BigDecimal("0"), transfers: BigDecimal("0")}) do |result, account|
       {
         balance: result[:balance] + BigDecimal(account.final_balance),
         earnings: result[:earnings] + BigDecimal(account.total_earnings),
@@ -33,14 +33,14 @@ class AccountsComparisonReport
 
   def all_balances_from_period
     @user_accounts.joins(:balances)
-    .select(
-      :id, :name,
-      first_value("amount_cents", "initial_balance"),
-      first_value("transfers_cents", "initial_transfer"),
-      first_value("diff_cents", "initial_diff"),
-      "balances.transfers_cents", "balances.diff_cents", "balances.date"
-    )
-    .where("balances.currency": "MXN", "balances.date": period)
+      .select(
+        :id, :name,
+        first_value("amount_cents", "initial_balance"),
+        first_value("transfers_cents", "initial_transfer"),
+        first_value("diff_cents", "initial_diff"),
+        "balances.transfers_cents", "balances.diff_cents", "balances.date"
+      )
+      .where("balances.currency": "MXN", "balances.date": period)
   end
 
   def calculate_period_from(year)
@@ -60,7 +60,7 @@ class AccountsComparisonReport
   end
 
   def decimalized(column, key = false)
-    key = column unless key
+    key ||= column
     "(#{column}) / 100.0 AS #{key}"
   end
 
