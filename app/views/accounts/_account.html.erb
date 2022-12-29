@@ -1,5 +1,8 @@
-<tr>
-  <td class="<%= 'disabled small' unless account.valid %>">
+<tr class="<%= 'disabled' unless account.final_balance > 0 %>">
+  <td>
     <%= link_to account.name, account_path(account) %>
   </td>
+  <td class="currency"><%= currency account.total_earnings, diff: true %></td>
+  <td class="currency"><%= currency account.total_transferred %></td>
+  <td class="currency"><%= currency account.final_balance, zero: true %></td>
 </tr>

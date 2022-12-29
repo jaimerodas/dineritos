@@ -2,7 +2,9 @@ class AccountsController < ApplicationController
   before_action :auth
 
   def index
-    @accounts = current_user.accounts.by_status
+    report = AccountsComparisonReport.new(user: current_user)
+    @accounts = report.accounts
+    @totals = report.totals
   end
 
   def new

@@ -4,10 +4,28 @@
 
 <% if @accounts.any? %>
 <table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>Ganancias</th>
+      <th>Transferido</th>
+      <th>Saldo</th>
+    </tr>
+  </thead>
   <tbody>
     <%= render @accounts %>
+    <tr class="totals">
+      <td>Total</td>
+      <td class="currency"><%= currency @totals[:earnings], diff: true %></td>
+      <td class="currency"><%= currency @totals[:transfers], diff: true %></td>
+      <td class="currency"><%= currency @totals[:balance] %></td>
+    </tr>
   </tbody>
+  <tfoot>
+
+  </tfoot>
 </table>
+<div class="info">* Todas las cantidades están en MXN</div>
 <% end %>
 
 <section class="actions">
