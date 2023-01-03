@@ -1,6 +1,6 @@
 class InvestmentsController < ApplicationController
   before_action :auth
-  DEFAULT_PERIOD = Date.current.year
+  DEFAULT_PERIOD = "past_year"
 
   def show
     @summary = InvestmentSummary.for(
