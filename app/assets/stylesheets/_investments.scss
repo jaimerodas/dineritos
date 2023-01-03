@@ -43,12 +43,10 @@
 }
 
 .chart-options {
-  padding: 1rem;
-  margin: 0 0 1rem;
+  margin: 0 1rem 1rem;
   font-size: 0.875em;
   color: var(--mid-color);
 
-  background-color: var(--bg-alt-color);
   display: grid;
   grid-template-columns: 1fr 2rem;
   align-items: center;
@@ -63,11 +61,12 @@
   label {
     display: block;
     padding: 0;
-    width: 1.75rem;
-    height: 1.75rem;
-    background-color: var(--bg-alt-color);
+    width: 2rem;
+    height: 2rem;
+    background-color: transparent;
     border: 0.25rem solid var(--border-color);
-    border-radius: 2rem;
+    border-radius: 1rem;
+    box-sizing: border-box;
     transition: background-color 0.4s ease-out;
     transition: border-color 0.2s ease-out;
 
@@ -100,13 +99,12 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-gap: 0.25rem;
-  padding: 0.25rem;
+  padding: 1rem;
   text-align: right;
   margin: 0;
 
   div {
-    padding: 1em;
-    background-color: var(--bg-alt-color);
+    margin: 0 0 1em;
   }
 
   dt {
@@ -116,7 +114,7 @@
 
   dd {
     font-size: 1.2em;
-    font-weight: bold;
+    font-weight: 700;
     margin: 0;
   }
 }
@@ -158,11 +156,15 @@
 
     aside {
       width: 12rem;
-      margin-right: 1rem;
+      margin-right: 1.5rem;
     }
     main {
       flex: 1;
     }
+  }
+
+  .chart-options {
+    margin: 0 0 1rem;
   }
 }
 

@@ -183,7 +183,7 @@ table.balance-sheet {
 }
 
 table.all-accounts {
-  .currency {
+  td.currency {
     font-size: 0.75em;
   }
 }
@@ -200,10 +200,7 @@ table.all-accounts {
   & > span {
     flex: 1;
     color: var(--mid-color);
-    text-transform: uppercase;
-    font-size: 0.75em;
-    font-weight: 700;
-    letter-spacing: 0.125em;
+    font-size: 0.875em;
   }
   & > em {
     flex: 1;
