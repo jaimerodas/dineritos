@@ -1,8 +1,12 @@
 class AccountsController < ApplicationController
   before_action :auth
+  DEFAULT_PERIOD = "past_year"
 
   def index
-    report = AccountsComparisonReport.new(user: current_user)
+    report = AccountsComparisonReport.new(
+      user: current_user,
+      period: params[:period].blank? ? DEFAULT_PERIOD : params[:period]
+    )
     @accounts = report.accounts
     @totals = report.totals
   end

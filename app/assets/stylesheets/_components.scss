@@ -1,0 +1,36 @@
+.button-bar {
+  display: flex;
+  width: 100%;
+  row-gap: 0.0625rem;
+  column-gap: 0.0625rem;
+  align-items: center;
+  justify-content: space-between;
+
+  a, button {
+    display: flex;
+    flex: 1;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    padding: 1em;
+    font-size: 1em;
+  }
+}
+
+@media screen and (min-width: 40em) {
+  .button-bar {
+    width: auto;
+    a {
+      width: 3em;
+      padding: 0.875em;
+    }
+  }
+}
+
+@media screen and (min-width: 45em) {
+  .button-bar {
+    a {
+      font-size: 1.25em;
+    }
+  }
+}

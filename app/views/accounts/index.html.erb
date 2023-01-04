@@ -1,5 +1,7 @@
-<header>
+<header class="settings">
   <h1>Cuentas</h1>
+
+  <%= period_buttons %>
 </header>
 
 <% if @accounts.any? %>
@@ -25,7 +27,7 @@
 
   </tfoot>
 </table>
-<div class="info">Este reporte refleja las transferencias y rendimientos del último año. Todas las cantidades están en MXN</div>
+<div class="info">Este reporte refleja las transferencias y rendimientos en el periodo seleccionado. Todas las cantidades están en MXN</div>
 <% end %>
 
 <section class="actions">

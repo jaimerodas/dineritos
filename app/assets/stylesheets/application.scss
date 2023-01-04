@@ -306,6 +306,11 @@ td {
   h1 {
     font-size: 3em;
   }
+
+  header.settings {
+    display: flex;
+    justify-content: space-between;
+  }
 }
 
 @media screen and (min-width: 45em) {
@@ -347,3 +352,4 @@ td {
 @import "account";
 @import "investments";
 @import "forms";
+@import "components";
