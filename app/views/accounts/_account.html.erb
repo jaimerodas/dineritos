@@ -1,3 +1,4 @@
+<% if should_be_shown? account %>
 <tr class="<%= 'disabled' unless account.final_balance > 0 %>">
   <td>
     <%= link_to account.name, account_path(account) %>
@@ -6,3 +7,4 @@
   <td class="currency"><%= currency account.total_transferred %></td>
   <td class="currency"><%= currency account.final_balance, zero: true %></td>
 </tr>
+<% end %>

@@ -48,7 +48,8 @@ class AccountsComparisonReport
     return earliest_date..Date.current if year == "all"
     return 1.month.ago..Date.current if year == "past_month"
     return 1.week.ago..Date.current if year == "past_week"
-    year = year.to_i if year.instance_of?(String)
+    year = Date.current.year if year == "year_to_date"
+    year = year.to_i if year.is_a?(String)
     Date.new(year)...Date.new(year + 1)
   end
 
