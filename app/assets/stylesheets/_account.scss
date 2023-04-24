@@ -233,13 +233,17 @@ svg .color-container {
     padding: 0.75em;
     box-shadow: none;
 
+    transition: all ease 0.2s;
+
     &:hover {
-      box-shadow: none;
+      background-color: var(--focus-color);
+      transform: translateY(-0.2em);
     }
 
     &.active {
       cursor: default;
       background-color: var(--mid-color);
+      transform: translateY(0);
     }
   }
 }
