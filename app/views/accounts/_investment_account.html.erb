@@ -5,6 +5,11 @@
   </div>
 
   <div class="big-number">
+    <span>Depósitos Netos</span>
+    <em><%= currency @report.net_deposited, zero: true %></em>
+  </div>
+
+  <div class="big-number">
     <span>Rendimiento Total</span>
     <em><%= currency @report.earnings, diff: true, zero: true %></em>
   </div>

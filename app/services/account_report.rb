@@ -38,6 +38,10 @@ class AccountReport
     @withdrawals ||= summary.withdrawals ? summary.withdrawals / -100.0 : 0.0
   end
 
+  def net_deposited
+    deposits - withdrawals
+  end
+
   def irr
     @irr ||= summary.irr
   end
