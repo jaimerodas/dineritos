@@ -40,7 +40,11 @@ class AccountsController < ApplicationController
   end
 
   def show
-    @report = AccountReport.new(account: account, user: current_user)
+    @report = AccountReport.new(
+      account: account,
+      user: current_user,
+      currency: params[:currency].blank? ? "default" : params[:currency]
+    )
   end
 
   private

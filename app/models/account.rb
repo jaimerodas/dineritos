@@ -36,8 +36,8 @@ class Account < ApplicationRecord
       .then { |name| "Updaters::#{name}".constantize }
   end
 
-  def last_amount
-    balances.where(currency: currency).order(date: :desc).limit(1).first || Balance.new
+  def last_amount(use: currency)
+    balances.where(currency: use).order(date: :desc).limit(1).first || Balance.new
   end
 
   def latest_balance(force: false)

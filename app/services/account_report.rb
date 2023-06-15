@@ -1,18 +1,19 @@
 class AccountReport
-  def initialize(user:, account:, period: "all")
+  def initialize(user:, account:, period: "all", currency: "default")
     raise unless account.user == user
     @account = account
     @period = calculate_period_from(period)
+    @currency = currency == "default" ? account.currency : "MXN"
   end
 
-  attr_reader :account, :period
+  attr_reader :account, :period, :currency
 
   def account_name
     account.name
   end
 
   def latest_balance
-    account.last_amount
+    account.last_amount(use: currency)
   end
 
   def earliest_date
@@ -66,7 +67,7 @@ class AccountReport
   private
 
   def available_balances
-    account.balances.where(date: period, currency: account.currency)
+    account.balances.where(date: period, currency: currency)
   end
 
   def summary
