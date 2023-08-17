@@ -1,6 +1,7 @@
 #!/bin/bash
-set -e
 
 rm latest.dump
+set -e
 heroku pg:backups:capture -a dineritos && heroku pg:backups:download -a dineritos
-pg_restore --verbose --clean --no-acl --no-owner -h localhost -d dineritos_development latest.dump && rm latest.dump
+pg_restore --verbose --clean --no-acl --no-owner -h localhost -d dineritos_development latest.dump 
+rm latest.dump
