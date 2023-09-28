@@ -1,4 +1,4 @@
-import { Controller } from "stimulus"
+import { Controller } from "@hotwired/stimulus"
 import { InvestmentChart } from "charts/investment_chart"
 import { BalanceChangeChart } from "charts/balance_change_chart"
 
