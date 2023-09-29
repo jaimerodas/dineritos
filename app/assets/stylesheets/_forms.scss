@@ -91,10 +91,11 @@ button, .btn {
 
   cursor: pointer;
 
-  border-radius: 0.25em;
+  border-radius: 2em;
 
   &:focus, &:hover {
     background-color: var(--focus-dark-color);
+    transform: scale(1.05);
   }
 }
 
@@ -179,8 +180,8 @@ form dl {
     display: block;
     width: 100%;
     box-sizing: border-box;
-    border: 0.125em solid var(--mid-color);
-    padding: 0.875em 0.625em;
+    border: 0.0625em solid var(--mid-color);
+    padding: 0.5em 1em;
     margin: 1em 0;
 
     background-color: transparent;
@@ -194,11 +195,12 @@ form dl {
 
     cursor: pointer;
 
-    border-radius: 0.25em;
+    border-radius: 2em;
 
     &:focus, &:hover {
       border-color: var(--fg-color);
       color: var(--fg-color);
+      transform: scale(1.05);
     }
   }
 }

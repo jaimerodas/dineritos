@@ -1,0 +1,15 @@
+<header class="simple">
+  <h1>Agregar Passkey</h1>
+</header>
+
+<%= form_for @passkey, data: { controller: "new-passkey", action: "submit->new-passkey#create" } do |f| %>
+  <div class="field">
+    <%= f.label :nickname %>
+    <%= f.text_field :nickname, required: true %>
+  </div>
+
+  <section class="actions">
+    <%= f.button %>
+    <%= link_to 'Cancelar', settings_path %>
+  </section>
+<% end %>

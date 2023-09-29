@@ -2,8 +2,10 @@ class User < ApplicationRecord
   has_many :sessions
   has_many :accounts
   has_many :balances, through: :accounts
+  has_many :passkeys
 
   before_create { self.email = email.downcase }
+  after_initialize { self.uid ||= WebAuthn.generate_user_id }
 
   def accounts_missing_todays_balance
     account_ids = balances

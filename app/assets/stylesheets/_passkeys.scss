@@ -1,0 +1,104 @@
+.passkeys {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 1em;
+  grid-auto-rows: minmax(5em, auto);
+
+  margin: 0 0 3em;
+  padding: 0;
+}
+
+.passkey {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  margin: 0;
+  padding: 1em;
+
+  box-sizing: border-box;
+  border-radius: 0.5em;
+  box-shadow: rgba(141, 150, 154, 0.36) 0 0.03125rem 0.0375rem 0,
+    rgba(141, 150, 154, 0.36) 0 0.1rem 0.1125rem -0.05rem,
+    rgba(141, 150, 154, 0.36) 0 0.25625rem 0.2875rem -0.10625rem,
+    rgba(141, 150, 154, 0.36) 0 0.61875rem 0.69375rem -0.15625rem;
+  background:
+    linear-gradient(-135deg , transparent 0%, rgba(255,255,255,0.1) 100%),
+    linear-gradient(85deg , transparent 80%, rgba(0,0,0,0.05) 80%, rgba(0,0,0,0.05) 100%),
+    #f3f3f3;
+  transition: 0.4s ease transform, 0.4s ease box-shadow;
+  transform: scale(1);
+  cursor: default;
+
+  font-size: 1.25em;
+  font-weight: bold;
+
+  &:hover {
+    transform: scale(1.02);
+    box-shadow: rgba(141, 150, 154, 0.25) 0 0.03125rem 0.0375rem 0,
+    rgba(141, 150, 154, 0.25) 0 0.1rem 0.1125rem -0.05rem,
+    rgba(141, 150, 154, 0.25) 0 0.25625rem 0.2875rem -0.10625rem,
+    rgba(141, 150, 154, 0.25) 0 0.61875rem 0.69375rem -0.15625rem;
+  }
+
+  .passkey-key {
+    color: var(--mid-color);
+    font-size: 0.75rem;
+    font-weight: 400;
+  }
+}
+
+.new-passkey {
+  display: block;
+  & > a {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+    box-sizing: border-box;
+    padding: 0.75em;
+    margin: 0;
+    border: 0.2em solid var(--mid-color);
+    border-radius: 0.75em;
+    border-style: dashed;
+
+    color: var(--mid-color);
+    font-size: 1.25em;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+
+    transition: 0.2s ease all;
+    &:hover, &:focus {
+      color: var(--focus-color);
+      border-color: var(--focus-color);
+    }
+  }
+}
+
+@media screen and (prefers-color-scheme: dark) {
+  .passkey {
+    background:
+    linear-gradient(-135deg , transparent 0%, rgba(255,255,255,0.1) 100%),
+    linear-gradient(85deg , transparent 80%, rgba(255,255,255,0.05) 80%, rgba(255,255,255,0.05) 100%),
+    #242424;
+
+    box-shadow:
+      rgba(4, 5, 6, 0.36) 0 0.03125rem 0.0375rem 0,
+      rgba(4, 5, 6, 0.36) 0 0.1rem 0.1125rem -0.05rem,
+      rgba(4, 5, 6, 0.36) 0 0.25625rem 0.2875rem -0.10625rem,
+      rgba(4, 5, 6, 0.36) 0 0.61875rem 0.69375rem -0.15625rem;
+
+    &:hover {
+      box-shadow: rgba(4, 5, 6, 0.25) 0 0.03125rem 0.0375rem 0,
+      rgba(4, 5, 6, 0.25) 0 0.1rem 0.1125rem -0.05rem,
+      rgba(4, 5, 6, 0.25) 0 0.25625rem 0.2875rem -0.10625rem,
+      rgba(4, 5, 6, 0.25) 0 0.61875rem 0.69375rem -0.15625rem;
+    }
+  }
+}
+
+@media screen and (min-width: 40em) {
+  .passkeys {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

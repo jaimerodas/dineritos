@@ -35,12 +35,18 @@ h1 {
   line-height: 1;
 
   margin: 0 0 0.5rem;
+
+  &.login-options-header {
+    font-size: 2.5em;
+    margin-bottom: 0.5em;
+  }
 }
 
 input {
+  color: var(--fg-color);
   font-family: inherit;
   font-size: 1em;
-  padding: 0.75em 1em;
+  padding: 0.625em 0.75em;
   margin: 0 0 1em;
 
   display: block;
@@ -48,19 +54,20 @@ input {
   box-sizing: border-box;
 
   outline: none;
-  box-shadow: 0 0.25em 0.5em rgba(0,0,0,0.02), 0 0.125em 0.125em rgba(0,0,0,0.02);
-  border: none;
-  border-radius: 0.25em;
+  box-shadow: 0 0 0 0.125em transparent;
+  border: 0.0625em solid var(--border-color);
+  border-radius: 0.5em;
 
-  background-color: white;
+  background-color: var(--bg-alt-color);
 
   transition: ease all 0.2s;
 
   &:active, &:focus {
-    box-shadow: 0 0.25em 0.5em rgba(0,0,0,0.1), 0 0.125em 0.125em rgba(0,0,0,0.15);
+    box-shadow: 0 0 0 0.125em var(--focus-color);
+    border-color: var(--focus-color);
+    background-color: var(--bg-alt-color);
   }
 }
-
 button {
   display: block;
   width: 100%;
@@ -79,11 +86,9 @@ button {
   font-family: inherit;
   font-size: 1em;
 
-  text-transform: uppercase;
-
   cursor: pointer;
 
-  border-radius: 0.25em;
+  border-radius: 2em;
 
   &:focus, &:hover {
     background-color: lighten(#077DBE, 0.1);
@@ -98,6 +103,39 @@ button {
       0 0.25em 0.5em rgba(0,0,0,0),
       0 0.125em 0.125em rgba(0,0,0,0),
       inset 0 0.125em 0.25em rgba(0,0,0,0.3);
+  }
+}
+
+.login-options {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1em;
+  grid-auto-rows: minmax(8em, auto);
+
+  a, button {
+    text-decoration: none;
+    color: var(--fg-color);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1em;
+    border-radius: 2em;
+    box-sizing: border-box;
+    background-color: var(--border-color);
+    height: 100%;
+    width: 100%;
+    transition: 0.4s ease all;
+
+    &:hover {
+      transform: scale(1.1);
+    }
+  }
+
+  svg {
+    max-width: 3em;
+    fill: var(--fg-color);
   }
 }
 

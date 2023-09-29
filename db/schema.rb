@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_03_21_005344) do
+ActiveRecord::Schema[7.0].define(version: 2023_09_28_022606) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -50,6 +50,18 @@ ActiveRecord::Schema[7.0].define(version: 2022_03_21_005344) do
     t.index ["date", "currency"], name: "index_currency_rates_on_date_and_currency", unique: true
   end
 
+  create_table "passkeys", force: :cascade do |t|
+    t.string "nickname"
+    t.string "external_id"
+    t.string "public_key"
+    t.bigint "user_id", null: false
+    t.bigint "sign_count", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["external_id"], name: "index_passkeys_on_external_id", unique: true
+    t.index ["user_id"], name: "index_passkeys_on_user_id"
+  end
+
   create_table "sessions", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.string "token_digest", null: false
@@ -72,5 +84,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_03_21_005344) do
 
   add_foreign_key "accounts", "users"
   add_foreign_key "balances", "accounts"
+  add_foreign_key "passkeys", "users"
   add_foreign_key "sessions", "users"
 end
