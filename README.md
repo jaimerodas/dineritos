@@ -12,11 +12,11 @@ vistas para ver la evolución a través del tiempo del total de saldos y de cada
 cuenta en particular.
 
 ## Instalación
-Esto es una app de Rails 6, corriendo sobre Ruby 2.7. Usamos postgresql como
+Esto es una app de Rails 7, corriendo sobre Ruby 3.2. Usamos postgresql como
 db. Si tienes Ruby y yarn instalados, puedes simplemente correr
 
 ```bash
-bundle && yarn && rails db:setup
+bundle && rails db:setup
 ```
 
 ## Configuración
