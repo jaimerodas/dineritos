@@ -10,11 +10,12 @@
 
 .passkey {
   display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
+  flex-direction: row;
+  align-items: center;
   margin: 0;
-  padding: 1em;
+  padding: 1em 1em 1em 0.75em;
 
+  border-top: 0.0625rem solid #fff;
   box-sizing: border-box;
   border-radius: 0.5em;
   box-shadow: rgba(141, 150, 154, 0.36) 0 0.03125rem 0.0375rem 0,
@@ -22,15 +23,25 @@
     rgba(141, 150, 154, 0.36) 0 0.25625rem 0.2875rem -0.10625rem,
     rgba(141, 150, 154, 0.36) 0 0.61875rem 0.69375rem -0.15625rem;
   background:
-    linear-gradient(-135deg , transparent 0%, rgba(255,255,255,0.1) 100%),
-    linear-gradient(85deg , transparent 80%, rgba(0,0,0,0.05) 80%, rgba(0,0,0,0.05) 100%),
-    #f3f3f3;
+    linear-gradient(-170deg , transparent 0%, rgba(255,255,255,0.5) 100%),
+    #eee;
   transition: 0.4s ease transform, 0.4s ease box-shadow;
   transform: scale(1);
   cursor: default;
 
   font-size: 1.25em;
   font-weight: bold;
+
+  svg {
+    width: 2.5rem;
+    margin-right: 0.5rem;
+    fill: #333;
+  }
+
+  div {
+    display: flex;
+    flex-direction: column;
+  }
 
   &:hover {
     transform: scale(1.02);
@@ -77,16 +88,23 @@
 
 @media screen and (prefers-color-scheme: dark) {
   .passkey {
-    background:
-    linear-gradient(-135deg , transparent 0%, rgba(255,255,255,0.1) 100%),
-    linear-gradient(85deg , transparent 80%, rgba(255,255,255,0.05) 80%, rgba(255,255,255,0.05) 100%),
+    background: linear-gradient(-170deg , transparent 0%, rgba(255,255,255,0.1) 100%),
     #242424;
 
-    box-shadow:
-      rgba(4, 5, 6, 0.36) 0 0.03125rem 0.0375rem 0,
+    border-top-color: #444;
+
+    box-shadow: rgba(4, 5, 6, 0.36) 0 0.03125rem 0.0375rem 0,
       rgba(4, 5, 6, 0.36) 0 0.1rem 0.1125rem -0.05rem,
       rgba(4, 5, 6, 0.36) 0 0.25625rem 0.2875rem -0.10625rem,
       rgba(4, 5, 6, 0.36) 0 0.61875rem 0.69375rem -0.15625rem;
+
+    .passkey-key {
+      color: #888;
+    }
+
+    svg {
+      fill: #aaa;
+    }
 
     &:hover {
       box-shadow: rgba(4, 5, 6, 0.25) 0 0.03125rem 0.0375rem 0,
