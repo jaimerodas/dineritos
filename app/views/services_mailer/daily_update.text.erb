@@ -10,7 +10,6 @@ Ganancias último mes: <%= currency @report.totals[:month] %>
 
 Saldo actual: <%= report[:current] ? currency(report[:current]) : "Error de descarga" %>
 Ganancias hoy: <%= currency report[:day] %>
-Ganancias última semana: <%= currency report[:week] %>
 Ganancias último mes: <%= currency report[:month] %>
 ------------------------------------------
 <% end %>

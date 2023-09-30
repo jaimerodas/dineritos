@@ -13,9 +13,8 @@ class EarningsReport
     @details ||= combine(
       current: current_balances,
       day: earnings_in_the_last(1.day),
-      week: earnings_in_the_last(1.week),
       month: earnings_in_the_last(1.month)
-    )
+    ).reject { |account, amounts| amounts.values.uniq == [0.0] }
   end
 
   def totals
