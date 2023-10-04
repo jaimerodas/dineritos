@@ -104,6 +104,12 @@ button, .btn {
   }
 }
 
+.settings button {
+  padding: 1em 2em;
+  width: auto;
+  margin: 2em auto;
+}
+
 select {
     display: block;
     color: var(--fg-color);
