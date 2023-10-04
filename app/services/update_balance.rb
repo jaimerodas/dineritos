@@ -16,7 +16,7 @@ class UpdateBalance
     saved_successfully = balance.save
 
     if saved_successfully
-      resend_email if invalidated_todays_email?
+      resend_email if invalidated_todays_email? && user_wants_to_be_notified?
       update_financials if modified_history?
     end
 
@@ -29,6 +29,10 @@ class UpdateBalance
     @invalidated_todays_email ||= balance.date == Date.current && (
       balance.transfers_cents_changed? || balance.amount_cents_changed?
     )
+  end
+
+  def user_wants_to_be_notified?
+    balance.account.user.settings && balance.account.user.settings['send_email_after_update']
   end
 
   def modified_history?

@@ -1,0 +1,41 @@
+<header class="simple">
+  <h1>Opciones</h1>
+</header>
+
+<section>
+  <h2>Notificaciones</h2>
+  <%= form_with scope: :settings, url: settings_path, class: "settings" do |f| %>
+    <div class="checkbox">
+      <%= f.check_box :daily_email, checked: @settings && @settings["daily_email"] %>
+      <%= f.label :daily_email do %>
+        <span class="checkbox-toggle">
+          <span class="checkbox-toggle-circle"></span>
+        </span>
+        <span class="text">¿Enviar correo de resumen en las mañanas?</span>
+      <% end %>
+    </div>
+
+    <div class="checkbox">
+      <%= f.check_box :send_email_after_update, checked: @settings && @settings["send_email_after_update"] %>
+      <%= f.label :send_email_after_update do %>
+        <span class="checkbox-toggle">
+          <span class="checkbox-toggle-circle"></span>
+          </span>
+        <span class="checkbox-text">¿Reenviar correo de resumen cuando hay actualizaciones?</span>
+      <% end %>
+    </div>
+
+    <%= f.button %>
+  <% end %>
+</section>
+
+<section>
+  <h2>Passkeys</h2>
+  <ul class="passkeys">
+    <%= render @passkeys %>
+  </ul>
+</section>
+
+<section class="actions">
+  <%= link_to 'Agregar Passkey', new_passkey_path %>
+</section>

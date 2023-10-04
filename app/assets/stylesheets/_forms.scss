@@ -3,6 +3,11 @@
 form {
   max-width: 20em;
   margin: 0 auto;
+
+  &.settings {
+    max-width: unset;
+    margin: 0 0 2em;
+  }
 }
 
 .field {
@@ -202,5 +207,55 @@ form dl {
       color: var(--fg-color);
       transform: scale(1.05);
     }
+  }
+}
+
+.checkbox {
+  margin: 0 0 1em;
+
+  label {
+    display: flex;
+    flex-direction: row;
+    font-size: 1em;
+    padding: 0;
+    color: inherit;
+  }
+  .checkbox-toggle {
+    flex: none;
+    display: block;
+    background: var(--bg-alt-color);
+    box-shadow: inset 0 0 0.25em rgba(0,0,0,0.3);
+    width: 2.75em;
+    height: 1.5em;
+    border-radius: 1.5em;
+    margin-right: 1em;
+    transition: 0.3s ease background;
+    transform: translateY(-0.1em);
+  }
+  .checkbox-toggle-circle {
+    display: block;
+    width: 1.3em;
+    height: 1.3em;
+    margin: .1em;
+    border-radius: .75em;
+    background: white;
+    box-shadow: 0 0 0.25em rgba(0,0,0,0.3);
+    transform: translate(0, 0);
+    transition: 0.2s ease transform;
+  }
+  input[type="checkbox"] {
+    display: none;
+  }
+  input[type="checkbox"]:checked + label .checkbox-toggle {
+    background: var(--positive-color);
+  }
+  input[type="checkbox"]:checked + label .checkbox-toggle-circle {
+    transform: translate(1.25em, 0);
+  }
+  input[type="checkbox"]:checked + label:hover .checkbox-toggle-circle {
+    transform: translate(1.25em, 0) scale(1.1);
+  }
+  label:hover .checkbox-toggle-circle {
+    transform: scale(1.1);
   }
 }

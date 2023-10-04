@@ -5,7 +5,7 @@ class UpdatesController < ApplicationController
 
   def show
     account.latest_balance
-    ServicesMailer.daily_update(current_user).deliver_now
+    ServicesMailer.daily_update(current_user).deliver_now if user_wants_to_be_notified?
   ensure
     redirect_to account_path(params[:account_id])
   end
@@ -22,5 +22,9 @@ class UpdatesController < ApplicationController
 
   def ensure_updateability
     redirect_to account_path(params[:account_id]) unless account.can_be_updated?
+  end
+
+  def user_wants_to_be_notified?
+    current_user.settings && current_user.settings['send_email_after_update']
   end
 end

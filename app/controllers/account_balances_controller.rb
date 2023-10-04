@@ -17,7 +17,7 @@ class AccountBalancesController < ApplicationController
     )
 
     if @balance.update(account_balance_params.merge(validated: true))
-      ServicesMailer.daily_update(current_user).deliver_now
+      ServicesMailer.daily_update(current_user).deliver_now if user_wants_to_be_notified?
       redirect_to account_movements_path(@balance.account)
     else
       render :new
@@ -47,5 +47,9 @@ class AccountBalancesController < ApplicationController
 
   def account_balance_params
     params.require(:balance).permit(:amount, :transfers)
+  end
+
+  def user_wants_to_be_notified?
+    current_user.settings && current_user.settings['send_email_after_update']
   end
 end

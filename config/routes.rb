@@ -8,7 +8,7 @@ Rails.application.routes.draw do
       resources :movements, path: "movimientos", only: [:index]
     end
 
-    resources :settings, path: "opciones", only: [:index]
+    resource :settings, path: "opciones", only: [:show, :create]
     resources :passkeys, only: [:new, :create] do
       post :callback, on: :collection
     end
