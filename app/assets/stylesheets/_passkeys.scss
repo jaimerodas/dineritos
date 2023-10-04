@@ -13,7 +13,7 @@
   flex-direction: row;
   align-items: center;
   margin: 0;
-  padding: 1em 1em 1em 0.75em;
+  padding: 1rem;
 
   border-top: 0.0625rem solid #fff;
   box-sizing: border-box;
@@ -22,8 +22,7 @@
     rgba(141, 150, 154, 0.36) 0 0.1rem 0.1125rem -0.05rem,
     rgba(141, 150, 154, 0.36) 0 0.25625rem 0.2875rem -0.10625rem,
     rgba(141, 150, 154, 0.36) 0 0.61875rem 0.69375rem -0.15625rem;
-  background:
-    linear-gradient(-170deg , transparent 0%, rgba(255,255,255,0.5) 100%),
+  background: linear-gradient(-170deg , transparent 0%, rgba(255,255,255,0.5) 100%),
     #eee;
   transition: 0.4s ease transform, 0.4s ease box-shadow;
   transform: scale(1);
@@ -33,28 +32,19 @@
   font-weight: bold;
 
   svg {
-    width: 2.5rem;
-    margin-right: 0.5rem;
-    fill: #333;
+    width: 2rem;
+    margin-right: 1rem;
+    fill: var(--mid-color);
   }
 
-  div {
-    display: flex;
-    flex-direction: column;
-  }
-
-  &:hover {
-    transform: scale(1.02);
-    box-shadow: rgba(141, 150, 154, 0.25) 0 0.03125rem 0.0375rem 0,
-    rgba(141, 150, 154, 0.25) 0 0.1rem 0.1125rem -0.05rem,
-    rgba(141, 150, 154, 0.25) 0 0.25625rem 0.2875rem -0.10625rem,
-    rgba(141, 150, 154, 0.25) 0 0.61875rem 0.69375rem -0.15625rem;
+  span {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 400;
   }
 
   .passkey-key {
     color: var(--mid-color);
-    font-size: 0.75rem;
-    font-weight: 400;
   }
 }
 
@@ -104,13 +94,6 @@
 
     svg {
       fill: #aaa;
-    }
-
-    &:hover {
-      box-shadow: rgba(4, 5, 6, 0.25) 0 0.03125rem 0.0375rem 0,
-      rgba(4, 5, 6, 0.25) 0 0.1rem 0.1125rem -0.05rem,
-      rgba(4, 5, 6, 0.25) 0 0.25625rem 0.2875rem -0.10625rem,
-      rgba(4, 5, 6, 0.25) 0 0.61875rem 0.69375rem -0.15625rem;
     }
   }
 }

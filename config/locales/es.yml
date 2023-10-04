@@ -38,6 +38,9 @@ es:
       short_year: "%e/%B/%Y"
       numeric_month: "%Y-%m"
       month: "%B %Y"
+  time:
+    formats:
+      default: '%d de %B de %Y'
   activerecord:
     attributes:
       account:
