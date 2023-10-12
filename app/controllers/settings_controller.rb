@@ -8,7 +8,7 @@ class SettingsController < ApplicationController
 
   def create
     current_user.update(settings: settings_to_b)
-    redirect_to settings_path
+    redirect_to settings_path, notice: t('settings.saved_successfully')
   end
 
   private

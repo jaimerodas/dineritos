@@ -25,7 +25,8 @@
       <% end %>
     </div>
 
-    <%= f.button "Guardar preferencias de notificación" %>
+    <% button_flash = flash.keys.include?("notice") ? "btn-flash" : "" %>
+    <%= f.button "Guardar preferencias de notificación", class: button_flash %>
   <% end %>
 </section>
 

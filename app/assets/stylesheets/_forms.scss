@@ -102,6 +102,12 @@ button, .btn {
     background-color: var(--focus-dark-color);
     transform: scale(1.05);
   }
+
+  &.btn-flash {
+    animation-name: flash;
+    animation-duration: 3s;
+    animation-iteration-count: 1;
+  }
 }
 
 .settings button {
@@ -263,5 +269,22 @@ form dl {
   }
   label:hover .checkbox-toggle-circle {
     transform: scale(1.1);
+  }
+}
+
+
+@keyframes flash {
+  from {
+    background-color: var(--focus-color);
+    transform: scale(1.05);
+  }
+  10% {
+    background-color: var(--positive-color);
+  }
+  90% {
+    background-color: var(--positive-color);
+  }
+  to {
+    background-color: var(--focus-color);
   }
 }

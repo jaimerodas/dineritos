@@ -69,3 +69,5 @@ es:
   will_paginate:
     next_label: ">"
     previous_label: "<"
+  settings:
+    saved_successfully: "Preferencias guardadas"
