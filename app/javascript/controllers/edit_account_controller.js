@@ -3,7 +3,7 @@ import { Controller } from "@hotwired/stimulus"
 export default class extends Controller {
   static targets = [
     "type", "currency", "apiKey", "apiSecret", "username", "password", "issuer", "secret",
-    "rgtoken", "rgpassword", "rgusername"
+    "rgtoken", "rgpassword", "rgusername", "apusername", "appassword", "aptoken", "apactor"
   ]
   connect() {
     this.change()
@@ -24,11 +24,14 @@ export default class extends Controller {
       case "red_girasol":
         fields.push("redGirasol")
         break
+      case "apify":
+        fields.push("apify")
+        break
       default:
         fields.push("credential")
     }
     [
-      "bitso","regular","credential","twoFactor", "redGirasol"
+      "bitso","regular","credential","afluenta", "redGirasol", "apify"
     ].forEach(e => this[e + "FieldsVisible"](fields.includes(e)))
   }
 
@@ -39,37 +42,35 @@ export default class extends Controller {
   bitsoFieldsVisible(visible) {
     this.elementVisible("bitso_account_settings_field", visible)
     this.hideCurrencyIfVisible(visible)
-    this.toggleTargetAbility([this.apiKeyTarget, this.apiSecretTarget], visible)
   }
 
   redGirasolFieldsVisible(visible) {
     this.elementVisible("red_girasol_field", visible)
     this.hideCurrencyIfVisible(visible)
-    this.toggleTargetAbility([this.rgpasswordTarget, this.rgusernameTarget, this.rgtokenTarget], visible)
   }
 
   credentialFieldsVisible(visible) {
     this.elementVisible("account_settings_credentials_field", visible)
     this.hideCurrencyIfVisible(visible)
-    this.toggleTargetAbility([this.usernameTarget, this.passwordTarget], visible)
   }
 
-  twoFactorFieldsVisible(visible) {
-    this.elementVisible("two_factor_field", visible)
-    this.toggleTargetAbility([this.issuerTarget, this.secretTarget], visible)
+  afluentaFieldsVisible(visible) {
+    this.elementVisible("afluenta_field", visible)
+  }
+
+  apifyFieldsVisible(visible) {
+    this.hideCurrencyIfVisible(visible)
+    this.elementVisible("apify_field", visible)
   }
 
   elementVisible(name, visible) {
     var display = visible ? "block" : "none"
     document.getElementById(name).style.display = display
+    document.querySelectorAll(`#${name} input, #${name} textarea`).forEach(e => e.disabled = !visible)
   }
 
   hideCurrencyIfVisible(visible) {
     if (visible) { return }
     document.getElementById("account_currency_field").value = "MXN"
-  }
-
-  toggleTargetAbility(targets, enabled) {
-    targets.forEach(e => e.disabled = !enabled)
   }
 }

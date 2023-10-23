@@ -51,6 +51,42 @@
            disabled>
   </div>
 
+  <div class="field" id="apify_field" style="display: none;">
+    <label for="account_settings_username">Usuario</label>
+    <input type="text"
+      name="account[settings][username]"
+      id="account_settings_username"
+      data-edit-account-target="apusername"
+      value="<%= @account.settings&.fetch("username", nil) %>"
+      disabled>
+    <label for="account_settings_password">Contraseña</label>
+    <input type="text"
+      name="account[settings][password]"
+      id="account_settings_password"
+      data-edit-account-target="appassword"
+      value="<%= @account.settings&.fetch("password", nil) %>"
+           disabled>
+    <label for="account_settings_token">Apify Token</label>
+    <input type="text"
+      name="account[settings][token]"
+      id="account_settings_token"
+      data-edit-account-target="aptoken"
+      value="<%= @account.settings&.fetch("token", nil) %>"
+      autocomplete="off"
+      spellcheck="false"
+      disabled>
+
+    <label for="account_settings_actor">Apify Actor</label>
+    <input type="text"
+      name="account[settings][actor]"
+      id="account_settings_actor"
+      data-edit-account-target="apactor"
+      value="<%= @account.settings&.fetch("actor", nil) %>"
+      autocomplete="off"
+      spellcheck="false"
+      disabled>
+  </div>
+
   <div class="field" id="red_girasol_field" style="display: none;">
     <label for="account_settings_username">Usuario</label>
     <input type="text"
@@ -74,7 +110,7 @@
       disabled><%= @account.settings&.fetch("token", nil) %></textarea>
   </div>
 
-  <div class="field" id="two_factor_field" style="display: none;">
+  <div class="field" id="afluenta_field" style="display: none;">
     <label for="account_settings_issuer">2FA Issuer</label>
     <input type="text"
            name="account[settings][issuer]"

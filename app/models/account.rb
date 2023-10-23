@@ -2,7 +2,7 @@ class Account < ApplicationRecord
   belongs_to :user
   has_many :balances
 
-  PLATFORMS = %i[no_platform bitso yo_te_presto briq afluenta la_tasa cetes_directo red_girasol]
+  PLATFORMS = %i[no_platform bitso yo_te_presto briq afluenta la_tasa cetes_directo red_girasol apify]
 
   enum platform: PLATFORMS
 
