@@ -48,7 +48,7 @@ class Updaters::Apify
       else
         HTTParty.post(
           url,
-          body: {username: params.username, password: params.password}.to_json,
+          body: {username: @params.username, password: @params.password}.to_json,
           headers: {"Content-Type" => "application/json"}
         )
       end
