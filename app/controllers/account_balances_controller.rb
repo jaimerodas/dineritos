@@ -50,6 +50,6 @@ class AccountBalancesController < ApplicationController
   end
 
   def user_wants_to_be_notified?
-    current_user.settings && current_user.settings['send_email_after_update']
+    current_user.settings && current_user.settings["send_email_after_update"]
   end
 end

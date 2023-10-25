@@ -3,7 +3,7 @@ class AccountReport
     raise unless account.user == user
     @account = account
     @period = calculate_period_from(period)
-    @currency = currency == "default" ? account.currency : "MXN"
+    @currency = (currency == "default") ? account.currency : "MXN"
   end
 
   attr_reader :account, :period, :currency

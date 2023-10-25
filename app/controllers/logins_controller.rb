@@ -28,30 +28,32 @@ class LoginsController < ApplicationController
     if valid_email?
       options = WebAuthn::Credential.options_for_get(
         allow: @user.passkeys.pluck(:external_id),
-        user_verification: 'required'
+        user_verification: "required"
       )
 
-      session['current_authentication'] = {
-        'challenge' => options.challenge,
-        'username' => params_email
+      session["current_authentication"] = {
+        "challenge" => options.challenge,
+        "username" => params_email
       }
 
       respond_to do |format|
-        format.json { render json: {
-          callback_url: callback_login_path(format: :json),
-          get_options: options
-        } }
+        format.json {
+          render json: {
+            callback_url: callback_login_path(format: :json),
+            get_options: options
+          }
+        }
       end
     end
   end
 
   def callback
     webauthn_credential = WebAuthn::Credential.from_get(params)
-    user = User.find_by(email: session['current_authentication']['username'])
+    user = User.find_by(email: session["current_authentication"]["username"])
     passkey = user.passkeys.find_by(external_id: Base64.strict_encode64(webauthn_credential.raw_id))
 
     webauthn_credential.verify(
-      session['current_authentication']['challenge'],
+      session["current_authentication"]["challenge"],
       public_key: passkey.public_key,
       sign_count: passkey.sign_count,
       user_verification: true
@@ -59,7 +61,7 @@ class LoginsController < ApplicationController
 
     passkey.update!(sign_count: webauthn_credential.sign_count)
     log_in(user)
-    render json: { status: 'ok' }, status: :ok
+    render json: {status: "ok"}, status: :ok
   rescue WebAuthn::Error => e
     render json: "Verification failed: #{e.message}", status: :unprocessable_entity
   ensure

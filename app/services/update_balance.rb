@@ -32,7 +32,7 @@ class UpdateBalance
   end
 
   def user_wants_to_be_notified?
-    balance.account.user.settings && balance.account.user.settings['send_email_after_update']
+    balance.account.user.settings && balance.account.user.settings["send_email_after_update"]
   end
 
   def modified_history?

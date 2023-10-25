@@ -14,7 +14,7 @@ module InvestmentsHelper
   end
 
   def summary_button(period: "past_year")
-    year = period == "past_year" ? "1Y" : period.to_s.upcase
+    year = (period == "past_year") ? "1Y" : period.to_s.upcase
     classes = ["btn"]
     classes << "active" if current_period.to_s == period.to_s
     classes << "year" if period.is_a? Integer

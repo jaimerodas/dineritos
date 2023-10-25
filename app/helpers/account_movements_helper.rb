@@ -23,7 +23,7 @@ module AccountMovementsHelper
 
   def account_nav_link(title, path, current)
     content_tag("li") {
-      classes = current == title ? "active" : ""
+      classes = (current == title) ? "active" : ""
       link_to(title, public_send(path, @account), class: classes)
     }
   end

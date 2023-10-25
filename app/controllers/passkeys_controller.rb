@@ -11,7 +11,7 @@ class PasskeysController < ApplicationController
         name: current_user.email,
         id: current_user.uid
       },
-      authenticator_selection: { user_verification: "required" }
+      authenticator_selection: {user_verification: "required"}
     )
 
     current_user.save
@@ -35,7 +35,7 @@ class PasskeysController < ApplicationController
     )
 
     if credential.save
-      render json: { status: "ok" }, status: :ok
+      render json: {status: "ok"}, status: :ok
     else
       render json: "Couldn't register your Security Key", status: :unprocessable_entity
     end
