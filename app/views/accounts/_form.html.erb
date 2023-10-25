@@ -12,117 +12,83 @@
     <%= f.text_field :name %>
   </div>
 
-  <div class="field" id="account_currency_field">
+  <div class="field" id="no_platform_fields">
     <%= f.label :currency %>
     <%= f.select :currency, ["MXN", "USD"], {}, data: { target: "account.currency" } %>
   </div>
 
-  <div class="field" id="bitso_account_settings_field" style="display: none;">
+  <div class="field" id="bitso_fields" style="display: none;">
     <label for="account_settings_bitso_key">API Key</label>
     <input type="text"
            name="account[settings][bitso_key]"
            id="account_settings_bitso_key"
-           data-edit-account-target="apiKey"
            value="<%= @account.settings&.fetch("bitso_key", nil) %>"
            disabled>
     <label for="account_settings_bitso_secret">API Secret</label>
     <input type="text"
            name="account[settings][bitso_secret]"
            id="account_settings_bitso_secret"
-           data-edit-account-target="apiSecret"
            value="<%= @account.settings&.fetch("bitso_secret", nil) %>"
            disabled>
   </div>
 
-  <div class="field" id="account_settings_credentials_field" style="display: none;">
+  <div class="field" id="credentials_fields" style="display: none;">
     <label for="account_settings_username">Usuario</label>
     <input type="text"
            name="account[settings][username]"
            id="account_settings_username"
-           data-edit-account-target="username"
            value="<%= @account.settings&.fetch("username", nil) %>"
            disabled>
     <label for="account_settings_password">Contraseña</label>
     <input type="text"
            name="account[settings][password]"
            id="account_settings_password"
-           data-edit-account-target="password"
            value="<%= @account.settings&.fetch("password", nil) %>"
            disabled>
   </div>
 
-  <div class="field" id="apify_field" style="display: none;">
+  <div class="field" id="apify_fields" style="display: none;">
     <label for="account_settings_username">Usuario</label>
     <input type="text"
       name="account[settings][username]"
       id="account_settings_username"
-      data-edit-account-target="apusername"
       value="<%= @account.settings&.fetch("username", nil) %>"
       disabled>
     <label for="account_settings_password">Contraseña</label>
     <input type="text"
       name="account[settings][password]"
       id="account_settings_password"
-      data-edit-account-target="appassword"
       value="<%= @account.settings&.fetch("password", nil) %>"
            disabled>
     <label for="account_settings_token">Apify Token</label>
     <input type="text"
       name="account[settings][token]"
       id="account_settings_token"
-      data-edit-account-target="aptoken"
       value="<%= @account.settings&.fetch("token", nil) %>"
       autocomplete="off"
       spellcheck="false"
       disabled>
-
     <label for="account_settings_actor">Apify Actor</label>
     <input type="text"
       name="account[settings][actor]"
       id="account_settings_actor"
-      data-edit-account-target="apactor"
       value="<%= @account.settings&.fetch("actor", nil) %>"
       autocomplete="off"
       spellcheck="false"
       disabled>
   </div>
 
-  <div class="field" id="red_girasol_field" style="display: none;">
-    <label for="account_settings_username">Usuario</label>
-    <input type="text"
-           name="account[settings][username]"
-           id="account_settings_username"
-           data-edit-account-target="rgusername"
-           value="<%= @account.settings&.fetch("username", nil) %>"
-           disabled>
-    <label for="account_settings_password">Contraseña</label>
-    <input type="text"
-           name="account[settings][password]"
-           id="account_settings_password"
-           data-edit-account-target="rgpassword"
-           value="<%= @account.settings&.fetch("password", nil) %>"
-           disabled>
-    <label for="account_settings_token">API Token</label>
-    <textarea
-      id="account_settings_token"
-      name="account[settings][token]"
-      data-edit-account-target="rgtoken"
-      disabled><%= @account.settings&.fetch("token", nil) %></textarea>
-  </div>
-
-  <div class="field" id="afluenta_field" style="display: none;">
+  <div class="field" id="afluenta_fields" style="display: none;">
     <label for="account_settings_issuer">2FA Issuer</label>
     <input type="text"
            name="account[settings][issuer]"
            id="account_settings_issuer"
-           data-edit-account-target="issuer"
            value="<%= @account.settings&.fetch("issuer", nil) %>"
            disabled>
     <label for="account_settings_secret">2FA Secret</label>
     <input type="text"
            name="account[settings][secret]"
            id="account_settings_secret"
-           data-edit-account-target="secret"
            value="<%= @account.settings&.fetch("secret", nil) %>"
            disabled>
   </div>
