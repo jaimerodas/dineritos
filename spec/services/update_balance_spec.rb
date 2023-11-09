@@ -1,10 +1,11 @@
 require "./app/services/update_balance"
 require "ostruct"
-require "active_support/core_ext/date/calculations"
+require "active_support/core_ext/date"
+require "active_support/isolated_execution_state"
 
 RSpec.describe UpdateBalance do
   context "balance from today with everything changed" do
-    let(:balance) { described_class.new(balance: FakeBalance.new, params: true) }
+    let(:balance) { described_class.new(balance: FakeBalance.new, params: {}) }
 
     it "should send email" do
       expect(balance.send(:invalidated_todays_email?)).to be true
@@ -20,7 +21,7 @@ RSpec.describe UpdateBalance do
   end
 
   context "balance from another day with everything changed" do
-    let(:balance) { described_class.new(balance: FakeBalance.new(from_today: false), params: true) }
+    let(:balance) { described_class.new(balance: FakeBalance.new(from_today: false), params: {}) }
 
     it "shouldn't send email" do
       expect(balance.send(:invalidated_todays_email?)).to be false
@@ -50,7 +51,7 @@ class FakeBalance < OpenStruct
   end
 
   def account
-    OpenStruct.new(user: nil)
+    OpenStruct.new(user: OpenStruct.new(settings: {send_email_after_update: true}))
   end
 
   def date
