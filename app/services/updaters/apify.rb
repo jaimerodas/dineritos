@@ -46,11 +46,7 @@ class Updaters::Apify
       response = if last
         HTTParty.get(url)
       else
-        HTTParty.post(
-          url,
-          body: {username: @params.username, password: @params.password}.to_json,
-          headers: {"Content-Type" => "application/json"}
-        )
+        HTTParty.post(url, body: apify_inputs.to_json, headers: headers)
       end
       @data = response.fetch("data")
     end
@@ -77,6 +73,14 @@ class Updaters::Apify
     end
 
     private
+
+    def apify_inputs
+      {username: @params.username, password: @params.password}
+    end
+
+    def headers
+      {"Content-Type" => "application/json"}
+    end
 
     def initial_url(last)
       url = "/acts/jaimerodas~actor-#{params.actor}/runs"
