@@ -83,7 +83,7 @@ class Updaters::Apify
     end
 
     def initial_url(last)
-      url = "/acts/jaimerodas~actor-#{params.actor}/runs"
+      url = "/acts/#{params.actor}/runs"
       url += last ? "/last?status=SUCCEEDED&" : "?"
       to_url(url)
     end

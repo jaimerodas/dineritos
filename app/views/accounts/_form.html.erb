@@ -97,6 +97,22 @@
            id="account_settings_secret"
            value="<%= @account.settings&.fetch("secret", nil) %>"
            disabled>
+    <label for="account_settings_token">Apify Token</label>
+    <input type="text"
+      name="account[settings][token]"
+      id="account_settings_token"
+      value="<%= @account.settings&.fetch("token", nil) %>"
+      autocomplete="off"
+      spellcheck="false"
+      disabled>
+    <label for="account_settings_actor">Apify Actor</label>
+    <input type="text"
+      name="account[settings][actor]"
+      id="account_settings_actor"
+      value="<%= @account.settings&.fetch("actor", nil) %>"
+      autocomplete="off"
+      spellcheck="false"
+      disabled>
   </div>
 
   <%= f.button %>
