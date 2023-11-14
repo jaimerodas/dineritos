@@ -1,7 +1,9 @@
 class Updaters::Afluenta < Updaters::Apify
-  private
-
-  def apify_inputs
-    {username: @params.username, password: @params.password, otp_secret: @params.secret}
+  def inputs
+    {
+      username: params.fetch("username"),
+      password: params.fetch("password"),
+      otp_secret: params.fetch("secret")
+    }
   end
 end
