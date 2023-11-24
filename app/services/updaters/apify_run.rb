@@ -7,24 +7,25 @@ module Updaters
     end
 
     def initialize(params, last: false)
-      @params = OpenStruct.new(params)
-      url = initial_url(last)
+      @params = params
+      @last = last
+
       response = if last
-        HTTParty.get(url)
+        HTTParty.get(initial_url)
       else
-        HTTParty.post(url, body: @params.inputs.to_json, headers: headers)
+        HTTParty.post(initial_url, body: @params.fetch("inputs").to_json, headers: headers)
       end
       @data = response.fetch("data")
     end
 
-    attr_reader :data, :params
+    attr_reader :data, :params, :last
 
     def succeeded?
-      data["status"] == "SUCCEEDED"
+      data.fetch("status", nil) == "SUCCEEDED"
     end
 
     def finished_at
-      data["finishedAt"].to_time
+      data.fetch("finishedAt").to_time
     end
 
     def value
@@ -44,13 +45,13 @@ module Updaters
       {"Content-Type" => "application/json"}
     end
 
-    def initial_url(last)
-      url = "/acts/#{params.actor}/runs"
+    def initial_url
+      url = "/acts/#{params.fetch("actor")}/runs"
       last ? to_url(url + "/last", "status=SUCCEEDED") : to_url(url)
     end
 
     def to_url(path, query = nil)
-      query = [query, "token=#{params.token}"].compact.join("&")
+      query = [query, "token=#{params.fetch("token")}"].compact.join("&")
       "#{BASE_URL}#{path}?#{query}"
     end
   end
