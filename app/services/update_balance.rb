@@ -40,7 +40,7 @@ class UpdateBalance
   end
 
   def resend_email
-    ServicesMailer.daily_update(balance.account.user).deliver_now
+    ServicesMailer.new_daily_update(balance.account.user).deliver_now
   end
 
   def update_financials

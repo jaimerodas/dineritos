@@ -11,4 +11,9 @@ class ServicesMailer < ApplicationMailer
     @errors = errors
     mail to: user.email, subject: "Actualización de Saldos #{Date.current}"
   end
+
+  def new_daily_update(user, date: Date.current, errors: [])
+    @report = DailyReport.for(user, date, errors)
+    mail to: user.email, subject: "Reporte diario: #{@report.date}"
+  end
 end

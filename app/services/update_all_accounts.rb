@@ -13,7 +13,7 @@ class UpdateAllAccounts
     User.all.each do |user|
       process_accounts_for(user)
       if user.settings && user.settings["daily_email"]
-        ServicesMailer.daily_update(user, errors: errors.uniq).deliver_now
+        ServicesMailer.new_daily_update(user, errors: errors.uniq).deliver_now
       end
     end
   end

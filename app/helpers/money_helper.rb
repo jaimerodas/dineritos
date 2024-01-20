@@ -6,4 +6,9 @@ module MoneyHelper
     return tag.span(text) unless diff
     number.negative? ? tag.span(text, class: "diff neg") : tag.span("+#{text}", class: "diff")
   end
+
+  def mailc(number)
+    return "0.00" if !number || number.zero?
+    number_to_currency(number, unit: "")
+  end
 end
