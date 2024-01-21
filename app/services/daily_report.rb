@@ -14,10 +14,9 @@ class DailyReport
   def total
     user.balances
       .select("SUM(amount_cents) as amount_cents")
-      .where("balances.currency": "MXN")
-      .where("balances.date = ?", date)
+      .where("balances.currency": "MXN", "balances.date": date)
       .to_a.first.amount_cents
-      .then {|i| BigDecimal(i.to_s) / 100.0 }
+      .then { |i| BigDecimal(i.to_s) / 100.0 }
   end
 
   def todays_exchange_rate
@@ -49,7 +48,14 @@ class DailyReport
   end
 
   def errors
-    errors_raw
+    errors_raw.reject do |e|
+      user.balances.joins(:account)
+        .where(
+          "balances.date": date,
+          "accounts.name": e[:account],
+          "balances.validated": true
+        ).any?
+    end
   end
 
   private
@@ -60,7 +66,7 @@ class DailyReport
       .where.not("balances.diff_cents": nil)
       .where("balances.date > ?", (date - period).to_date)
       .to_a.first.diff_cents
-      .then {|i| BigDecimal(i.to_s) / 100.0 }
+      .then { |i| BigDecimal(i.to_s) / 100.0 }
   end
 
   def balance_in_usd
@@ -69,7 +75,7 @@ class DailyReport
       .where("balances.currency": "USD")
       .where("balances.date = ?", date)
       .to_a.first.amount_cents
-      .then {|i| BigDecimal(i.to_s) / 100.0 }
+      .then { |i| BigDecimal(i.to_s) / 100.0 }
   end
 
   def exchange_rate_on(date)

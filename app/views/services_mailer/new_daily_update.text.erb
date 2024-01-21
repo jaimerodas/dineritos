@@ -1,15 +1,15 @@
-Reporte Diario: <%= @report.date %>
+<%= @report.date %>
 
-Saldo actual total en inversiones: <%= mailc @report.total %>
-Tipo de Cambio MXN/USD: <%= mailc @report.todays_exchange_rate %>
+Saldo actual total en inversiones: <%= plainc @report.total %>
+Tipo de Cambio MXN/USD: <%= plainc @report.todays_exchange_rate %>
 
-Rendimiento de hoy: <%= mailc @report.day %>
-Rendimiento de hoy por cambio MXN/USD: <%= mailc @report.day_usd %>
-Tipo de cambio ayer: <%= mailc @report.day_exchange_rate %>
+Rendimiento de hoy: <%= plainc @report.day %>
+Rendimiento de hoy por cambio MXN/USD: <%= plainc @report.day_usd %>
+Tipo de cambio ayer: <%= plainc @report.day_exchange_rate %>
 
-Rendimiento 30 días: <%= mailc @report.month %>
-Rendimiento 30 días por cambio MXN/USD: <%= mailc @report.month_usd %>
-Tipo de cambio hace 30 días: <%= mailc @report.month_exchange_rate %>
+Rendimiento 30 días: <%= plainc @report.month %>
+Rendimiento 30 días por cambio MXN/USD: <%= plainc @report.month_usd %>
+Tipo de cambio hace 30 días: <%= plainc @report.month_exchange_rate %>
 
 Para más detalles, ve a <%= accounts_url %>
 

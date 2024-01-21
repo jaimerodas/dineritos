@@ -1,23 +1,58 @@
-<h1 style="font-size: 1.5em;"> Reporte Diario: <%= @report.date %></h1>
-<p>
-  Saldo total: <b><%= mailc @report.total %></b><br />
-  Tipo de Cambio MXN/USD: <b><%= mailc @report.todays_exchange_rate %></b>
-</p>
-<p>
-  Rendimiento de hoy: <b><%= mailc @report.day %></b><br />
-  Rendimiento de hoy por cambio MXN/USD: <b><%= mailc @report.day_usd %></b><br />
-  Tipo de cambio ayer: <b><%= mailc @report.day_exchange_rate %></b>
-</p>
-<p>
-  Rendimiento 30 días: <b><%= mailc @report.month %></b><br />
-  Rendimiento 30 días por cambio MXN/USD: <b><%= mailc @report.month_usd %></b><br />
-  Tipo de cambio hace 30 días: <b><%= mailc @report.month_exchange_rate %></b>
-</p>
-<p>
-  Para más información, ve el <%= link_to "Detalle de Cuentas", accounts_url %>
-</p>
+<h1 style="font-size: 1.5em; text-align: center;"><%= @report.date %></h1>
 
-<hr />
+<table style="text-align: center; border-collapse: collapse; width: 100%; max-width: 24em; margin: 1em auto;">
+  <tr>
+    <td>Saldo</td>
+    <td
+      colspan="2"
+      style="font-size: 1.4em; font-weight: bold; padding: 0.25rem; text-align: right;"
+    ><%= mailc @report.total, diff: false %></td>
+  </tr>
+  <tr>
+    <td>TDC</td>
+    <td
+      colspan="2"
+      style="font-size: 1.4em; font-weight: bold; padding: 0.25rem; text-align: right;"
+    ><%= mailc @report.todays_exchange_rate, diff: false %></td>
+  </tr>
+  <tr>
+    <td colspan="3" style="font-size: 0.75em;">&nbsp;</td>
+  </tr>
+  <tr>
+    <td colspan="3" style="font-size: 0.75em; text-transform: uppercase; letter-spacing: 0.125em; border-bottom: 1px solid #ccc; padding: 0.25rem;">Comparado contra</td>
+  </tr>
+  <tr>
+    <td style="border-bottom: 1px solid #ccc; padding: 0.25rem 0.25rem 0.20rem;">Hace</td>
+    <td style="border-bottom: 1px solid #ccc; padding: 0.25rem 0.25rem 0.20rem;">1D</td>
+    <td style="border-bottom: 1px solid #ccc; padding: 0.25rem 0.25rem 0.20rem;">1M</td>
+  </tr>
+  <tr>
+    <td></td>
+    <td style="font-size: 1.2em; font-weight: bold; padding: 0.25rem; text-align: right;"><%= mailc @report.day %></td>
+    <td style="font-size: 1.2em; font-weight: bold; padding: 0.25rem; text-align: right;"><%= mailc @report.month %></td>
+  </tr>
+  <tr style="font-size: 0.875em;">
+    <td style="padding: 0.25rem;">por TDC</td>
+    <td style="padding: 0.25rem; text-align: right;"><b><%= mailc @report.day_usd %></b></td>
+    <td style="padding: 0.25rem; text-align: right;"><b><%= mailc @report.month_usd %></b></td>
+  </tr>
+  <tr style="font-size: 0.875em;">
+    <td style="padding: 0.25rem;">sin TDC</td>
+    <td style="padding: 0.25rem; text-align: right;"><b><%= mailc (@report.day - @report.day_usd)  %></b></td>
+    <td style="padding: 0.25rem; text-align: right;"><b><%= mailc (@report.month - @report.month_usd)  %></b></td>
+  </tr>
+  <tr style="font-size: 0.875em;">
+    <td style="padding: 0.25rem;">TDC</td>
+    <td style="padding: 0.25rem; text-align: right;"><b><%= mailc @report.day_exchange_rate, diff: false  %></b></td>
+    <td style="padding: 0.25rem; text-align: right;"><b><%= mailc @report.month_exchange_rate, diff: false  %></b></td>
+  </tr>
+  <tr>
+    <td colspan="3" style="font-size: 0.75em;">&nbsp;</td>
+  </tr>
+  <tr>
+    <td colspan="3" style="font-size: 0.75em;">Para más información, ve el <%= link_to "Detalle de Cuentas", accounts_url %></td>
+  </tr>
+</table>
 
 <% if @report.errors.any? %>
 <h2 style="font-size: 1em;">Vimos errores con los siguientes crawlers:</h2>
