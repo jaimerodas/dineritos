@@ -6,14 +6,14 @@
     <td
       colspan="2"
       style="font-size: 1.4em; font-weight: bold; padding: 0.25rem; text-align: right;"
-    ><%= mailc @report.total, diff: false %></td>
+    ><%= mcur @report.total %></td>
   </tr>
   <tr>
     <td>TDC</td>
     <td
       colspan="2"
       style="font-size: 1.4em; font-weight: bold; padding: 0.25rem; text-align: right;"
-    ><%= mailc @report.todays_exchange_rate, diff: false %></td>
+    ><%= mfx @report.todays_exchange_rate %></td>
   </tr>
   <tr>
     <td colspan="3" style="font-size: 0.75em;">&nbsp;</td>
@@ -28,23 +28,33 @@
   </tr>
   <tr>
     <td></td>
-    <td style="font-size: 1.2em; font-weight: bold; padding: 0.25rem; text-align: right;"><%= mailc @report.day %></td>
-    <td style="font-size: 1.2em; font-weight: bold; padding: 0.25rem; text-align: right;"><%= mailc @report.month %></td>
+    <td style="
+      font-size: 1.2em;
+      font-weight: bold;
+      padding: 0.25rem;
+      text-align: right;
+    "><%= mdiff @report.day %></td>
+    <td style="
+      font-size: 1.2em;
+      font-weight: bold;
+      padding: 0.25rem;
+      text-align: right;
+    "><%= mdiff @report.month %></td>
   </tr>
   <tr style="font-size: 0.875em;">
     <td style="padding: 0.25rem;">por TDC</td>
-    <td style="padding: 0.25rem; text-align: right;"><b><%= mailc @report.day_usd %></b></td>
-    <td style="padding: 0.25rem; text-align: right;"><b><%= mailc @report.month_usd %></b></td>
+    <td style="padding: 0.25rem; text-align: right;"><b><%= mdiff @report.day_usd %></b></td>
+    <td style="padding: 0.25rem; text-align: right;"><b><%= mdiff @report.month_usd %></b></td>
   </tr>
   <tr style="font-size: 0.875em;">
     <td style="padding: 0.25rem;">sin TDC</td>
-    <td style="padding: 0.25rem; text-align: right;"><b><%= mailc (@report.day - @report.day_usd)  %></b></td>
-    <td style="padding: 0.25rem; text-align: right;"><b><%= mailc (@report.month - @report.month_usd)  %></b></td>
+    <td style="padding: 0.25rem; text-align: right;"><b><%= mdiff (@report.day - @report.day_usd)  %></b></td>
+    <td style="padding: 0.25rem; text-align: right;"><b><%= mdiff (@report.month - @report.month_usd)  %></b></td>
   </tr>
   <tr style="font-size: 0.875em;">
     <td style="padding: 0.25rem;">TDC</td>
-    <td style="padding: 0.25rem; text-align: right;"><b><%= mailc @report.day_exchange_rate, diff: false  %></b></td>
-    <td style="padding: 0.25rem; text-align: right;"><b><%= mailc @report.month_exchange_rate, diff: false  %></b></td>
+    <td style="padding: 0.25rem; text-align: right;"><b><%= mfx @report.day_exchange_rate  %></b></td>
+    <td style="padding: 0.25rem; text-align: right;"><b><%= mfx @report.month_exchange_rate  %></b></td>
   </tr>
   <tr>
     <td colspan="3" style="font-size: 0.75em;">&nbsp;</td>

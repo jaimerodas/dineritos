@@ -7,15 +7,20 @@ module MoneyHelper
     number.negative? ? tag.span(text, class: "diff neg") : tag.span("+#{text}", class: "diff")
   end
 
-  def plainc(number)
-    return "0.00" if !number || number.zero?
-    number_to_currency(number, unit: "")
+  def mdiff(number, diff: true, decimals: 2, plain: false)
+    number = 0.0 if !number || number == ""
+    text = number_to_currency(number, unit: "", precision: decimals)
+    text = "+" + text if diff && number > 0
+    return text if plain
+    return tag.span(text) if number.zero? || !diff
+    tag.span(text, style: number.positive? ? "color: #27a717;" : "color: #ce3129;")
   end
 
-  def mailc(number, diff: true)
-    return tag.span("0.00") if !number || number.zero?
-    text = number_to_currency(number, unit: "")
-    return tag.span(text) unless diff
-    number.negative? ? tag.span(text, style: "color: #ce3129;") : tag.span("+#{text}", style: "color: #27a717;")
+  def mfx(number, plain: false)
+    mdiff(number, diff: false, decimals: 4, plain: plain)
+  end
+
+  def mcur(number, plain: false)
+    mdiff(number, diff: false, plain: plain)
   end
 end
