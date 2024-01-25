@@ -54,6 +54,11 @@ class InvestmentChart {
       .attr("class", "chart-date")
       .text(d3.utcFormat("%Y-%m-%d")(datum.date))
 
+    const reportLink = textContainer.append("a")
+      .attr("class", "report-link")
+      .attr("href", "/reportes/diarios?d=" + d3.utcFormat("%Y-%m-%d")(datum.date))
+      .text("Más info")
+
     const formContainer = navContainer.append("div")
 
     const followToggle = formContainer.append("input")
@@ -68,7 +73,9 @@ class InvestmentChart {
         return followToggle.property("checked")
       },
       update(datum) {
-        currentDate.text(d3.utcFormat("%Y-%m-%d")(datum.date))
+        const fDate = d3.utcFormat("%Y-%m-%d")(datum.date)
+        currentDate.text(fDate)
+        reportLink.attr("href", "/reportes/diarios?d=" + fDate)
       }
     })
   }

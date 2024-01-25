@@ -17,6 +17,13 @@
   }
 }
 
+.button-bar.dates {
+  flex-wrap: wrap;
+  a, button {
+    min-width: 8em;
+  }
+}
+
 @media screen and (min-width: 40em) {
   .button-bar {
     width: auto;

@@ -32,6 +32,10 @@ Rails.application.routes.draw do
       resources :account_balances, path: "saldos_de_cuenta", only: [:show]
       resources :account_yields, path: "rendimiento_de_cuenta", only: [:show]
     end
+
+    scope path: "reportes", module: "reports", as: "reports" do
+      resource :dailies, path: "diarios", only: [:show]
+    end
   end
 
   # Rutas directas

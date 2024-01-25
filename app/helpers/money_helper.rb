@@ -1,10 +1,15 @@
 module MoneyHelper
-  def currency(number, diff: false, zero: false)
+  def currency(number, diff: false, zero: false, decimals: 2)
     return tag.span(zero ? "0.00" : "-", class: "zero") if !number || number.zero?
-    text = number_to_currency(number, unit: "")
+    text = number_to_currency(number, unit: "", precision: decimals)
 
     return tag.span(text) unless diff
     number.negative? ? tag.span(text, class: "diff neg") : tag.span("+#{text}", class: "diff")
+  end
+
+  def fx(number)
+    return tag.span("-") if !number
+    tag.span(number_to_currency(number, precision: 4, unit: ""))
   end
 
   def mdiff(number, diff: true, decimals: 2, plain: false)

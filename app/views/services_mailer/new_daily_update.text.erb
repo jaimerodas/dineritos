@@ -11,7 +11,8 @@ Rendimiento 30 días: <%= mdiff @report.month, plain: true %>
 Rendimiento 30 días por cambio MXN/USD: <%= mdiff @report.month_usd, plain: true %>
 Tipo de cambio hace 30 días: <%= mfx @report.month_exchange_rate, plain: true %>
 
-Para más detalles, ve a <%= accounts_url %>
+¿Quieres ver éste reporte en el sitio? Entra aquí:
+<%= reports_dailies_url(d: @report.date) %>
 
 <% if @report.errors.any? %>
 Vimos errores con los siguientes crawlers:

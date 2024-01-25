@@ -1,0 +1,45 @@
+<header class="simple">
+  <h1>Reporte <%= @report.date %></h1>
+</header>
+<section class="summary">
+  <div class="very-big-number">
+    <span>Saldo</span>
+    <em><span><%= currency @report.total %></span></em>
+  </div>
+
+  <div class="very-big-number">
+    <span>Tipo de Cambio MXN/USD</span>
+    <em><span><%= fx @report.todays_exchange_rate %></span></em>
+  </div>
+</section>
+
+<table class="">
+  <tr><td colspan="3">Comparado contra</td></tr>
+  <tr>
+    <td>Hace</td>
+    <td>1D</td>
+    <td>1M</td>
+  </tr>
+  <tr>
+    <td></td>
+    <td><%= currency @report.day, diff: true %></td>
+    <td><%= currency @report.month, diff: true %></td>
+  </tr>
+  <tr>
+    <td>Por TDC</td>
+    <td><%= currency @report.day_usd, diff: true %></td>
+    <td><%= currency @report.month_usd, diff: true %></td>
+  </tr>
+  <tr>
+    <td>Sin TDC</td>
+    <td><%= currency @report.day - @report.day_usd, diff: true %></td>
+    <td><%= currency @report.month - @report.month_usd, diff: true %></td>
+  </tr>
+  <tr>
+    <td>TDC</td>
+    <td><%= fx @report.day_exchange_rate %></td>
+    <td><%= fx @report.month_exchange_rate %></td>
+  </tr>
+</table>
+
+<%= dailies_nav %>
