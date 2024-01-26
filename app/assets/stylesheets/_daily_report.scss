@@ -1,0 +1,74 @@
+#daily-report {
+  margin: 1em auto;
+
+  h1 {
+    font-size: 2em;
+    text-align: center;
+    margin-bottom: 1em;
+
+    span {
+      white-space: nowrap;
+    }
+  }
+
+  dl {
+    & > div {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 0 0 0.5em;
+    }
+
+    dt {
+      color: var(--mid-color);
+    }
+
+    dd {
+      font-size: 1.5em;
+      font-weight: 900;
+    }
+  }
+
+  table {
+    margin: 1em auto;
+  }
+
+  td[colspan] {
+    font-size: 0.625em;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 0.25em;
+    border-bottom: 0.0625rem solid var(--border-color);
+  }
+
+  th {
+    color: var(--mid-color);
+    font-size: 0.75em;
+    text-transform: none;
+    border-bottom: 0.0625rem solid var(--border-color);
+  }
+
+  td.title {
+    color: var(--mid-color);
+    font-size: 0.75em;
+    width: 7em;
+  }
+}
+
+@media screen and (min-width: 28em) {
+  #daily-report dl {
+    font-size: 1.2em;
+  }
+}
+
+@media screen and (min-width: 40em) {
+  #daily-report dl {
+    font-size: 1.5em;
+  }
+}
+
+@media screen and (min-width: 45em) {
+  #daily-report dl {
+    font-size: 1.75em;
+  }
+}
