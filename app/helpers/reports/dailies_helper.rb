@@ -5,15 +5,21 @@ module Reports::DailiesHelper
         "« #{(@report.date - 1.day)}",
         reports_dailies_path(d: (@report.date - 1.day).to_s),
         class: "btn"
-      )) unless @report.date - 1.day == (@report.user.balances.earliest_date)
+      )) if @report.date > @report.earliest_date + 1.day
 
       concat(link_to(
         "#{(@report.date + 1.day)} »",
         reports_dailies_path(d: (@report.date + 1.day).to_s),
         class: "btn"
-      )) if @report.date < Date.current - 1.day
+      )) if (
+        @report.date < Date.current - 1.day &&
+        @report.date < @report.latest_date - 1.day
+      )
 
-      concat(link_to("Hoy", reports_dailies_path, class: "btn")) if (@report.date < Date.current)
+      concat(link_to("Hoy", reports_dailies_path, class: "btn")) if (
+        Date.current == @report.latest_date &&
+        @report.date < Date.current
+      )
     end
   end
 end

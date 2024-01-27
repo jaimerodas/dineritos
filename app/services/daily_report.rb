@@ -60,6 +60,14 @@ class DailyReport
     end
   end
 
+  def earliest_date
+    @earliest_date ||= user.balances.earliest_date
+  end
+
+  def latest_date
+    @latest_date ||= user.balances.latest_date
+  end
+
   private
 
   def earnings_in_the_last(period)
