@@ -11,7 +11,7 @@ export default class extends Controller {
   }
 
   chartGenerator(name) {
-    return {"Saldos": InvestmentChart, "Rendimientos": BalanceChangeChart}[name]
+    return {"Saldos": InvestmentChart, "Más Información": BalanceChangeChart}[name]
   }
 
   changeYear(operator) {
@@ -119,7 +119,7 @@ export default class extends Controller {
     }
 
     const allBalancesButton = createButton("Saldos", "saldos")
-    const returnsButton = createButton("Rendimientos", "rendimientos")
+    const returnsButton = createButton("Más Información", "rendimientos")
 
     this.chartButtonsTarget.append(allBalancesButton, returnsButton)
     this.updateChart({target: allBalancesButton})
