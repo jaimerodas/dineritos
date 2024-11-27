@@ -1,7 +1,11 @@
 #!/bin/bash
 
-rm latest.dump
 set -e
+
+if [ -f "latest.dump" ]; then
+  rm latest.dump
+fi
+
 heroku pg:backups:capture -a dineritos && heroku pg:backups:download -a dineritos
 
 set +e
