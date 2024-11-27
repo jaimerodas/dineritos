@@ -10,7 +10,7 @@ gem "httparty"
 gem "rails", "~> 7"
 gem "pg", ">= 0.18", "< 2.0"
 gem "postmark-rails"
-gem "puma", "~> 5.6"
+gem "puma"
 gem "sass-rails", "~> 6"
 gem "stimulus-rails"
 gem "turbolinks", "~> 5"
@@ -18,11 +18,6 @@ gem "watir"
 gem "will_paginate", "~> 3.3"
 gem "webauthn"
 gem "jbuilder", "~> 2"
-# Use Redis adapter to run Action Cable in production
-# gem 'redis', '~> 4.0'
-
-# Use Active Storage variant
-# gem 'image_processing', '~> 1.2'
 
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", ">= 1.4.2", require: false

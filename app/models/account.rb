@@ -6,7 +6,7 @@ class Account < ApplicationRecord
 
   enum platform: PLATFORMS
 
-  lockbox_encrypts :settings, type: :json
+  has_encrypted :settings, type: :json
   scope :updateable, -> { where.not(platform: :no_platform) }
   scope :foreign_currency, -> { where(platform: :no_platform).where.not(currency: "MXN") }
   scope :active, -> { where(active: true) }
