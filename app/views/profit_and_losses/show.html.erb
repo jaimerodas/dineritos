@@ -1,0 +1,37 @@
+<% content_for(:title) { @report.account_name } %>
+<%= render "accounts/account_header", current: "ERs" %>
+
+<% if @report.pnls.any? %>
+<table class="balance-sheet">
+  <thead>
+    <tr>
+      <th>Mes</th>
+      <th>Saldo Inicial</th>
+      <th>Depósitos</th>
+      <th>Retiros</th>
+      <th>Rendimientos</th>
+      <th>Saldo Final</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @report.pnls.each do |row| %>
+    <tr>
+      <td><%= row.fetch(:month) %></td>
+      <td class="currency"><%= currency row.fetch(:initial_balance) %></td>
+      <td class="currency"><%= currency row.fetch(:deposits), diff: true %></td>
+      <td class="currency"><%= currency row.fetch(:withdrawals), diff: true %></td>
+      <td class="currency"><%= currency row.fetch(:earnings), diff: true %></td>
+      <td class="currency"><%= currency row.fetch(:final_balance) %></td>
+    </tr>
+    <% end %>
+    <tr>
+      <td colspan="2">Total</td>
+      <td class="currency"><%= currency @report.pnl_totals.fetch(:deposits), diff: true %></td>
+      <td class="currency"><%= currency @report.pnl_totals.fetch(:withdrawals), diff: true %></td>
+      <td class="currency"><%= currency @report.pnl_totals.fetch(:earnings), diff: true %></td>
+      <td></td>
+    </tr>
+  </tbody>
+</table>
+<% end %>

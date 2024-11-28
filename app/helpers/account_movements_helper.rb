@@ -16,6 +16,7 @@ module AccountMovementsHelper
   def account_main_nav(current: "Estadísticas")
     content_tag("ul") {
       concat account_nav_link("Estadísticas", "account_path", current)
+      concat account_nav_link("ERs", "account_profit_and_loss_path", current)
       concat account_nav_link("Saldos", "account_movements_path", current)
       concat account_nav_link("Opciones", "edit_account_path", current)
     }
