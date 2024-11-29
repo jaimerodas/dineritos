@@ -17,7 +17,7 @@
   <tbody>
     <% @report.pnls.each do |row| %>
     <tr>
-      <td><%= row.fetch(:month) %></td>
+      <td><%= link_to row.fetch(:month), account_movements_path(month: row.fetch(:month)) %></td>
       <td class="currency"><%= currency row.fetch(:initial_balance) %></td>
       <td class="currency"><%= currency row.fetch(:deposits), diff: true %></td>
       <td class="currency"><%= currency row.fetch(:withdrawals), diff: true %></td>
