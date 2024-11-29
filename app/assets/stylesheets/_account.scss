@@ -280,6 +280,14 @@ svg .color-container {
       align-items: center;
       justify-content: center;
     }
+    &.profit-and-loss {
+      tr {
+        grid-template-columns: 1fr 2fr;
+      }
+      .date {
+        grid-row: 1 / span 5;
+      }
+    }
     .main.currency {
       grid-column: 2;
       grid-row: 1;

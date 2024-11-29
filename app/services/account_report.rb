@@ -1,8 +1,10 @@
 class AccountReport
+  include ReportHelper
+
   def initialize(user:, account:, period: "all", currency: "default")
-    raise unless account.user == user
+    validate_user_account!(user, account)
     @account = account
-    @period = calculate_period_from(period)
+    @period = determine_period_range(period, account)
     @currency = (currency == "default") ? account.currency : "MXN"
   end
 
@@ -20,26 +22,19 @@ class AccountReport
     @earliest_date ||= account.balances.earliest_date
   end
 
-  def calculate_period_from(year)
-    return 1.year.ago.beginning_of_month..Date.current if year == "past_year"
-    return earliest_date..Date.current if year == "all"
-    year = year.to_i if year.instance_of?(String)
-    Date.new(year)...Date.new(year + 1)
-  end
-
   def earnings
-    @earnings ||= summary.earnings ? summary.earnings / 100.0 : 0.0
+    @earnings ||= cents_to_decimal(summary.earnings)
   end
 
   def deposits
-    @deposits ||= summary.deposits ? summary.deposits / 100.0 : 0.0
+    @deposits ||= cents_to_decimal(summary.deposits)
   end
 
   def withdrawals
-    @withdrawals ||= summary.withdrawals ? summary.withdrawals / -100.0 : 0.0
+    @withdrawals ||= (cents_to_decimal(summary.withdrawals) * -1)
   end
 
-  def net_deposited
+  def net_transferred
     deposits - withdrawals
   end
 
@@ -64,12 +59,12 @@ class AccountReport
       .join(",")
   end
 
-  def pnls
+  def monthly_pnl
     results = account.balances
-                     .where(date: period, currency: currency)
-                     .select(select_pnl)
-                     .group("month")
-                     .order("month DESC")
+      .where(date: period, currency: currency)
+      .select(select_pnl)
+      .group("month")
+      .order("month DESC")
 
     final_balance = account.balances
       .where("date <= ?", period.last)
@@ -79,11 +74,11 @@ class AccountReport
       .first
       .amount_cents
 
-    pnl_object_from(results, final_balance)
+    create_monthly_pnl_array(results, final_balance)
   end
 
-  def pnl_totals
-    pnls.each_with_object({
+  def total_pnl
+    monthly_pnl.each_with_object({
       deposits: BigDecimal(0),
       withdrawals: BigDecimal(0),
       earnings: BigDecimal(0)
@@ -106,47 +101,44 @@ class AccountReport
       .select("SUM(CASE WHEN (transfers_cents > 0) THEN transfers_cents ELSE 0 END ) deposits")
       .select("SUM(CASE WHEN (transfers_cents < 0) THEN transfers_cents ELSE 0 END ) withdrawals")
       .select(select_irr)
-      .order("1")
+      .order(earnings: :desc)
       .first
   end
 
   def select_irr
-    "
+    <<~SQL
       COALESCE((((1 + SUM(
         (diff_cents * 1.0) /
-        CASE WHEN (amount_cents - diff_cents - transfers_cents = 0) THEN 1 ELSE (amount_cents - diff_cents - transfers_cents) END
+        CASE
+          WHEN (amount_cents - diff_cents - transfers_cents = 0) THEN 1
+          ELSE (amount_cents - diff_cents - transfers_cents)
+        END
       )) ^
       (365.0 / SUM(diff_days))) - 1), 0)
       AS irr
-    "
+    SQL
   end
 
   def select_pnl
-    "
-       DATE_TRUNC('month', date) AS month,
-       SUM(CASE WHEN transfers_cents > 0 THEN transfers_cents ELSE 0 END) AS deposits,
-       SUM(CASE WHEN transfers_cents < 0 THEN transfers_cents ELSE 0 END) AS withdrawals,
-       SUM(diff_cents) AS earnings
-     "
+    <<~SQL
+      DATE_TRUNC('month', date) AS month,
+      SUM(CASE WHEN transfers_cents > 0 THEN transfers_cents ELSE 0 END) AS deposits,
+      SUM(CASE WHEN transfers_cents < 0 THEN transfers_cents ELSE 0 END) AS withdrawals,
+      SUM(diff_cents) AS earnings
+    SQL
   end
 
-  def pnl_object_from(results, last_balance)
-    final_balance = 0
+  def create_monthly_pnl_array(results, last_balance)
     initial_balance = BigDecimal(last_balance)
     results.map do |row|
-      deposits = BigDecimal(row.deposits)
-      withdrawals = BigDecimal(row.withdrawals)
-      earnings = BigDecimal(row.earnings)
+      result = %i[deposits withdrawals earnings].map { |v| [v, BigDecimal(row.send(v))] }.to_h
       final_balance = initial_balance
-      initial_balance = final_balance - deposits - withdrawals - earnings
-      {
+      initial_balance = final_balance - result.values.reduce(&:+)
+      result.map { |k, v| [k, cents_to_decimal(v)] }.to_h.merge({
         month: row.month.strftime("%Y-%m"),
-        initial_balance: initial_balance / 100 || 0.0,
-        final_balance: final_balance / 100 || 0.0,
-        deposits: deposits / 100 || 0.0,
-        withdrawals: withdrawals / 100 || 0.0,
-        earnings: earnings / 100 || 0.0,
-      }
+        initial_balance: cents_to_decimal(initial_balance),
+        final_balance: cents_to_decimal(final_balance)
+      })
     end
   end
 end

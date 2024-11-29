@@ -1,8 +1,8 @@
 <% content_for(:title) { @report.account_name } %>
 <%= render "accounts/account_header", current: "ERs" %>
 
-<% if @report.pnls.any? %>
-<table class="balance-sheet">
+<% if @report.monthly_pnl.any? %>
+<table class="balance-sheet profit-and-loss">
   <thead>
     <tr>
       <th>Mes</th>
@@ -15,21 +15,21 @@
   </thead>
 
   <tbody>
-    <% @report.pnls.each do |row| %>
+    <% @report.monthly_pnl.each do |row| %>
     <tr>
-      <td><%= link_to row.fetch(:month), account_movements_path(month: row.fetch(:month)) %></td>
-      <td class="currency"><%= currency row.fetch(:initial_balance) %></td>
-      <td class="currency"><%= currency row.fetch(:deposits), diff: true %></td>
-      <td class="currency"><%= currency row.fetch(:withdrawals), diff: true %></td>
-      <td class="currency"><%= currency row.fetch(:earnings), diff: true %></td>
-      <td class="currency"><%= currency row.fetch(:final_balance) %></td>
+      <td class="date"><%= link_to row.fetch(:month), account_movements_path(month: row.fetch(:month)) %></td>
+      <td class="currency" data-name="Saldo Inicial"><%= currency row.fetch(:initial_balance) %></td>
+      <td class="currency" data-name="Depósitos"><%= currency row.fetch(:deposits), diff: true %></td>
+      <td class="currency" data-name="Retiros"><%= currency row.fetch(:withdrawals), diff: true %></td>
+      <td class="currency" data-name="Rendimientos"><%= currency row.fetch(:earnings), diff: true %></td>
+      <td class="currency" data-name="Saldo Final"><%= currency row.fetch(:final_balance) %></td>
     </tr>
     <% end %>
     <tr>
-      <td colspan="2">Total</td>
-      <td class="currency"><%= currency @report.pnl_totals.fetch(:deposits), diff: true %></td>
-      <td class="currency"><%= currency @report.pnl_totals.fetch(:withdrawals), diff: true %></td>
-      <td class="currency"><%= currency @report.pnl_totals.fetch(:earnings), diff: true %></td>
+      <td class="date" colspan="2">Total</td>
+      <td class="currency" data-name="Total Depositado"><%= currency @report.total_pnl.fetch(:deposits), diff: true %></td>
+      <td class="currency" data-name="Total Retirado"><%= currency @report.total_pnl.fetch(:withdrawals), diff: true %></td>
+      <td class="currency" data-name="Total Rendimientos"><%= currency @report.total_pnl.fetch(:earnings), diff: true %></td>
       <td></td>
     </tr>
   </tbody>
