@@ -20,7 +20,7 @@ class AccountsComparisonReport
   end
 
   def totals
-    accounts.reduce({balance: BigDecimal("0"), earnings: BigDecimal("0"), transfers: BigDecimal("0")}) do |result, account|
+    accounts.reduce({balance: BigDecimal(0), earnings: BigDecimal(0), transfers: BigDecimal(0)}) do |result, account|
       {
         balance: result[:balance] + BigDecimal(account.final_balance),
         earnings: result[:earnings] + BigDecimal(account.total_earnings),
