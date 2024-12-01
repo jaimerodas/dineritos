@@ -26,44 +26,45 @@ export default class extends Controller {
     const computedStyle = window.getComputedStyle(this.navContainer)
     let width = 0
 
-    if (computedStyle.flexDirection === "row") {
-      width = this.navTarget.clientWidth + this.actionsTarget.clientWidth
-    } else {
-      Array.from(this.navTarget.children).forEach(element => { width += element.clientWidth })
-    }
+    width = computedStyle.flexDirection === "row"
+      ? width = this.navTarget.clientWidth + this.actionsTarget.clientWidth
+      : Array.from(this.navTarget.children).forEach(element => { width += element.clientWidth });
 
     if (this.hasMoreButtonTarget && this.moreMenuTarget.children.length === 1) {
-      width = width - this.moreButtonTarget.clientWidth
+      width -= this.moreButtonTarget.clientWidth;
     }
 
-    console.log(width)
+    return width;
+  }
 
-    return width
+  lastHiddenElementWidth() {
+    if (!this.hasMoreMenuTarget || this.moreMenuTarget.children.length === 0) { return 0 }
+    return parseInt(this.moreMenuTarget.children[0].dataset.width, 10) || 0
   }
 
   stashElement() {
-    if (!this.hasMoreMenuTarget) { this.createNav() }
+    if (!this.hasMoreMenuTarget) this.createNav();
+
     const links = this.navTarget.children
     const elementToHide = links[links.length - 2]
     this.moreMenuTarget.prepend(elementToHide)
+
     this.resize()
   }
 
   popElement() {
-    if (!this.hasMoreMenuTarget) { return }
+    if (!this.hasMoreMenuTarget) return;
+
     const links = this.moreMenuTarget.children
     const elementToPop = links[0]
     this.navTarget.insertBefore(elementToPop, this.navTarget.lastElementChild)
-    if (this.moreMenuTarget.children.length === 0) { this.destroyNav() }
-  }
 
-  lastHiddenElementWidth() {
-    if (!this.hasMoreMenuTarget) { return false }
-    const links = this.moreMenuTarget.children
-    return links[0].dataset.width
+    if (this.moreMenuTarget.children.length === 0) this.destroyNav();
   }
 
   createNav() {
+    if (this.hasMoreMenuTarget) return;
+
     const moreMenu = document.createElement("ul")
     moreMenu.dataset.accountHeaderTarget = "moreMenu"
     moreMenu.classList.add("more-menu", "hidden")
@@ -82,7 +83,6 @@ export default class extends Controller {
   }
 
   toggleNav() {
-    if (!this.hasMoreMenuTarget) { return false }
-    this.moreMenuTarget.classList.toggle("hidden")
+    if (this.hasMoreMenuTarget) this.moreMenuTarget.classList.toggle("hidden");
   }
 }
