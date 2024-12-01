@@ -1,11 +1,11 @@
-<header class="account-header">
+<header class="account-header" data-controller="account-header" data-action="resize@window->account-header#resize">
   <h1><%= @account.name %></h1>
   <span class="currency-code"><%= @account.currency %></span>
   <nav>
     <%= account_main_nav(current: current) %>
 
     <% if @account.can_be_updated? || @account.can_be_updated_automatically? %>
-    <ul class="actions">
+    <ul class="actions" data-account-header-target="actions">
       <% if @account.can_be_updated? %>
       <li><%= link_to "Agregar Saldo", new_account_account_balance_path(@account), class: "add-link" %></li>
       <% end %>

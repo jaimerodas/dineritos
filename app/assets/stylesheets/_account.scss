@@ -42,18 +42,29 @@ header.account-header {
     margin: 0;
     padding: 0;
     display: flex;
+    flex-shrink: 0;
 
-    a {
+    li {
+      flex-shrink: 0;
+    }
+
+    a, button {
       display: block;
       color: var(--mid-color);
       text-decoration: none;
+      background: none;
+      font-weight: inherit;
 
+      width: auto;
+      margin: 0;
       padding: 1em 1em;
       border-bottom: 0.125rem solid transparent;
+      border-radius: 0;
       transition: 0.2s ease border-bottom-color;
 
       &:hover {
         border-bottom-color: var(--mid-color);
+        transform: none;
       }
 
       &.active {
@@ -77,6 +88,16 @@ header.account-header {
       a.svg-link {
         display: block;
         padding: 0.32em 0.4em;
+      }
+    }
+
+    &.more-menu {
+      display: block;
+      background: rgba(255,255,255,0.01);
+
+      &.hidden { display: none; }
+      a {
+
       }
     }
   }
@@ -207,7 +228,7 @@ table.all-accounts {
     flex: 1;
     display: block;
     text-align: right;
-    font-size: 2em;
+    font-size: 1.75em;
     font-style: normal;
     font-weight: 900;
   }
@@ -378,7 +399,7 @@ svg .color-container {
 
 @media screen and (min-width: 40em) {
   .big-number > em, .very-big-number > em {
-    font-size: 2em;
+    font-size: 1.75em;
   }
 }
 

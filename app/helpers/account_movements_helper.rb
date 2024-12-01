@@ -14,16 +14,16 @@ module AccountMovementsHelper
   end
 
   def account_main_nav(current: "Estadísticas")
-    content_tag("ul") {
+    content_tag("ul", "data-account-header-target": "nav") {
       concat account_nav_link("Estadísticas", "account_path", current)
-      concat account_nav_link("ERs", "account_profit_and_loss_path", current)
+      concat account_nav_link("Resumen Mensual", "account_profit_and_loss_path", current)
       concat account_nav_link("Saldos", "account_movements_path", current)
       concat account_nav_link("Opciones", "edit_account_path", current)
     }
   end
 
   def account_nav_link(title, path, current)
-    content_tag("li") {
+    content_tag("li", "data-account-header-target": "link") {
       classes = (current == title) ? "active" : ""
       link_to(title, public_send(path, @account), class: classes)
     }
