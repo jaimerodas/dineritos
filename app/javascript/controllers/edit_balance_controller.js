@@ -46,15 +46,19 @@ export default class extends Controller {
     const transfers = this.transfers()
 
     if (amount === NaN || this.prevAmount === NaN || this.diffDays === NaN || transfers === NaN) {
+      this.irrTarget.textContent = "-"
       return
     }
 
     const dailyRate = (1 + ((amount - this.prevAmount - transfers) / this.prevAmount))
     const power = 365 / this.diffDays
-    const result = ((dailyRate ** power) - 1).toLocaleString("en-us", {
+    let result = ((dailyRate ** power) - 1).toLocaleString("en-us", {
       style: "percent",
       maximumFractionDigits: 2
     })
+
+    if (result === "NaN%") { result = "-" }
+
     this.irrTarget.textContent = result
   }
 }
