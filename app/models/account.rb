@@ -27,6 +27,18 @@ class Account < ApplicationRecord
     !last_amount.validated
   end
 
+  def can_be_reset?
+    updateable? && last_amount.validated && last_amount.amount_cents.zero?
+  end
+
+  def reset!
+    return unless can_be_reset?
+    today = last_amount
+    yesterday = last_amount.prev
+    today.amount_cents = yesterday.amount_cents
+    today.save
+  end
+
   def can_be_updated_automatically?
     can_be_updated? && updateable?
   end

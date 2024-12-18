@@ -47,7 +47,19 @@ class AccountsController < ApplicationController
     )
   end
 
+  def reset
+    @account = current_user.accounts.find(params[:account_id])
+    if @account.reset!
+      ServicesMailer.new_daily_update(current_user).deliver_now if user_wants_to_be_notified?
+    end
+    redirect_to account_movements_path(@account)
+  end
+
   private
+
+  def user_wants_to_be_notified?
+    current_user.settings && current_user.settings["send_email_after_update"]
+  end
 
   def account_params
     params.require(:account).permit(:name, :currency, :platform, settings: {})

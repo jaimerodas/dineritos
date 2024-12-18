@@ -7,6 +7,7 @@ Rails.application.routes.draw do
       resource :update, path: "actualizar", only: [:show], constraints: {format: :json}
       resources :movements, path: "movimientos", only: [:index]
       resource :profit_and_loss, path: "estados_de_resultados", only: [:show]
+      get "/reset", to: "accounts#reset", as: "reset"
     end
 
     resource :settings, path: "opciones", only: [:show, :create]
