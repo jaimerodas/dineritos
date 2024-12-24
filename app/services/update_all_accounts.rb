@@ -5,15 +5,17 @@ class UpdateAllAccounts
 
   def initialize
     @errors = []
+    @actions = []
   end
 
-  attr_accessor :errors
+  attr_accessor :errors, :actions
 
   def run
     User.all.each do |user|
       process_accounts_for(user)
       if user.settings && user.settings["daily_email"]
-        ServicesMailer.new_daily_update(user, errors: errors.uniq).deliver_now
+        calculate_account_actions_for(user)
+        ServicesMailer.new_daily_update(user, errors: errors.uniq, actions: actions).deliver_now
       end
     end
   end
@@ -41,5 +43,12 @@ class UpdateAllAccounts
     return if (tries -= 1) == 0
     sleep 5
     retry
+  end
+
+  def calculate_account_actions_for(user)
+    user.accounts.updateable.each do |account|
+      next unless account.can_be_reset?
+      actions.push(account: account, action: :reset)
+    end
   end
 end

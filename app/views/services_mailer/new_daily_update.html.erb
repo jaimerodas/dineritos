@@ -64,6 +64,19 @@
   </tr>
 </table>
 
+<% if @actions.any? %>
+<h2 style="font-size: 1em;">Puede que quieras hacer lo siguiente:</h2>
+<ul>
+  <% @actions.each do |action| %>
+  <li>
+    <b><%= action[:account].name %></b>
+    regresó 0 en como saldo. Quieres
+    <%= link_to "reestablecer el saldo anterior?", account_reset_url(action[:account]) %>
+  </li>
+  <% end %>
+</ul>
+<% end %>
+
 <% if @report.errors.any? %>
 <h2 style="font-size: 1em;">Vimos errores con los siguientes crawlers:</h2>
 <ul>
