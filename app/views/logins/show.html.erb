@@ -1,7 +1,15 @@
 <h1>Dineritos</h1>
-<%= form_with scope: :session, data: {remote: false}  do |f| %>
+<%= form_with scope: :session, data: {remote: false}, html: {novalidate: false} do |f| %>
   <div class="field">
-    <%= f.email_field :email, placeholder: "tu@example.com" %>
+    <%= f.email_field :email,
+                     placeholder: "tu@example.com",
+                     required: true,
+                     autofocus: true %>
   </div>
   <%= f.button "Entrar" %>
 <% end %>
+<div class="passkey-fallback"
+    data-controller="logins"
+    data-logins-discovery-url-value="<%= discovery_login_path(format: :json) %>">
+  <button type="button" data-action="click->logins#discover">Entrar con Passkey</button>
+</div>

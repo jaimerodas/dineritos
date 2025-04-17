@@ -18,9 +18,11 @@ Rails.application.routes.draw do
     resources :account_balances, path: "saldos_de_cuenta", only: [:edit, :update]
 
     resource :login, path: "ingresar", only: [:show, :create] do
-      get :choose, path: "escoge", on: :collection
+      # Email-based login (magic link)
       get :email, on: :collection
-      post :passkey, on: :collection
+      # Passkey authentication: discovery mode (no email) and email-based fallback
+      get :discovery, on: :collection, defaults: {format: :json}
+      # Remove email-identified passkey route (no longer used)
       post :callback, on: :collection
     end
     # Standalone page for USD/MXN exchange rate

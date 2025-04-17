@@ -2,25 +2,32 @@ import { Controller } from "@hotwired/stimulus"
 import * as Credential from "plugins/credential";
 
 export default class extends Controller {
-  create(event) {
-    event.preventDefault();
-
-    const headers = new Headers();
-    const action = event.target.action;
-    const options = {
-      method: event.target.method,
-      headers: headers,
-      body: new FormData(event.target)
-    };
-
-    fetch(action, options).then((response) => {
-      if (response.ok) {
-        response.json().then((data) => {
-          Credential.get(data);
-        });
-      } else {
-        err(response);
-      }
-    });
+  static values = {
+    discoveryUrl: String
+  }
+  
+  // Automatically trigger passkey discovery on load, if supported
+  connect() {
+    if (window.PublicKeyCredential) {
+      this.discover(new Event('autodiscover'));
+    }
+  }
+  
+  // Trigger WebAuthn discovery flow (resident credentials)
+  discover(event = null) {
+    // suppress default if this was a user event
+    if (event && typeof event.preventDefault === 'function') {
+      event.preventDefault();
+    }
+    fetch(this.discoveryUrlValue, {
+      method: 'GET',
+      headers: { 'Accept': 'application/json' },
+      credentials: 'same-origin'
+    })
+    .then(response => response.json())
+    .then(data => {
+      Credential.get(data);
+    })
+    .catch(err => console.error('Discovery error', err));
   }
 }

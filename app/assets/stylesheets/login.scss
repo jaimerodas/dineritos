@@ -106,36 +106,16 @@ button {
   }
 }
 
-.login-options {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1em;
-  grid-auto-rows: minmax(8em, auto);
-
-  a, button {
-    text-decoration: none;
+.passkey-fallback {
+  margin-top: 1em;
+  button {
+    display: inline-block;
     color: var(--fg-color);
-
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 1em;
-    border-radius: 2em;
-    box-sizing: border-box;
-    background-color: var(--border-color);
-    height: 100%;
-    width: 100%;
-    transition: 0.4s ease all;
-
-    &:hover {
-      transform: scale(1.1);
-    }
-  }
-
-  svg {
-    max-width: 3em;
-    fill: var(--fg-color);
+    font-size: 0.75em;
+    text-decoration: underline;
+    background: transparent;
+    border: none;
+    box-shadow: none;
   }
 }
 

@@ -6,11 +6,8 @@ class LoginsController < ApplicationController
   end
 
   def create
-    if valid_email? && @user.passkeys.any?
-      redirect_to choose_login_path(session: {email: params_email})
-    else
-      redirect_to email_login_path(session: {email: params_email})
-    end
+    # Uniformly redirect to magic‑link step; do not reveal whether email exists
+    redirect_to email_login_path(session: {email: params_email})
   end
 
   def email
@@ -20,52 +17,40 @@ class LoginsController < ApplicationController
     end
   end
 
-  def choose
-    @email = params_email
-  end
-
-  def passkey
-    if valid_email?
-      options = WebAuthn::Credential.options_for_get(
-        allow: @user.passkeys.pluck(:external_id),
-        user_verification: "required"
-      )
-
-      session["current_authentication"] = {
-        "challenge" => options.challenge,
-        "username" => params_email
-      }
-
-      respond_to do |format|
-        format.json {
-          render json: {
-            callback_url: callback_login_path(format: :json),
-            get_options: options
-          }
-        }
-      end
-    end
+  # GET /ingresar/discovery.json
+  # WebAuthn discovery: prompt any resident credential, no email required
+  def discovery
+    options = WebAuthn::Credential.options_for_get(
+      user_verification: "required"
+    )
+    session[:webauthn_discovery_challenge] = options.challenge
+    render json: {
+      callback_url: callback_login_path(format: :json),
+      get_options: options
+    }
   end
 
   def callback
-    webauthn_credential = WebAuthn::Credential.from_get(params)
-    user = User.find_by(email: session["current_authentication"]["username"])
-    passkey = user.passkeys.find_by(external_id: Base64.strict_encode64(webauthn_credential.raw_id))
-
-    webauthn_credential.verify(
-      session["current_authentication"]["challenge"],
-      public_key: passkey.public_key,
-      sign_count: passkey.sign_count,
-      user_verification: true
-    )
-
-    passkey.update!(sign_count: webauthn_credential.sign_count)
-    log_in(user)
-    render json: {status: "ok"}, status: :ok
+    # Discovery mode: no email, find user by resident credential
+    if session[:webauthn_discovery_challenge]
+      webauthn_credential = WebAuthn::Credential.from_get(params)
+      external = Base64.strict_encode64(webauthn_credential.raw_id)
+      passkey = Passkey.find_by(external_id: external)
+      unless passkey
+        return render json: "Unknown credential", status: :unprocessable_entity
+      end
+      webauthn_credential.verify(
+        session.delete(:webauthn_discovery_challenge),
+        public_key: passkey.public_key,
+        sign_count: passkey.sign_count,
+        user_verification: true
+      )
+      passkey.update!(sign_count: webauthn_credential.sign_count)
+      log_in(passkey.user)
+      render json: {status: "ok"}, status: :ok
+    end
   rescue WebAuthn::Error => e
     render json: "Verification failed: #{e.message}", status: :unprocessable_entity
-  ensure
-    session.delete(:current_authentication)
   end
 
   private
