@@ -1,12 +1,13 @@
 require "./app/services/update_balance"
 require "ostruct"
-require 'date'
+require "date"
 # Provide Date.current if ActiveSupport is not loaded
 unless Date.respond_to?(:current)
   class Date
     def self.current
       today
     end
+
     # also provide yesterday class method
     def self.yesterday
       today - 1

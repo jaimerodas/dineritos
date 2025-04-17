@@ -1,18 +1,18 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe Passkey, type: :model do
-  let(:user) { User.create!(email: 'x@example.com') }
+  let(:user) { User.create!(email: "x@example.com") }
   subject do
     described_class.new(
-      nickname: 'Device',
+      nickname: "Device",
       external_id: SecureRandom.base64,
-      public_key: 'pubkey',
+      public_key: "pubkey",
       sign_count: 0,
       user: user
     )
   end
 
-  it 'is valid with all attributes' do
+  it "is valid with all attributes" do
     expect(subject).to be_valid
   end
 
@@ -23,12 +23,12 @@ RSpec.describe Passkey, type: :model do
     end
   end
 
-  it 'belongs to user' do
+  it "belongs to user" do
     assoc = described_class.reflect_on_association(:user)
     expect(assoc.macro).to eq(:belongs_to)
   end
 
-  it 'validates uniqueness of external_id' do
+  it "validates uniqueness of external_id" do
     subject.save!
     duplicate = described_class.new(
       nickname: subject.nickname,
