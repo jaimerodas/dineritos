@@ -3,8 +3,26 @@ require "ostruct"
 require "json"
 
 RSpec.describe Updaters::ApifyRun do
+  class FakeHTTParty
+    def self.get(url)
+      new({url: url})
+    end
+
+    def self.post(url, **params)
+      new({url: url}.merge(params))
+    end
+
+    def initialize(params)
+      @data = params
+    end
+
+    def fetch(key)
+      @data.merge("id" => 1)
+    end
+  end
+
   context "new run" do
-    let(:run) { described_class.new(params) }
+    let(:run) { described_class.new(params, http_handler: FakeHTTParty) }
 
     it "went to the right url" do
       expect(run.data.fetch(:url)).to eq "https://api.apify.com/v2/acts/test/runs?token=test"
@@ -21,7 +39,7 @@ RSpec.describe Updaters::ApifyRun do
   end
 
   context "last run" do
-    let(:run) { described_class.last_successful(params) }
+    let(:run) { described_class.last_successful(params, http_handler: FakeHTTParty) }
 
     it "went to the right url" do
       expect(run.data.fetch(:url)).to eq "https://api.apify.com/v2/acts/test/runs/last?status=SUCCEEDED&token=test"
@@ -34,23 +52,5 @@ RSpec.describe Updaters::ApifyRun do
 
   def params
     {"actor" => "test", "token" => "test", "inputs" => {}}
-  end
-
-  class HTTParty
-    def self.get(url)
-      new({url: url})
-    end
-
-    def self.post(url, **params)
-      new({url: url}.merge(params))
-    end
-
-    def initialize(params)
-      @data = params
-    end
-
-    def fetch(key)
-      @data.merge("id" => 1)
-    end
   end
 end

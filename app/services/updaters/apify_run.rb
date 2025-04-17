@@ -2,18 +2,19 @@ module Updaters
   class ApifyRun
     BASE_URL = "https://api.apify.com/v2"
 
-    def self.last_successful(params)
-      new(params, last: true)
+    def self.last_successful(params, http_handler: HTTParty)
+      new(params, last: true, http_handler: http_handler)
     end
 
-    def initialize(params, last: false)
+    def initialize(params, last: false, http_handler: HTTParty)
       @params = params
       @last = last
+      @http_handler = http_handler
 
       response = if last
-        HTTParty.get(initial_url)
+        @http_handler.get(initial_url)
       else
-        HTTParty.post(initial_url, body: @params.fetch("inputs").to_json, headers: headers)
+        @http_handler.post(initial_url, body: @params.fetch("inputs").to_json, headers: headers)
       end
       @data = response.fetch("data")
     end
@@ -30,13 +31,13 @@ module Updaters
 
     def value
       url = to_url("/datasets/#{data["defaultDatasetId"]}/items")
-      value = HTTParty.get(url)&.first&.fetch("value")
+      value = @http_handler.get(url)&.first&.fetch("value")
       BigDecimal(value.tr("^0-9.", "")).round(2)
     end
 
     def refresh!
       url = to_url("/actor-runs/#{data.fetch("id")}")
-      @data = HTTParty.get(url).fetch("data")
+      @data = @http_handler.get(url).fetch("data")
     end
 
     private

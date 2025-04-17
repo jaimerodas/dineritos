@@ -1,7 +1,18 @@
 require "./app/services/update_balance"
 require "ostruct"
-require "active_support/core_ext/date"
-require "active_support/isolated_execution_state"
+require 'date'
+# Provide Date.current if ActiveSupport is not loaded
+unless Date.respond_to?(:current)
+  class Date
+    def self.current
+      today
+    end
+    # also provide yesterday class method
+    def self.yesterday
+      today - 1
+    end
+  end
+end
 
 RSpec.describe UpdateBalance do
   context "balance from today with everything changed" do
@@ -55,7 +66,8 @@ class FakeBalance < OpenStruct
   end
 
   def date
-    from_today ? Date.current : Date.yesterday
+    # use Date.current for both cases; subtract one day for past dates
+    from_today ? Date.current : (Date.current - 1)
   end
 
   def next
