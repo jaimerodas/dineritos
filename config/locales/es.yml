@@ -69,5 +69,7 @@ es:
   will_paginate:
     next_label: ">"
     previous_label: "<"
+  exchange_rates:
+    title: "Tipo de cambio USD/MXN"
   settings:
     saved_successfully: "Preferencias guardadas"

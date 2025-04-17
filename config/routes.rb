@@ -23,7 +23,8 @@ Rails.application.routes.draw do
       post :passkey, on: :collection
       post :callback, on: :collection
     end
-    resource :currency, path: "tipo_de_cambio", only: [:show]
+    # Standalone page for USD/MXN exchange rate
+    resource :exchange_rate, path: "tipo_de_cambio", controller: "exchange_rates", only: [:show]
     scope module: "investments", as: "investments", path: "inversiones" do
       resource :summary, path: "resumen", only: [:show]
     end
@@ -31,6 +32,9 @@ Rails.application.routes.draw do
     scope path: "graficas", as: "chart_data", module: "charts", defaults: {format: :json} do
       resource :balances, path: "saldos", only: [:show]
       resource :yields, path: "rendimientos", only: [:show]
+      # USD/MXN exchange rate over time
+      # JSON endpoint for exchange rate series
+      resource :exchange_rate, path: "tipo_de_cambio", controller: "exchange_rates", only: [:show]
     end
 
     scope path: "reportes", module: "reports", as: "reports" do

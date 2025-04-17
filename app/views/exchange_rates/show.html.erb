@@ -1,0 +1,10 @@
+<header class="simple">
+  <h1><%= t('exchange_rates.title') %></h1>
+</header>
+
+<section class="exchange-rate-chart">
+  <div class="chart-container"
+       data-controller="exchange-rate-chart"
+       data-exchange-rate-chart-url="<%= chart_data_exchange_rate_path(format: :json, currency: params[:currency].presence || 'USD', period: params[:period].presence || 'past_year') %>">
+  </div>
+</section>
