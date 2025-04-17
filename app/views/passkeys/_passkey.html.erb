@@ -4,5 +4,8 @@
     <%= passkey.nickname %>
     <span class="passkey-key"><%= passkey.external_id %></span>
     <span class="passkey-created-at">Agregada el <%= l passkey.created_at %></span>
+    <%= link_to 'Eliminar', passkey_path(passkey),
+    data: { turbo_method: :delete, turbo_confirm: '¿Eliminar esta passkey?' },
+    class: 'passkey-remove' %>
   </div>
 </li>

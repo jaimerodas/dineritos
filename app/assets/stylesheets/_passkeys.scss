@@ -47,6 +47,13 @@
     color: var(--mid-color);
     overflow-wrap: anywhere;
   }
+  .passkey-remove {
+    font-size: 0.75em;
+    color: var(--mid-color);
+    &:hover {
+      color: var(--negative-color);
+    }
+  }
 }
 
 .new-passkey {

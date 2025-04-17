@@ -11,7 +11,7 @@ Rails.application.routes.draw do
     end
 
     resource :settings, path: "opciones", only: [:show, :create]
-    resources :passkeys, only: [:new, :create] do
+    resources :passkeys, only: [:new, :create, :destroy] do
       post :callback, on: :collection
     end
     resources :missing_balances, path: "saldos_faltantes", only: [:index]

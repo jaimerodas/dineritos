@@ -44,4 +44,11 @@ class PasskeysController < ApplicationController
   ensure
     session.delete("create_challenge")
   end
+
+  # DELETE /passkeys/:id
+  def destroy
+    passkey = current_user.passkeys.find(params[:id])
+    passkey.destroy
+    redirect_to settings_path, notice: "Passkey eliminada"
+  end
 end
