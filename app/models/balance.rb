@@ -6,7 +6,7 @@ class Balance < ApplicationRecord
   monetize :diff_cents, allow_nil: true
 
   before_save :calculate_diffs
-  after_save :convert_currency, if: proc { currency != "MXN" && account.currency != "MXN" }
+  after_save :maybe_convert_to_mxn
 
   def prev
     @prev ||= prev_set.limit(1).first
@@ -27,12 +27,17 @@ class Balance < ApplicationRecord
     @foreign_currency ||= (currency != "MXN")
   end
 
+  # Get the exchange rate for this balance
+  # @return [Float] The exchange rate to MXN
   def exchange_rate
-    @exchange_rate ||= if foreign_currency?
-      CurrencyRate.find_or_create_by(date: date, currency: currency).rate_subcents / 1000000.0
-    else
-      1.0
-    end
+    CurrencyConverter.exchange_rate_for(self)
+  end
+
+  # Get MXN equivalent of this balance
+  # @return [Balance] The MXN balance for this record
+  def to_mxn
+    return self unless foreign_currency?
+    CurrencyConverter.to_mxn(self)
   end
 
   def self.earliest_date
@@ -52,16 +57,9 @@ class Balance < ApplicationRecord
       .order(date: :desc)
   end
 
-  def convert_currency
-    Balance.find_or_initialize_by(
-      account: account,
-      date: date,
-      currency: "MXN"
-    ).update(
-      validated: validated,
-      amount_cents: (amount_cents * exchange_rate).to_i,
-      transfers_cents: (transfers_cents * exchange_rate).to_i
-    )
+  def maybe_convert_to_mxn
+    return unless currency != "MXN" && account.currency != "MXN"
+    to_mxn # Automatically converts to MXN and saves
   end
 
   def calculate_diffs
