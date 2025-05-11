@@ -26,7 +26,7 @@ class InvestmentSummary
       .select("SUM(amount_cents) AS amount_cents")
       .where("rank = 1")
       .from(ranked_balances)
-      .order("1").first.amount.amount
+      .order("1").first&.amount&.amount || 0
   end
 
   def earliest_date
@@ -38,15 +38,15 @@ class InvestmentSummary
   end
 
   def earnings
-    @earnings ||= BigDecimal(period_aggregate.earnings)
+    @earnings ||= BigDecimal(period_aggregate&.earnings || 0)
   end
 
   def deposits
-    @deposits ||= BigDecimal(period_aggregate.deposits)
+    @deposits ||= BigDecimal(period_aggregate&.deposits || 0)
   end
 
   def withdrawals
-    @withdrawals ||= BigDecimal(period_aggregate.withdrawals * -1)
+    @withdrawals ||= BigDecimal((period_aggregate&.withdrawals || 0) * -1)
   end
 
   def net_investment
