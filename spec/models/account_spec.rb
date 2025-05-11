@@ -1,7 +1,9 @@
 require "rails_helper"
 
 RSpec.describe Account, type: :model do
-  let(:user) { User.create!(email: "test@example.com") }
+  fixtures :users, :accounts
+
+  let(:user) { users(:test_user) }
 
   subject { described_class.new(name: "Acct1", currency: "MXN", user: user) }
 

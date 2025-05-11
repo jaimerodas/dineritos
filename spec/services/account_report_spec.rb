@@ -4,8 +4,9 @@ require "rails_helper"
 
 RSpec.describe AccountReport do
   # Set up test users and accounts with real data
-  let(:user) { User.create!(email: "test@example.com") }
-  let(:unauthorized_user) { User.create!(email: "unauthorized@example.com") }
+  fixtures :users
+  let(:user) { users(:test_user) }
+  let(:unauthorized_user) { users(:test_user_2) }
 
   # Create an account with a known transaction history
   let(:account) do

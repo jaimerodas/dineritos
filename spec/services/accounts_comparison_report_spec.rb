@@ -3,23 +3,13 @@
 require "rails_helper"
 
 RSpec.describe AccountsComparisonReport do
-  # Set up users with accounts and balances
-  let(:user) { User.create!(email: "test@example.com") }
+  # Load fixtures
+  fixtures :users, :accounts, :balances
 
-  # Create multiple accounts for comparison
-  let(:account1) do
-    user.accounts.create!(
-      name: "Savings Account",
-      currency: "MXN"
-    )
-  end
-
-  let(:account2) do
-    user.accounts.create!(
-      name: "Investment Account",
-      currency: "MXN"
-    )
-  end
+  # Access fixtures
+  let(:user) { users(:test_user) }
+  let(:account1) { accounts(:savings_account) }
+  let(:account2) { accounts(:investment_account) }
 
   # Define dates for test data
   let(:jan_1) { Date.new(2023, 1, 1) }
@@ -28,85 +18,7 @@ RSpec.describe AccountsComparisonReport do
   let(:feb_15) { Date.new(2023, 2, 15) }
   let(:mar_1) { Date.new(2023, 3, 1) }
 
-  # Set up test balances with a known history
   before do
-    # Account 1: Savings Account
-    # Initial deposit on Jan 1: 5,000 (50.00)
-    Balance.create!(
-      account: account1,
-      date: jan_1,
-      amount_cents: 5_000,
-      transfers_cents: 5_000,
-      diff_cents: 0,
-      currency: "MXN"
-    )
-
-    # Mid-January: Balance grows to 5,100 (51.00) - 100 (1.00) earnings
-    Balance.create!(
-      account: account1,
-      date: jan_15,
-      amount_cents: 5_100,
-      transfers_cents: 0,
-      diff_cents: 100,
-      diff_days: 14,
-      currency: "MXN"
-    )
-
-    # February 1: Additional deposit of 1,000 (10.00)
-    Balance.create!(
-      account: account1,
-      date: feb_1,
-      amount_cents: 6_200,
-      transfers_cents: 1_000,
-      diff_cents: 100,
-      diff_days: 17,
-      currency: "MXN"
-    )
-
-    # March 1: Final balance with earnings
-    Balance.create!(
-      account: account1,
-      date: mar_1,
-      amount_cents: 6_300,
-      transfers_cents: 0,
-      diff_cents: 100,
-      diff_days: 28,
-      currency: "MXN"
-    )
-
-    # Account 2: Investment Account
-    # Initial deposit on Jan 1: 10,000 (100.00)
-    Balance.create!(
-      account: account2,
-      date: jan_1,
-      amount_cents: 10_000,
-      transfers_cents: 10_000,
-      diff_cents: 0,
-      currency: "MXN"
-    )
-
-    # February 1: Growth with no transfers
-    Balance.create!(
-      account: account2,
-      date: feb_1,
-      amount_cents: 10_500,
-      transfers_cents: 0,
-      diff_cents: 500,
-      diff_days: 31,
-      currency: "MXN"
-    )
-
-    # March 1: Withdrawal of 2,000 (20.00) with earnings
-    Balance.create!(
-      account: account2,
-      date: mar_1,
-      amount_cents: 8_800,
-      transfers_cents: -2_000,
-      diff_cents: 300,
-      diff_days: 28,
-      currency: "MXN"
-    )
-
     # Allow Balance class methods to work with our fixed dates
     allow(Balance).to receive(:earliest_date).and_return(jan_1)
     allow(Balance).to receive(:latest_date).and_return(mar_1)

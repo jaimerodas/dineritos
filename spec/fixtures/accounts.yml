@@ -1,0 +1,9 @@
+savings_account:
+  name: "Savings Account"
+  currency: "MXN"
+  user: test_user
+
+investment_account:
+  name: "Investment Account"
+  currency: "MXN"
+  user: test_user

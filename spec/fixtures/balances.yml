@@ -1,0 +1,62 @@
+# Savings Account balances
+savings_jan1:
+  account: savings_account
+  date: 2023-01-01
+  amount_cents: 5000
+  transfers_cents: 5000
+  diff_cents: 0
+  currency: "MXN"
+
+savings_jan15:
+  account: savings_account
+  date: 2023-01-15
+  amount_cents: 5100
+  transfers_cents: 0
+  diff_cents: 100
+  diff_days: 14
+  currency: "MXN"
+
+savings_feb1:
+  account: savings_account
+  date: 2023-02-01
+  amount_cents: 6200
+  transfers_cents: 1000
+  diff_cents: 100
+  diff_days: 17
+  currency: "MXN"
+
+savings_mar1:
+  account: savings_account
+  date: 2023-03-01
+  amount_cents: 6300
+  transfers_cents: 0
+  diff_cents: 100
+  diff_days: 28
+  currency: "MXN"
+
+# Investment Account balances
+investment_jan1:
+  account: investment_account
+  date: 2023-01-01
+  amount_cents: 10000
+  transfers_cents: 10000
+  diff_cents: 0
+  currency: "MXN"
+
+investment_feb1:
+  account: investment_account
+  date: 2023-02-01
+  amount_cents: 10500
+  transfers_cents: 0
+  diff_cents: 500
+  diff_days: 31
+  currency: "MXN"
+  
+investment_mar1:
+  account: investment_account
+  date: 2023-03-01
+  amount_cents: 8800
+  transfers_cents: -2000
+  diff_cents: 300
+  diff_days: 28
+  currency: "MXN"

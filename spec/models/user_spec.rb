@@ -45,7 +45,7 @@ RSpec.describe User, type: :model do
   end
 
   describe "account management" do
-    let(:user) { User.create!(email: "test@example.com") }
+    let(:user) { User.create!(email: "test_acct@example.com") }
 
     it "can create accounts" do
       account = user.accounts.create!(name: "Test Account", currency: "MXN")
@@ -60,7 +60,7 @@ RSpec.describe User, type: :model do
   end
 
   describe "accounts missing balances" do
-    let(:user) { User.create!(email: "test@example.com") }
+    let(:user) { User.create!(email: "test_missing_balances@example.com") }
     let(:account1) { user.accounts.create!(name: "Account 1", currency: "MXN") }
     let(:account2) { user.accounts.create!(name: "Account 2", currency: "MXN") }
     let(:account3) { user.accounts.create!(name: "Account 3", currency: "MXN") }

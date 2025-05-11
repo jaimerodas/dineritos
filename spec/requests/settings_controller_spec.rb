@@ -1,7 +1,8 @@
 require "rails_helper"
 
 RSpec.describe SettingsController, type: :request do
-  let(:user) { User.create(email: "test@example.com") }
+  fixtures :users
+  let(:user) { users(:test_user) }
 
   describe "#show" do
     context "when user is logged in" do

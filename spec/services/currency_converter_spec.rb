@@ -3,7 +3,8 @@
 require "rails_helper"
 
 RSpec.describe CurrencyConverter do
-  let(:user) { User.create!(email: "test@example.com") }
+  fixtures :users
+  let(:user) { users(:test_user) }
   let(:mxn_account) { Account.create!(name: "MXN Account", currency: "MXN", user: user) }
   let(:usd_account) { Account.create!(name: "USD Account", currency: "USD", user: user) }
 

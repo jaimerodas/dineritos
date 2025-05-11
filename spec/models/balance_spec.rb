@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe Balance, type: :model do
-  let(:user) { User.create!(email: "u@example.com") }
+  let(:user) { User.create!(email: "test_balances@example.com") }
   let(:account) { Account.create!(name: "A", currency: "MXN", user: user) }
   let!(:b1) { Balance.create!(account: account, date: Date.yesterday, amount_cents: 1000, transfers_cents: 0, currency: "MXN", validated: true) }
   let!(:b2) { Balance.create!(account: account, date: Date.today, amount_cents: 1500, transfers_cents: 200, currency: "MXN", validated: false) }
@@ -28,8 +28,8 @@ RSpec.describe Balance, type: :model do
 
   describe ".earliest_date and .latest_date" do
     it "returns correct earliest and latest dates" do
-      expect(Balance.earliest_date).to eq(Date.yesterday)
-      expect(Balance.latest_date).to eq(Date.today)
+      expect(user.balances.earliest_date).to eq(Date.yesterday)
+      expect(user.balances.latest_date).to eq(Date.today)
     end
 
     it "returns current date when no balances exist" do
@@ -85,8 +85,7 @@ RSpec.describe Balance, type: :model do
 
   describe "#exchange_rate" do
     before do
-      # Stub CurrencyRate for USD
-      allow_any_instance_of(CurrencyRate).to receive(:rate_subcents).and_return(19_500_000) # 19.5 MXN per USD
+      allow(CurrencyExchange).to receive(:get_rate_for).and_return(19.5) # 19.5 MXN per USD
     end
 
     it "returns 1.0 for MXN currency" do

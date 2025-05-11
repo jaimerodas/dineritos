@@ -6,7 +6,7 @@ RSpec.describe DailyReport do
   # This test focuses on key functionality without relying on Balance and CurrencyExchange
   # which have caused test issues
 
-  let(:user) { User.create!(email: "test@example.com") }
+  let(:user) { User.create!(email: "test_daily_report@example.com") }
   let(:today) { Date.current }
   let(:yesterday) { today - 1.day }
   let(:month_ago) { today - 1.month }
