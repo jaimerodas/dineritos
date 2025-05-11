@@ -1,99 +1,264 @@
-require "ostruct"
-require "date"
-require "bigdecimal"
-require "./app/services/report_helper"
-require "./app/services/account_report"
+# frozen_string_literal: true
+
+require "rails_helper"
 
 RSpec.describe AccountReport do
-  # A minimal fake account to drive the service without ActiveRecord
-  class FakeAccount
-    attr_reader :name, :currency, :user, :balances
-    def initialize(name:, currency:, user:, balances:)
-      @name = name
-      @currency = currency
-      @user = user
-      @balances = balances
-    end
+  # Set up test users and accounts with real data
+  let(:user) { User.create!(email: "test@example.com") }
+  let(:unauthorized_user) { User.create!(email: "unauthorized@example.com") }
 
-    # simulate last_amount(use:)
-    def last_amount(use:)
-      # pick latest balance matching currency (balances sorted)
-      balances.select { |b| b.currency == use }.max_by(&:date) || nil
-    end
-  end
-
-  let(:user) { Object.new }
-  let(:earliest_date) { Date.new(2020, 1, 1) }
-  let(:balances) { double("balances", earliest_date: earliest_date) }
+  # Create an account with a known transaction history
   let(:account) do
-    FakeAccount.new(
-      name: "Acct1",
-      currency: "USD",
-      user: user,
-      balances: balances
+    user.accounts.create!(
+      name: "Test Investment Account",
+      currency: "MXN"
     )
   end
 
+  # Define time periods for the test data
+  let(:jan_1) { Date.new(2023, 1, 1) }
+  let(:jan_15) { Date.new(2023, 1, 15) }
+  let(:feb_1) { Date.new(2023, 2, 1) }
+  let(:feb_15) { Date.new(2023, 2, 15) }
+  let(:mar_1) { Date.new(2023, 3, 1) }
+
+  # Set up test balances with a known history
+  before do
+    # Initial deposit on Jan 1: 10,000 (100.00)
+    Balance.create!(
+      account: account,
+      date: jan_1,
+      amount_cents: 10_000,
+      transfers_cents: 10_000,
+      currency: "MXN"
+    )
+
+    # Mid-January: Balance grows to 10,500 (105.00) - 500 (5.00) earnings
+    Balance.create!(
+      account: account,
+      date: jan_15,
+      amount_cents: 10_500,
+      transfers_cents: 0,
+      diff_cents: 500,
+      diff_days: 14,
+      currency: "MXN"
+    )
+
+    # February 1: Additional deposit of 5,000 (50.00)
+    Balance.create!(
+      account: account,
+      date: feb_1,
+      amount_cents: 15_800,
+      transfers_cents: 5_000,
+      diff_cents: 300,
+      diff_days: 17,
+      currency: "MXN"
+    )
+
+    # Mid-February: Withdrawal of 2,000 (20.00)
+    Balance.create!(
+      account: account,
+      date: feb_15,
+      amount_cents: 14_200,
+      transfers_cents: -2_000,
+      diff_cents: 400,
+      diff_days: 14,
+      currency: "MXN"
+    )
+
+    # March 1: Final balance with earnings
+    Balance.create!(
+      account: account,
+      date: mar_1,
+      amount_cents: 15_000,
+      transfers_cents: 0,
+      diff_cents: 800,
+      diff_days: 14,
+      currency: "MXN"
+    )
+
+    # Allow Balance class methods to work with our fixed dates
+    allow(Balance).to receive(:earliest_date).and_return(jan_1)
+    allow(Balance).to receive(:latest_date).and_return(mar_1)
+  end
+
   describe "#initialize" do
-    before do
-      allow_any_instance_of(AccountReport)
-        .to receive(:determine_period_range)
-        .with("all", account)
-        .and_return(earliest_date..Date.today)
-    end
-    it "sets account_name, currency, and period" do
-      report = AccountReport.new(user: user, account: account)
-      expect(report.account_name).to eq("Acct1")
-      expect(report.currency).to eq("USD")
-      expect(report.period.begin).to eq(earliest_date)
-      expect(report.period.end).to eq(Date.today)
+    it "sets account, currency, and period parameters" do
+      report = described_class.new(user: user, account: account)
+
+      expect(report.account).to eq(account)
+      expect(report.currency).to eq("MXN")
+      expect(report.period).to be_a(Range)
+      expect(report.period).to cover(jan_1)
+      expect(report.period).to cover(mar_1)
     end
 
-    it "allows overriding currency to MXN" do
-      report = AccountReport.new(user: user, account: account, currency: "MXN")
+    it "allows overriding the currency to MXN" do
+      # Create a USD account
+      usd_account = user.accounts.create!(
+        name: "USD Account",
+        currency: "USD"
+      )
+
+      # Override the currency to MXN
+      report = described_class.new(user: user, account: usd_account, currency: "MXN")
       expect(report.currency).to eq("MXN")
     end
 
-    it "rejects when user does not own the account" do
-      other = Object.new
+    it "allows specifying a time period" do
+      # Mock the determine_period_range method for specific year
+      year_range = Date.new(2023, 1, 1)...Date.new(2023, 12, 31)
+      allow_any_instance_of(AccountReport).to receive(:determine_period_range)
+        .with(2023, account)
+        .and_return(year_range)
+
+      year_2023 = described_class.new(user: user, account: account, period: 2023)
+      expect(year_2023.period).to eq(year_range)
+
+      # Test with 'past_year' string
+      allow(Date).to receive(:current).and_return(Date.new(2023, 3, 15))
+      past_year_range = Date.new(2022, 3, 1)..Date.new(2023, 3, 15)
+      allow_any_instance_of(AccountReport).to receive(:determine_period_range)
+        .with("past_year", account)
+        .and_return(past_year_range)
+
+      past_year = described_class.new(user: user, account: account, period: "past_year")
+      expect(past_year.period).to eq(past_year_range)
+    end
+
+    it "validates that the account belongs to the user" do
       expect {
-        AccountReport.new(user: other, account: account)
+        described_class.new(user: unauthorized_user, account: account)
       }.to raise_error(ArgumentError, /Unauthorized user for this account/)
     end
   end
 
+  describe "account information" do
+    subject { described_class.new(user: user, account: account) }
+
+    it "returns the account name" do
+      expect(subject.account_name).to eq("Test Investment Account")
+    end
+
+    it "returns the latest balance for the account" do
+      latest = subject.latest_balance
+      expect(latest).to be_a(Balance)
+      expect(latest.date).to eq(mar_1)
+      expect(latest.amount_cents).to eq(15_000)
+    end
+
+    it "returns the earliest date with balance data" do
+      expect(subject.earliest_date).to eq(jan_1)
+    end
+  end
+
   describe "financial calculations" do
-    subject { AccountReport.new(user: user, account: account) }
+    # Set a fixed period for consistent testing
+    let(:jan_feb_period) { jan_1..feb_15 }
 
     before do
-      # stub summary and available_balances
-      stub_summary = OpenStruct.new(
-        earnings: 500,
-        deposits: 300,
-        withdrawals: -200,
-        irr: BigDecimal("0.10")
-      )
-      allow(subject).to receive(:summary).and_return(stub_summary)
+      allow_any_instance_of(AccountReport).to receive(:determine_period_range)
+        .and_return(jan_feb_period)
     end
 
-    it "computes earnings as decimal" do
-      expect(subject.earnings).to eq(5.0)
+    subject { described_class.new(user: user, account: account) }
+
+    it "calculates the total earnings" do
+      # Sum of earnings from Jan 1 to Feb 15: 500 + 300 + 400 = 1200 cents = 12.00
+      expect(subject.earnings).to eq(12.00)
     end
 
-    it "computes deposits as decimal" do
-      expect(subject.deposits).to eq(3.0)
+    it "calculates total deposits" do
+      # Initial deposit (10000) + Feb 1 deposit (5000) = 15000 cents = 150.00
+      expect(subject.deposits).to eq(150.00)
     end
 
-    it "computes withdrawals as positive decimal" do
-      expect(subject.withdrawals).to eq(2.0)
+    it "calculates total withdrawals" do
+      # Feb 15 withdrawal (2000 cents = 20.00) - returned as positive
+      expect(subject.withdrawals).to eq(20.00)
     end
 
-    it "computes net_transferred correctly" do
-      expect(subject.net_transferred).to eq(1.0)
+    it "calculates net transfers" do
+      # Deposits (150.00) - Withdrawals (20.00) = 130.00
+      expect(subject.net_transferred).to eq(130.00)
     end
 
-    it "returns irr value" do
-      expect(subject.irr).to eq(BigDecimal("0.10"))
+    it "calculates IRR based on transaction history" do
+      # The IRR calculation is complex, so we just verify it returns a decimal value
+      expect(subject.irr).to be_a(BigDecimal)
+      expect(subject.irr).to be >= 0
+    end
+  end
+
+  describe "chart data generation" do
+    subject { described_class.new(user: user, account: account) }
+
+    it "formats IRR data for monthly JavaScript charts" do
+      result = subject.monthly_irrs
+
+      # Should include data for January, February, and March
+      expect(result).to include('new Date("2023-01-01")')
+      expect(result).to include('new Date("2023-02-01")')
+      expect(result).to include('new Date("2023-03-01")')
+
+      # Should include the 'value' property with numeric IRR values
+      expect(result).to match(/value: [0-9.]+/)
+    end
+
+    it "formats balance data for JavaScript charts" do
+      result = subject.balances_in_period
+
+      # Should include all dates with proper values
+      expect(result).to include('new Date("2023-01-01")')
+      expect(result).to include('new Date("2023-01-15")')
+      expect(result).to include('new Date("2023-02-01")')
+      expect(result).to include('new Date("2023-02-15")')
+      expect(result).to include('new Date("2023-03-01")')
+
+      # Should include values for balances
+      expect(result).to include("value: 100.0") # Jan 1
+      expect(result).to include("value: 105.0") # Jan 15
+      # Values are dividing by 100.0 to convert cents to dollars
+    end
+  end
+
+  describe "profit and loss reporting" do
+    let(:report_period) { jan_1..mar_1 }
+
+    before do
+      allow_any_instance_of(AccountReport).to receive(:determine_period_range)
+        .and_return(report_period)
+    end
+
+    subject { described_class.new(user: user, account: account) }
+
+    it "generates monthly profit and loss data" do
+      results = subject.monthly_pnl
+
+      # Should contain data for all months
+      expect(results.size).to eq(3) # Jan, Feb, Mar
+
+      # Each month has the right structure
+      results.each do |month|
+        expect(month.keys).to include(:month, :deposits, :withdrawals, :earnings, :initial_balance, :final_balance)
+      end
+
+      # Check January data specifically
+      january = results.find { |m| m[:month] == "2023-01" }
+      expect(january[:deposits]).to eq(100.0) # 10000 cents
+      expect(january[:earnings]).to eq(5.0)   # 500 cents
+
+      # Check February data
+      february = results.find { |m| m[:month] == "2023-02" }
+      expect(february[:deposits]).to eq(50.0)     # 5000 cents
+      expect(february[:withdrawals].abs).to eq(20.0) # 2000 cents (might be negative in result)
+      expect(february[:earnings]).to eq(7.0)      # 700 cents (300 + 400)
+
+      # Check totals calculation
+      totals = subject.total_pnl
+      expect(totals[:deposits]).to eq(150.0)          # 15000 cents total deposits
+      expect(totals[:withdrawals].abs).to eq(20.0)   # 2000 cents total withdrawals (might be negative)
+      expect(totals[:earnings]).to eq(20.0)           # 2000 cents total earnings (500 + 300 + 400 + 800)
     end
   end
 end

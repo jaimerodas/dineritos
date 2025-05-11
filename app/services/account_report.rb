@@ -10,6 +10,7 @@ class AccountReport
 
   attr_reader :account, :period, :currency
 
+  # Basic account information
   def account_name
     account.name
   end
@@ -22,6 +23,7 @@ class AccountReport
     @earliest_date ||= account.balances.earliest_date
   end
 
+  # Financial Metrics
   def earnings
     @earnings ||= cents_to_decimal(summary.earnings)
   end
@@ -42,6 +44,7 @@ class AccountReport
     @irr ||= summary.irr
   end
 
+  # Chart data
   def monthly_irrs
     available_balances
       .select("DATE(DATE_TRUNC('month', date)) AS month")
@@ -96,7 +99,7 @@ class AccountReport
   end
 
   def summary
-    available_balances
+    @summary ||= available_balances
       .select("SUM(diff_cents) AS earnings")
       .select("SUM(CASE WHEN (transfers_cents > 0) THEN transfers_cents ELSE 0 END ) deposits")
       .select("SUM(CASE WHEN (transfers_cents < 0) THEN transfers_cents ELSE 0 END ) withdrawals")

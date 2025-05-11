@@ -46,7 +46,7 @@ class AccountsComparisonReport
   def calculate_period_from(year)
     return 1.year.ago..Date.current if year == "past_year"
     return earliest_date..Date.current if year == "all"
-    return 1.month.ago..Date.current if year == "past_month"
+    return 1.months.ago..Date.current if year == "past_month"
     return 1.week.ago..Date.current if year == "past_week"
     year = Date.current.year if year == "year_to_date"
     year = year.to_i if year.is_a?(String)
