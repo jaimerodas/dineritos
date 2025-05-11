@@ -2,3 +2,5 @@ test_user:
   email: test@example.com
 test_user_2:
   email: test2@example.com
+historic_investment_user:
+  email: historic@example.com

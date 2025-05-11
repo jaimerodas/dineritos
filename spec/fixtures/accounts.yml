@@ -7,3 +7,19 @@ investment_account:
   name: "Investment Account"
   currency: "MXN"
   user: test_user
+
+hi1_acct:
+  name: "Investment Account 1"
+  currency: "MXN"
+  user: historic_investment_user
+
+hi2_acct:
+  name: "Investment Account 2"
+  currency: "MXN"
+  user: historic_investment_user
+
+hi3_acct:
+  name: "USD Account"
+  currency: "USD"
+  user: historic_investment_user
+
