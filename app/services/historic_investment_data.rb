@@ -81,9 +81,10 @@ class HistoricInvestmentData
   def ids_with_positive_balance
     @ids_with_positive_balance ||= user.balances
       .group(:account_id)
-      .select(:account_id, "sum(balances.amount_cents) sum")
+      .select(:account_id, "max(balances.amount_cents) max")
       .where(currency: "MXN")
       .where(date: period, account_id: account_ids)
+      .filter { |d| d.max > 0 }
       .map { |d| d.account_id }
       .sort
   end
