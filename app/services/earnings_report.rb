@@ -13,7 +13,7 @@ class EarningsReport
     @details ||= combine(
       current: current_balances,
       day: earnings_in_the_last(1.day),
-      month: earnings_in_the_last(1.month)
+      month: earnings_in_the_last(1.months)
     ).reject { |account, amounts| amounts.values.uniq == [0.0] }
   end
 
