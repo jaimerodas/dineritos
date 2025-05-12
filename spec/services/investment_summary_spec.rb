@@ -194,7 +194,7 @@ RSpec.describe InvestmentSummary do
 
         # Check all expected keys
         expected_keys = [:starting_balance, :final_balance, :earnings,
-                         :deposits, :withdrawals, :net_investment, :irr]
+          :deposits, :withdrawals, :net_investment, :irr]
         expect(summary.keys).to match_array(expected_keys)
 
         # Check values (converted to floats)
@@ -264,7 +264,7 @@ RSpec.describe InvestmentSummary do
           account: mxn_account,
           date: Date.today,
           amount_cents: 10_000_00,
-          transfers_cents: 4_000_00,
+          transfers_cents: 4_000_00
         )
 
         # Add USD balance - should be converted into MXN for calculations
@@ -293,46 +293,6 @@ RSpec.describe InvestmentSummary do
         expect(summary.deposits).to eq(BigDecimal("6000.0"))
         # 1,000 + (100 * 20) = 3,000
         expect(summary.earnings).to eq(BigDecimal("3000.0"))
-      end
-    end
-  end
-
-  describe "private methods" do
-    subject { described_class.for(user: user, period: "all") }
-
-    describe "#calculate_period_from" do
-      it "returns correct range for 'past_year'" do
-        travel_to Date.new(2023, 3, 15)
-
-        period = subject.send(:calculate_period_from, "past_year")
-
-        expect(period).to be_a(Range)
-        expect(period).to cover(Date.new(2022, 3, 15))
-        expect(period).to cover(Date.new(2023, 3, 15))
-
-        travel_back
-      end
-
-      it "returns correct range for 'all'" do
-        allow(Balance).to receive(:earliest_date).and_return(jan_1)
-
-        period = subject.send(:calculate_period_from, "all")
-
-        expect(period).to be_a(Range)
-        expect(period).to cover(jan_1)
-        expect(period).to cover(Date.current)
-      end
-
-      it "returns correct range for numeric year" do
-        period = subject.send(:calculate_period_from, "2023")
-
-        expect(period).to be_a(Range)
-        expect(period).to cover(Date.new(2023, 6, 15))
-        expect(period).not_to cover(Date.new(2024, 1, 1))
-
-        # Test with integer input
-        period_int = subject.send(:calculate_period_from, 2023)
-        expect(period_int).to eq(period)
       end
     end
   end

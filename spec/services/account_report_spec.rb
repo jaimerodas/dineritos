@@ -108,23 +108,20 @@ RSpec.describe AccountReport do
 
     it "allows specifying a time period" do
       # Mock the determine_period_range method for specific year
-      year_range = Date.new(2023, 1, 1)...Date.new(2023, 12, 31)
-      allow_any_instance_of(AccountReport).to receive(:determine_period_range)
-        .with(2023, account)
-        .and_return(year_range)
+      year_range = Date.new(2023, 1, 1)...Date.new(2024, 1, 1)
 
       year_2023 = described_class.new(user: user, account: account, period: 2023)
       expect(year_2023.period).to eq(year_range)
 
       # Test with 'past_year' string
-      allow(Date).to receive(:current).and_return(Date.new(2023, 3, 15))
-      past_year_range = Date.new(2022, 3, 1)..Date.new(2023, 3, 15)
-      allow_any_instance_of(AccountReport).to receive(:determine_period_range)
-        .with("past_year", account)
-        .and_return(past_year_range)
+      travel_to(Date.new(2023, 3, 15))
 
+      past_year_range = Date.new(2022, 3, 15)..Date.new(2023, 3, 15)
       past_year = described_class.new(user: user, account: account, period: "past_year")
+
       expect(past_year.period).to eq(past_year_range)
+
+      travel_back
     end
 
     it "validates that the account belongs to the user" do
@@ -157,10 +154,8 @@ RSpec.describe AccountReport do
     # Set a fixed period for consistent testing
     let(:jan_feb_period) { jan_1..feb_15 }
 
-    before do
-      allow_any_instance_of(AccountReport).to receive(:determine_period_range)
-        .and_return(jan_feb_period)
-    end
+    before { travel_to(feb_15) }
+    after { travel_back }
 
     subject { described_class.new(user: user, account: account) }
 
@@ -225,11 +220,6 @@ RSpec.describe AccountReport do
 
   describe "profit and loss reporting" do
     let(:report_period) { jan_1..mar_1 }
-
-    before do
-      allow_any_instance_of(AccountReport).to receive(:determine_period_range)
-        .and_return(report_period)
-    end
 
     subject { described_class.new(user: user, account: account) }
 

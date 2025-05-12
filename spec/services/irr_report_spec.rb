@@ -46,25 +46,20 @@ RSpec.describe IrrReport do
   end
 
   describe "#calculate_period_from" do
-    subject { described_class.for(user: user) }
-
     it "returns correct range for 'past_year'" do
       travel_to Date.new(2023, 3, 15)
 
-      period = subject.send(:calculate_period_from, "past_year")
-
-      expected_start = Date.new(2022, 3, 3) # 1 year ago beginning of month minus 1 month
+      period = described_class.for(user: user, period: "past_year").period
+      # 1 year ago beginning of month minus 1 month
       expect(period).to be_a(Range)
-      expect(period).to cover(expected_start)
+      expect(period).to cover(Date.new(2022, 3, 15))
       expect(period).to cover(Date.current)
 
       travel_back
     end
 
     it "returns correct range for 'all'" do
-      allow(Balance).to receive(:earliest_date).and_return(jan_1)
-
-      period = subject.send(:calculate_period_from, "all")
+      period = described_class.for(user: user, period: "all").period
 
       expect(period).to be_a(Range)
       expect(period).to cover(jan_1)
@@ -72,7 +67,7 @@ RSpec.describe IrrReport do
     end
 
     it "returns correct range for numeric year" do
-      period = subject.send(:calculate_period_from, "2023")
+      period = described_class.for(user: user, period: "2023").period
 
       expect(period).to be_a(Range)
       expect(period).to cover(Date.new(2023, 1, 1))

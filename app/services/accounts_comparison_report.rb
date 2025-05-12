@@ -1,11 +1,13 @@
 class AccountsComparisonReport
+  include Reports::Helpers::PeriodHelper
+
   def initialize(user:, period: "past_year")
     @user = user
     @user_accounts = user.accounts
-    @period = calculate_period_from(period)
+    @period = calculate_period(period, earliest_date: earliest_date)
   end
 
-  attr_reader :period
+  attr_reader :period, :user
 
   def accounts
     @accounts ||= Account
@@ -43,16 +45,6 @@ class AccountsComparisonReport
       .where("balances.currency": "MXN", "balances.date": period)
   end
 
-  def calculate_period_from(year)
-    return 1.year.ago..Date.current if year == "past_year"
-    return earliest_date..Date.current if year == "all"
-    return 1.months.ago..Date.current if year == "past_month"
-    return 1.week.ago..Date.current if year == "past_week"
-    year = Date.current.year if year == "year_to_date"
-    year = year.to_i if year.is_a?(String)
-    Date.new(year)...Date.new(year + 1)
-  end
-
   def first_value(column, key)
     "
     COALESCE(
@@ -65,9 +57,5 @@ class AccountsComparisonReport
   def decimalized(column, key = false)
     key ||= column
     "(#{column}) / 100.0 AS #{key}"
-  end
-
-  def earliest_date
-    @earliest_date ||= @user.balances.earliest_date
   end
 end

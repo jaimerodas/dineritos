@@ -1,15 +1,14 @@
 class InvestmentSummary
+  include Reports::Helpers::PeriodHelper
+
   def self.for(user:, period: "past_year")
     new(user, period)
   end
 
   def initialize(user, period_string)
-    @user = user
     @period_string = period_string
-    @period = calculate_period_from(@period_string)
+    super
   end
-
-  attr_reader :user, :period
 
   def to_h
     %i[starting_balance final_balance earnings deposits withdrawals net_investment irr]
@@ -27,10 +26,6 @@ class InvestmentSummary
       .where("rank = 1")
       .from(ranked_balances)
       .order("1").first&.amount&.amount || 0
-  end
-
-  def earliest_date
-    @earliest_date ||= user.balances.earliest_date
   end
 
   def earliest_year
@@ -58,13 +53,6 @@ class InvestmentSummary
   end
 
   private
-
-  def calculate_period_from(year)
-    return 1.year.ago.to_date..Date.current if year == "past_year"
-    return earliest_date..Date.current if year == "all"
-    year = year.to_i if year.instance_of?(String)
-    Date.new(year)...Date.new(year + 1)
-  end
 
   def elegible_account_ids
     @elegible_account_ids ||= user.accounts.pluck(:id)

@@ -1,4 +1,6 @@
 class DailyReport
+  include Reports::Helpers::PeriodHelper
+
   def self.for(user, date, errors = [])
     new(user, date, errors)
   end
@@ -58,14 +60,6 @@ class DailyReport
           "balances.validated": true
         ).any?
     end
-  end
-
-  def earliest_date
-    @earliest_date ||= user.balances.earliest_date
-  end
-
-  def latest_date
-    @latest_date ||= user.balances.latest_date
   end
 
   private

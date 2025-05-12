@@ -1,14 +1,9 @@
 class IrrReport
+  include Reports::Helpers::PeriodHelper
+
   def self.for(user:, period: "past_year")
     new(user, period)
   end
-
-  def initialize(user, period_string)
-    @user = user
-    @period = calculate_period_from(period_string)
-  end
-
-  attr_reader :user, :period
 
   def accumulated_irr
     @accumulated_irr ||= begin
@@ -48,10 +43,6 @@ class IrrReport
     end
   end
 
-  def earliest_date
-    @earliest_date ||= user.balances.earliest_date
-  end
-
   def diffs
     @diffs ||= Balance
       .select("SUM(diff_cents) AS diff_cents", "DATE_TRUNC('month', date)::DATE AS month")
@@ -87,12 +78,5 @@ class IrrReport
 
   def accounts
     user.accounts.select(:id)
-  end
-
-  def calculate_period_from(year)
-    return 1.year.ago.beginning_of_month - 1.month..Date.current if year == "past_year"
-    return earliest_date..Date.current if year == "all"
-    year = year.to_i if year.is_a? String
-    (Date.new(year) - 1.month)...Date.new(year + 1)
   end
 end

@@ -1,12 +1,13 @@
 class HistoricInvestmentData
+  include Reports::Helpers::PeriodHelper
+
   def self.for(user, period: "past_year")
     new(user, period)
   end
 
   def initialize(user, period_string)
-    @user = user
     @period_string = period_string
-    @period = calculate_period_from(@period_string)
+    super
   end
 
   attr_reader :user, :period
@@ -24,17 +25,6 @@ class HistoricInvestmentData
   end
 
   private
-
-  def earliest_date
-    @earliest_date ||= user.balances.earliest_date
-  end
-
-  def calculate_period_from(year)
-    return 1.year.ago..Date.current if year == "past_year"
-    return earliest_date..Date.current if year == "all"
-    year = year.to_i if year.instance_of?(String)
-    Date.new(year)...Date.new(year + 1)
-  end
 
   def balances
     @balances ||= begin

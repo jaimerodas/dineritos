@@ -99,7 +99,7 @@ RSpec.describe HistoricInvestmentData do
     it "calculates 'past_year' period correctly" do
       service = described_class.new(user, "past_year")
 
-      expect(service.period).to eq(1.year.ago..Date.current)
+      expect(service.period).to eq(1.year.ago.to_date..Date.current)
     end
 
     it "calculates 'all' period correctly" do

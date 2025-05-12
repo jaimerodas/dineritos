@@ -1,10 +1,10 @@
 class AccountReport
-  include ReportHelper
+  include Reports::Helpers::PeriodHelper
 
   def initialize(user:, account:, period: "all", currency: "default")
     validate_user_account!(user, account)
     @account = account
-    @period = determine_period_range(period, account)
+    @period = calculate_period(period, earliest_date: earliest_date)
     @currency = (currency == "default") ? account.currency : "MXN"
   end
 
@@ -93,6 +93,14 @@ class AccountReport
   end
 
   private
+
+  def cents_to_decimal(amount)
+    amount ? amount / 100.0 : 0.0
+  end
+
+  def validate_user_account!(user, account)
+    raise ArgumentError, "Unauthorized user for this account" unless account.user == user
+  end
 
   def available_balances
     account.balances.where(date: period, currency: currency)
