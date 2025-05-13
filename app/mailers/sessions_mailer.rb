@@ -7,6 +7,6 @@ class SessionsMailer < ApplicationMailer
   def login(user:, token:)
     @token = token
     @user = user
-    mail to: user.email
+    mail to: user.email, subject: "Entrar a Dineritos"
   end
 end

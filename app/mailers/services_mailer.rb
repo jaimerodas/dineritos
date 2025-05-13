@@ -6,14 +6,14 @@ class ServicesMailer < ApplicationMailer
   #
   #   en.services_mailer.daily_update.subject
   #
-  def daily_update(user, errors: [])
-    @report = EarningsReport.for(user)
+  def daily_update(user, errors: [], report: EarningsReport)
+    @report = report.for(user)
     @errors = errors
     mail to: user.email, subject: "Actualización de Saldos #{Date.current}"
   end
 
-  def new_daily_update(user, date: Date.current, errors: [], actions: [])
-    @report = DailyReport.for(user, date, errors)
+  def new_daily_update(user, date: Date.current, errors: [], actions: [], report: DailyReport)
+    @report = report.for(user, date, errors)
     @actions = actions
     mail to: user.email, subject: "Reporte diario: #{@report.date}"
   end

@@ -70,7 +70,7 @@
   <% @actions.each do |action| %>
   <li>
     <b><%= action[:account].name %></b>
-    regresó 0 en como saldo. Quieres
+    regresó 0 como saldo. Quieres
     <%= link_to "reestablecer el saldo anterior?", account_reset_url(action[:account]) %>
   </li>
   <% end %>
