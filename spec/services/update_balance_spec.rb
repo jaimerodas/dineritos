@@ -76,8 +76,10 @@ class FakeBalance < OpenStruct
   end
 end
 
-class ServicesMailer
-  def self.daily_update(_)
-    OpenStruct.new(deliver_now: false)
+unless defined? ServicesMailer
+  class ServicesMailer
+    def self.daily_update(_)
+      OpenStruct.new(deliver_now: false)
+    end
   end
 end
