@@ -19,6 +19,7 @@ gem "watir"
 gem "will_paginate", "~> 3.3"
 gem "webauthn"
 gem "jbuilder", "~> 2"
+gem "ostruct"
 
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", ">= 1.4.2", require: false
@@ -37,6 +38,7 @@ group :development do
   gem "listen"
   gem "spring"
   gem "spring-watcher-listen", "~> 2.0.0"
+  gem "mutex_m"
   # gem "i18n-debug"
 end
 

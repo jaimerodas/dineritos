@@ -1,3 +1,5 @@
+[![codecov](https://codecov.io/gh/jaimerodas/dineritos/graph/badge.svg?token=NIID1NX94K)](https://codecov.io/gh/jaimerodas/dineritos)
+
 # Dineritos
 Como me he puesto a investigar qué tal funcionan distintos instrumentos de
 inversión, tengo mi dinero dividido entre varias cuentas. Originalmente llevaba
@@ -12,8 +14,8 @@ vistas para ver la evolución a través del tiempo del total de saldos y de cada
 cuenta en particular.
 
 ## Instalación
-Esto es una app de Rails 7, corriendo sobre Ruby 3.2. Usamos postgresql como
-db. Si tienes Ruby y yarn instalados, puedes simplemente correr
+Esto es una app de Rails 8, corriendo sobre Ruby 3.4.3. Usamos PostgreSQL como
+db. Si tienes Ruby ya instalado, puedes simplemente correr
 
 ```bash
 bundle && rails db:setup
