@@ -13,9 +13,15 @@
 # it.
 #
 require "simplecov"
+require "simplecov-cobertura"
 require "active_support/testing/time_helpers"
+
 SimpleCov.start "rails" do
   add_group "Services", "app/services"
+  formatter SimpleCov::Formatter::MultiFormatter.new([
+    SimpleCov::Formatter::CoberturaFormatter,
+    SimpleCov::Formatter::HTMLFormatter
+  ])
 end
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 RSpec.configure do |config|

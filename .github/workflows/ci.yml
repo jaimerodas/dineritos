@@ -1,0 +1,34 @@
+name: CI
+on: [push, pull_request]
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:12.7
+        env:
+          POSTGRES_DB: rails_test
+          POSTGRES_USER: rails
+          POSTGRES_PASSWORD: password
+        ports: ["5432:5432"]
+    env:
+      RAILS_ENV: test
+      DATABASE_URL: "postgres://rails:password@localhost:5432/rails_test"
+      DINERITOS_DATABASE_PASSWORD: password
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+      - name: Setup ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+      - name: Setup DB
+        run: bin/rails db:schema:load
+      - name: Run specs
+        run: bundle exec rspec
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          flags: rails
+          token: ${{ secrets.CODECOV_TOKEN }}
