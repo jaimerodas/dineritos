@@ -218,7 +218,7 @@ RSpec.describe InvestmentSummary do
   end
 
   describe "with edge cases" do
-    let(:edge_user) { User.create!(email: "edge_case@example.com") }
+    let(:edge_user) { User.create!(email: "edge_case_test@example.com") }
 
     context "with no accounts" do
       it "returns zero for all financial metrics" do
@@ -262,7 +262,7 @@ RSpec.describe InvestmentSummary do
         Balance.create!(account: mxn_account, date: Date.yesterday, amount_cents: 5_000_00)
         Balance.create!(
           account: mxn_account,
-          date: Date.today,
+          date: Date.current,
           amount_cents: 10_000_00,
           transfers_cents: 4_000_00
         )
@@ -276,7 +276,7 @@ RSpec.describe InvestmentSummary do
         )
         Balance.create!(
           account: usd_account,
-          date: Date.today,
+          date: Date.current,
           amount_cents: 500_00,
           transfers_cents: 100_00,
           currency: "USD"
@@ -285,7 +285,6 @@ RSpec.describe InvestmentSummary do
 
       it "converts USD to MXN in calculations" do
         summary = described_class.for(user: edge_user, period: "all")
-
         # Should only reflect MXN balances
         # 10,000 + (500 * 20) = 20,000
         expect(summary.final_balance).to eq(BigDecimal("20000.0"))
