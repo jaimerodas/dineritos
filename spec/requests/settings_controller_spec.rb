@@ -6,11 +6,8 @@ RSpec.describe SettingsController, type: :request do
 
   describe "#show" do
     context "when user is logged in" do
-      before do
-        # Set session user_id directly to simulate being logged in
-        allow_any_instance_of(SettingsController).to receive(:current_user).and_return(user)
-        get settings_path
-      end
+      stub_current_user { user }
+      before { get settings_path }
 
       it "returns a successful response" do
         expect(response).to have_http_status(:success)
@@ -37,10 +34,7 @@ RSpec.describe SettingsController, type: :request do
 
   describe "#create" do
     context "when user is logged in" do
-      before do
-        # Set session user_id directly to simulate being logged in
-        allow_any_instance_of(SettingsController).to receive(:current_user).and_return(user)
-      end
+      stub_current_user { user }
 
       it "updates user settings" do
         expect {
@@ -68,10 +62,7 @@ RSpec.describe SettingsController, type: :request do
   end
 
   describe "#settings_to_b" do
-    before do
-      # Set session user_id directly to simulate being logged in
-      allow_any_instance_of(SettingsController).to receive(:current_user).and_return(user)
-    end
+    stub_current_user { user }
 
     it "converts string '1' values to true" do
       post settings_path, params: {settings: {daily_email: "1", send_email_after_update: "1"}}

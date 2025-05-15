@@ -14,11 +14,8 @@ RSpec.describe Charts::ExchangeRatesController, type: :request do
     end
 
     context "when user is logged in" do
-      before do
-        allow_any_instance_of(Charts::ExchangeRatesController)
-          .to receive(:current_user).and_return(user)
-        allow(CurrencyExchange).to receive(:get_rate_for).and_return(1.0)
-      end
+      stub_current_user { user }
+      before { allow(CurrencyExchange).to receive(:get_rate_for).and_return(1.0) }
 
       it "returns a successful JSON response" do
         get chart_data_exchange_rate_path

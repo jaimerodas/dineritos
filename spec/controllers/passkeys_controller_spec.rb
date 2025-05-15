@@ -14,7 +14,7 @@ RSpec.describe PasskeysController, type: :controller do
     end
 
     context "when logged in" do
-      before { allow(controller).to receive(:current_user).and_return(user) }
+      stub_current_user { user }
 
       it "returns a successful response and assigns a new passkey" do
         get :new
@@ -35,7 +35,7 @@ RSpec.describe PasskeysController, type: :controller do
     end
 
     context "when logged in" do
-      before { allow(controller).to receive(:current_user).and_return(user) }
+      stub_current_user { user }
 
       let(:fake_options) do
         Struct.new(:challenge) do
@@ -71,7 +71,7 @@ RSpec.describe PasskeysController, type: :controller do
     end
 
     context "when logged in" do
-      before { allow(controller).to receive(:current_user).and_return(user) }
+      stub_current_user { user }
       before { session[:create_challenge] = "fake_challenge" }
 
       context "with successful verification" do
@@ -129,7 +129,7 @@ RSpec.describe PasskeysController, type: :controller do
     end
 
     context "when logged in" do
-      before { allow(controller).to receive(:current_user).and_return(user) }
+      stub_current_user { user }
 
       it "destroys the passkey and redirects to settings page" do
         expect {

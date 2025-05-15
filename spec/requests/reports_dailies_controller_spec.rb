@@ -14,10 +14,7 @@ RSpec.describe Reports::DailiesController, type: :request do
     end
 
     context "when user is logged in" do
-      before do
-        allow_any_instance_of(Reports::DailiesController)
-          .to receive(:current_user).and_return(user)
-      end
+      stub_current_user { user }
 
       it "redirects to latest date when no date param" do
         get reports_dailies_path

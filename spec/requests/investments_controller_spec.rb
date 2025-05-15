@@ -13,11 +13,8 @@ RSpec.describe InvestmentsController, type: :request do
     end
 
     context "when user is logged in" do
-      before do
-        allow_any_instance_of(InvestmentsController)
-          .to receive(:current_user).and_return(user)
-        get root_path
-      end
+      stub_current_user { user }
+      before { get root_path }
 
       it "returns a successful response" do
         expect(response).to have_http_status(:success)

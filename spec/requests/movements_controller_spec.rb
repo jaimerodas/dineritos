@@ -8,11 +8,8 @@ RSpec.describe MovementsController, type: :request do
 
   describe "#index" do
     context "when user is logged in" do
-      before do
-        allow_any_instance_of(MovementsController)
-          .to receive(:current_user).and_return(user)
-        travel_to Date.new(2023, 1, 1)
-      end
+      stub_current_user { user }
+      before { travel_to Date.new(2023, 1, 1) }
 
       after { travel_back }
 

@@ -8,11 +8,8 @@ RSpec.describe ProfitAndLossesController, type: :request do
 
   describe "#show" do
     context "when user is logged in" do
-      before do
-        allow_any_instance_of(ProfitAndLossesController)
-          .to receive(:current_user).and_return(user)
-        get account_profit_and_loss_path(account)
-      end
+      stub_current_user { user }
+      before { get account_profit_and_loss_path(account) }
 
       it "returns a successful response" do
         expect(response).to have_http_status(:success)

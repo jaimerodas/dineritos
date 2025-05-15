@@ -14,9 +14,7 @@ RSpec.describe MissingBalancesController, type: :controller do
     end
 
     context "when user is logged in" do
-      before do
-        allow(controller).to receive(:current_user).and_return(user)
-      end
+      stub_current_user { user }
 
       it "returns a successful response" do
         get :index

@@ -15,7 +15,7 @@ RSpec.describe LoginsController, type: :controller do
     end
 
     context "when logged in" do
-      before { allow(controller).to receive(:current_user).and_return(user) }
+      stub_current_user { user }
 
       it "redirects to the root path" do
         get :show
@@ -35,7 +35,7 @@ RSpec.describe LoginsController, type: :controller do
     end
 
     context "when logged in" do
-      before { allow(controller).to receive(:current_user).and_return(user) }
+      stub_current_user { user }
 
       it "redirects to the root path" do
         post :create, params: {session: {email: user.email}}
@@ -71,7 +71,7 @@ RSpec.describe LoginsController, type: :controller do
     end
 
     context "when logged in" do
-      before { allow(controller).to receive(:current_user).and_return(user) }
+      stub_current_user { user }
 
       it "redirects to the root path" do
         get :email, params: {session: {email: user.email}}
@@ -90,9 +90,7 @@ RSpec.describe LoginsController, type: :controller do
     end
 
     context "when not logged in" do
-      before do
-        allow(WebAuthn::Credential).to receive(:options_for_get).and_return(fake_options)
-      end
+      before { allow(WebAuthn::Credential).to receive(:options_for_get).and_return(fake_options) }
 
       it "sets the session challenge and returns JSON options" do
         get :discovery, format: :json
@@ -106,10 +104,8 @@ RSpec.describe LoginsController, type: :controller do
     end
 
     context "when logged in" do
-      before do
-        allow(controller).to receive(:current_user).and_return(user)
-        allow(WebAuthn::Credential).to receive(:options_for_get).and_return(fake_options)
-      end
+      stub_current_user { user }
+      before { allow(WebAuthn::Credential).to receive(:options_for_get).and_return(fake_options) }
 
       it "redirects to the root path" do
         get :discovery, format: :json
@@ -178,7 +174,7 @@ RSpec.describe LoginsController, type: :controller do
     end
 
     context "when logged in" do
-      before { allow(controller).to receive(:current_user).and_return(user) }
+      stub_current_user { user }
 
       it "redirects to the root path" do
         post :callback, params: {}, format: :json

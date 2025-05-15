@@ -18,9 +18,7 @@ RSpec.describe UpdatesController, type: :request do
     end
 
     context "when user is logged in" do
-      before do
-        allow_any_instance_of(UpdatesController).to receive(:current_user).and_return(user)
-      end
+      stub_current_user { user }
 
       context "and the account is not updateable" do
         let(:account) { accounts(:savings_account) }

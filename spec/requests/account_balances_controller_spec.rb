@@ -9,10 +9,8 @@ RSpec.describe AccountBalancesController, type: :request do
 
   describe "#new" do
     context "when user is logged in" do
-      before do
-        allow_any_instance_of(AccountBalancesController).to receive(:current_user).and_return(user)
-        travel_to Date.new(2023, 1, 1)
-      end
+      stub_current_user { user }
+      before { travel_to Date.new(2023, 1, 1) }
 
       after { travel_back }
 
@@ -36,10 +34,8 @@ RSpec.describe AccountBalancesController, type: :request do
   end
 
   describe "#create" do
-    before do
-      allow_any_instance_of(AccountBalancesController).to receive(:current_user).and_return(user)
-      travel_to Date.new(2023, 1, 1)
-    end
+    stub_current_user { user }
+    before { travel_to Date.new(2023, 1, 1) }
 
     after { travel_back }
 
@@ -64,9 +60,7 @@ RSpec.describe AccountBalancesController, type: :request do
 
   describe "#edit" do
     context "when user is logged in" do
-      before do
-        allow_any_instance_of(AccountBalancesController).to receive(:current_user).and_return(user)
-      end
+      stub_current_user { user }
 
       it "returns a successful response" do
         get edit_account_balance_path(balance)
@@ -91,9 +85,7 @@ RSpec.describe AccountBalancesController, type: :request do
     let(:update_params) { {balance: {amount: "7000", transfers: "200"}} }
 
     context "when user is logged in" do
-      before do
-        allow_any_instance_of(AccountBalancesController).to receive(:current_user).and_return(user)
-      end
+      stub_current_user { user }
 
       context "when the update is successful" do
         before do

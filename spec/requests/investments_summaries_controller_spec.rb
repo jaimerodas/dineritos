@@ -13,11 +13,8 @@ RSpec.describe Investments::SummariesController, type: :request do
     end
 
     context "when user is logged in" do
-      before do
-        allow_any_instance_of(Investments::SummariesController)
-          .to receive(:current_user).and_return(user)
-        get investments_summary_path
-      end
+      stub_current_user { user }
+      before { get investments_summary_path }
 
       it "returns a successful response" do
         expect(response).to have_http_status(:success)

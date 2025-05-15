@@ -15,6 +15,8 @@ RSpec.describe AccountsController, type: :request do
     end
 
     context "when user is logged in" do
+      stub_current_user { user }
+
       let(:fake_account_row) do
         double(
           name: "Stub Account",
@@ -32,7 +34,6 @@ RSpec.describe AccountsController, type: :request do
       end
 
       before do
-        allow_any_instance_of(AccountsController).to receive(:current_user).and_return(user)
         allow(AccountsComparisonReport).to receive(:new)
           .with(user: user, period: AccountsController::DEFAULT_PERIOD)
           .and_return(fake_report)
@@ -59,10 +60,8 @@ RSpec.describe AccountsController, type: :request do
     end
 
     context "when logged in" do
-      before do
-        allow_any_instance_of(AccountsController).to receive(:current_user).and_return(user)
-        get new_account_path
-      end
+      stub_current_user { user }
+      before { get new_account_path }
 
       it "returns a successful response" do
         expect(response).to have_http_status(:success)
@@ -87,9 +86,7 @@ RSpec.describe AccountsController, type: :request do
     end
 
     context "when logged in" do
-      before do
-        allow_any_instance_of(AccountsController).to receive(:current_user).and_return(user)
-      end
+      stub_current_user { user }
 
       context "with valid parameters" do
         it "creates a new account and redirects to index" do
@@ -119,10 +116,8 @@ RSpec.describe AccountsController, type: :request do
     end
 
     context "when logged in" do
-      before do
-        allow_any_instance_of(AccountsController).to receive(:current_user).and_return(user)
-        get edit_account_path(account)
-      end
+      stub_current_user { user }
+      before { get edit_account_path(account) }
 
       it "returns a successful response" do
         expect(response).to have_http_status(:success)
@@ -145,9 +140,7 @@ RSpec.describe AccountsController, type: :request do
     end
 
     context "when logged in" do
-      before do
-        allow_any_instance_of(AccountsController).to receive(:current_user).and_return(user)
-      end
+      stub_current_user { user }
 
       it "updates the account and redirects to show" do
         patch account_path(account), params: update_params
@@ -172,6 +165,8 @@ RSpec.describe AccountsController, type: :request do
     end
 
     context "when logged in" do
+      stub_current_user { user }
+
       let(:report_double) do
         double(
           account_name: account.name,
@@ -186,7 +181,6 @@ RSpec.describe AccountsController, type: :request do
       end
 
       before do
-        allow_any_instance_of(AccountsController).to receive(:current_user).and_return(user)
         allow(AccountReport).to receive(:new)
           .with(user: user, account: account, currency: "default")
           .and_return(report_double)
@@ -214,10 +208,8 @@ RSpec.describe AccountsController, type: :request do
     end
 
     context "when logged in" do
-      before do
-        allow_any_instance_of(AccountsController).to receive(:current_user).and_return(user)
-        allow_any_instance_of(Account).to receive(:reset!).and_return(true)
-      end
+      stub_current_user { user }
+      before { allow_any_instance_of(Account).to receive(:reset!).and_return(true) }
 
       it "redirects to account movements path" do
         get account_reset_path(account_to_reset)

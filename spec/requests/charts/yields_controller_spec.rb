@@ -14,10 +14,7 @@ RSpec.describe Charts::YieldsController, type: :request do
     end
 
     context "when user is logged in" do
-      before do
-        allow_any_instance_of(Charts::YieldsController)
-          .to receive(:current_user).and_return(user)
-      end
+      stub_current_user { user }
 
       it "returns a successful JSON response" do
         get chart_data_yields_path
