@@ -23,7 +23,6 @@ class PasskeysController < ApplicationController
   end
 
   def callback
-    pp params
     webauthn_credential = WebAuthn::Credential.from_create(params)
     webauthn_credential.verify(session[:create_challenge])
 
