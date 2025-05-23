@@ -9,6 +9,8 @@ class AccountsController < ApplicationController
     )
     @accounts = report.accounts
     @totals = report.totals
+    @new_accounts = report.new_accounts
+    @disabled_accounts = report.disabled_accounts
   end
 
   def new
@@ -19,7 +21,7 @@ class AccountsController < ApplicationController
     @account = current_user.accounts.build(account_params)
 
     if @account.save
-      redirect_to accounts_path
+      redirect_to @account
     else
       render :new
     end

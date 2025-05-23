@@ -26,10 +26,18 @@ RSpec.describe AccountsController, type: :request do
           to_partial_path: "accounts/account"
         )
       end
+      let(:fake_new_account) do
+        double(name: "New Account", new_and_empty?: true)
+      end
+      let(:fake_disabled_account) do
+        double(name: "Disabled Account", active: false)
+      end
       let(:fake_report) do
         double(
           accounts: [fake_account_row],
-          totals: {balance: BigDecimal(100), earnings: BigDecimal(10), transfers: BigDecimal(20)}
+          totals: {balance: BigDecimal(100), earnings: BigDecimal(10), transfers: BigDecimal(20)},
+          new_accounts: [fake_new_account],
+          disabled_accounts: [fake_disabled_account]
         )
       end
 
@@ -47,6 +55,17 @@ RSpec.describe AccountsController, type: :request do
       it "renders the accounts list and add link" do
         expect(response.body).to include(fake_account_row.name)
         expect(response.body).to include("Agregar")
+      end
+
+      it "calls the report with correct parameters and methods" do
+        expect(AccountsComparisonReport).to receive(:new)
+          .with(user: user, period: AccountsController::DEFAULT_PERIOD)
+          .and_return(fake_report)
+        expect(fake_report).to receive(:accounts).and_return([fake_account_row])
+        expect(fake_report).to receive(:totals).and_return({balance: BigDecimal(100), earnings: BigDecimal(10), transfers: BigDecimal(20)})
+        expect(fake_report).to receive(:new_accounts).and_return([fake_new_account])
+        expect(fake_report).to receive(:disabled_accounts).and_return([fake_disabled_account])
+        get accounts_path
       end
     end
   end
@@ -93,7 +112,8 @@ RSpec.describe AccountsController, type: :request do
           expect {
             post accounts_path, params: valid_params
           }.to change { user.accounts.count }.by(1)
-          expect(response).to redirect_to(accounts_path)
+          new_account_id = user.accounts.last.id
+          expect(response).to redirect_to(account_path(new_account_id))
         end
       end
 
@@ -184,15 +204,54 @@ RSpec.describe AccountsController, type: :request do
         allow(AccountReport).to receive(:new)
           .with(user: user, account: account, currency: "default")
           .and_return(report_double)
-        get account_path(account)
       end
 
-      it "returns a successful response" do
-        expect(response).to have_http_status(:success)
+      context "when account is new and empty" do
+        before do
+          allow(account).to receive(:new_and_empty?).and_return(true)
+          get account_path(account)
+        end
+
+        it "returns a successful response" do
+          expect(response).to have_http_status(:success)
+        end
+
+        it "renders the account header with account name" do
+          expect(response.body).to include("<h1>#{account.name}</h1>")
+        end
+
+        it "shows the banner for new empty accounts" do
+          expect(response.body).to include("agregues un saldo")
+        end
+
+        it "does not render the investment account section" do
+          expect(response.body).not_to include("Saldo Actual")
+          expect(response.body).not_to include("Transferencias Netas")
+        end
       end
 
-      it "renders the account header with account name" do
-        expect(response.body).to include("<h1>#{account.name}</h1>")
+      context "when account has balances" do
+        before do
+          allow(account).to receive(:new_and_empty?).and_return(false)
+          get account_path(account)
+        end
+
+        it "returns a successful response" do
+          expect(response).to have_http_status(:success)
+        end
+
+        it "renders the account header with account name" do
+          expect(response.body).to include("<h1>#{account.name}</h1>")
+        end
+
+        it "renders the investment account section" do
+          expect(response.body).to include("Saldo Actual")
+          expect(response.body).to include("Transferencias Netas")
+        end
+
+        it "does not show the banner for new empty accounts" do
+          expect(response.body).not_to include("¡Agrega tu primer saldo para ver información!")
+        end
       end
     end
   end

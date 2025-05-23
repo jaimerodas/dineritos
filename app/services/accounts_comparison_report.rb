@@ -21,6 +21,14 @@ class AccountsComparisonReport
       .order(name: :asc)
   end
 
+  def new_accounts
+    @new_accounts ||= hidden_accounts.select(&:new_and_empty?)
+  end
+
+  def disabled_accounts
+    @disabled_accounts ||= hidden_accounts.reject(&:new_and_empty?)
+  end
+
   def totals
     accounts.reduce({balance: BigDecimal(0), earnings: BigDecimal(0), transfers: BigDecimal(0)}) do |result, account|
       {
@@ -32,6 +40,13 @@ class AccountsComparisonReport
   end
 
   private
+
+  def hidden_accounts
+    @hidden_accounts ||= begin
+      visible_account_ids = accounts.pluck(:id)
+      @user_accounts.where.not(id: visible_account_ids).order(name: :asc)
+    end
+  end
 
   def all_balances_from_period
     @user_accounts.joins(:balances)

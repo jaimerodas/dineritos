@@ -169,4 +169,73 @@ RSpec.describe AccountsComparisonReport do
       expect(totals[:transfers].to_f).to be_within(0.01).of(-10.0)
     end
   end
+
+  describe "#new_accounts" do
+    subject { described_class.new(user: user, period: "all") }
+
+    context "when there are new and empty accounts" do
+      let!(:new_account) { user.accounts.create!(name: "New Account", currency: "MXN", created_at: 30.days.ago) }
+
+      it "returns accounts that are new and empty" do
+        # Since the account has no balances and was created recently, it should be new_and_empty
+        new_accounts = subject.new_accounts
+        expect(new_accounts).to include(new_account)
+      end
+    end
+
+    context "when there are no new accounts" do
+      # Both existing accounts have balances, so they shouldn't be hidden
+      it "returns an empty collection when all accounts have balances" do
+        new_accounts = subject.new_accounts
+        expect(new_accounts).to be_empty
+      end
+    end
+  end
+
+  describe "#disabled_accounts" do
+    subject { described_class.new(user: user, period: "all") }
+
+    context "when there are disabled accounts" do
+      let!(:disabled_account) { user.accounts.create!(name: "Disabled Account", currency: "MXN", active: false, created_at: 2.years.ago) }
+
+      it "returns accounts that are not new and empty" do
+        # Account is old and should not be considered new_and_empty
+        disabled_accounts = subject.disabled_accounts
+        expect(disabled_accounts).to include(disabled_account)
+      end
+    end
+
+    context "when there are no disabled accounts" do
+      it "returns an empty collection" do
+        disabled_accounts = subject.disabled_accounts
+        expect(disabled_accounts).to be_empty
+      end
+    end
+  end
+
+  describe "hidden accounts behavior" do
+    subject { described_class.new(user: user, period: "all") }
+
+    let!(:new_account) { user.accounts.create!(name: "New Account", currency: "MXN", created_at: 30.days.ago) }
+    let!(:disabled_account) { user.accounts.create!(name: "Disabled Account", currency: "MXN", active: false, created_at: 2.years.ago) }
+
+    it "excludes hidden accounts from main accounts list" do
+      main_accounts = subject.accounts.to_a
+      account_names = main_accounts.map(&:name)
+
+      expect(account_names).not_to include("New Account")
+      expect(account_names).not_to include("Disabled Account")
+      expect(account_names).to contain_exactly("Investment Account", "Savings Account")
+    end
+
+    it "properly categorizes hidden accounts" do
+      new_accounts = subject.new_accounts
+      disabled_accounts = subject.disabled_accounts
+
+      expect(new_accounts).to include(new_account)
+      expect(disabled_accounts).to include(disabled_account)
+      expect(new_accounts).not_to include(disabled_account)
+      expect(disabled_accounts).not_to include(new_account)
+    end
+  end
 end

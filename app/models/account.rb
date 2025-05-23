@@ -61,4 +61,8 @@ class Account < ApplicationRecord
     balance.update(amount: update_service.current_balance_for(self), validated: true)
     BigDecimal(balance.amount.to_d)
   end
+
+  def new_and_empty?
+    balances.empty? && created_at > 90.days.ago
+  end
 end

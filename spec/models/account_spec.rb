@@ -183,6 +183,30 @@ RSpec.describe Account, type: :model do
     end
   end
 
+  describe "#new_and_empty?" do
+    let(:account) { described_class.create!(name: "Test Account", currency: "MXN", user: user) }
+
+    it "returns true for newly created account with no balances" do
+      expect(account.new_and_empty?).to be_truthy
+    end
+
+    it "returns false for account created more than 90 days ago with no balances" do
+      old_account = described_class.create!(name: "Old Account", currency: "MXN", user: user, created_at: 91.days.ago)
+      expect(old_account.new_and_empty?).to be_falsey
+    end
+
+    it "returns false for newly created account with balances" do
+      account.balances.create!(date: Date.current, amount_cents: 1000, currency: "MXN")
+      expect(account.new_and_empty?).to be_falsey
+    end
+
+    it "returns false for old account with balances" do
+      old_account = described_class.create!(name: "Old Account", currency: "MXN", user: user, created_at: 91.days.ago)
+      old_account.balances.create!(date: Date.current, amount_cents: 1000, currency: "MXN")
+      expect(old_account.new_and_empty?).to be_falsey
+    end
+  end
+
   describe "platform enum" do
     it "has correct integer values for database compatibility" do
       expect(described_class.platforms).to eq({
