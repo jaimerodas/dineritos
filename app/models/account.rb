@@ -2,9 +2,12 @@ class Account < ApplicationRecord
   belongs_to :user
   has_many :balances
 
-  PLATFORMS = %i[no_platform bitso afluenta cetes_directo apify]
-
-  enum :platform, PLATFORMS
+  enum :platform, {
+    no_platform: 0,
+    bitso: 1,
+    afluenta: 2,
+    apify: 4
+  }
 
   has_encrypted :settings, type: :json
   scope :updateable, -> { where.not(platform: :no_platform) }

@@ -182,4 +182,27 @@ RSpec.describe Account, type: :model do
       expect(today_balance.amount_cents).to eq(1000)
     end
   end
+
+  describe "platform enum" do
+    it "has correct integer values for database compatibility" do
+      expect(described_class.platforms).to eq({
+        "no_platform" => 0,
+        "bitso" => 1,
+        "afluenta" => 2,
+        "apify" => 4
+      })
+    end
+
+    it "preserves database integrity after removing unused platforms" do
+      # Test that existing platform values still work
+      account = described_class.create!(name: "Test", currency: "MXN", user: user, platform: "bitso")
+      expect(account.platform).to eq("bitso")
+      expect(account.read_attribute_before_type_cast(:platform)).to eq(1)
+
+      account.update!(platform: "apify")
+      account.reload
+      expect(account.platform).to eq("apify")
+      expect(account.read_attribute_before_type_cast(:platform)).to eq(4)
+    end
+  end
 end
