@@ -20,7 +20,7 @@ module AccountMovementsHelper
         concat account_nav_link("Opciones", "edit_account_path", current)
       }
     else
-      existing_account_nav(current: "Resumen")
+      existing_account_nav(current: current)
     end
   end
 

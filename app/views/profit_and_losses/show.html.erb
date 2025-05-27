@@ -1,5 +1,5 @@
 <% content_for(:title) { @report.account_name } %>
-<%= render "accounts/account_header", current: "Resumen Mensual" %>
+<%= render "accounts/account_header", current: "Estado Mensual" %>
 
 <% if @report.monthly_pnl.any? %>
 <table class="balance-sheet profit-and-loss">
