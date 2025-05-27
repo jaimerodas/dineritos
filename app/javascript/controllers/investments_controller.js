@@ -1,22 +1,22 @@
-import { Controller } from "@hotwired/stimulus"
-import { InvestmentChart } from "charts/investment_chart"
-import { BalanceChangeChart } from "charts/balance_change_chart"
+import { Controller } from '@hotwired/stimulus'
+import { InvestmentChart } from 'charts/investment_chart'
+import { BalanceChangeChart } from 'charts/balance_change_chart'
 
 export default class extends Controller {
-  static targets = ["chart", "summary", "summaryButtons", "chartButtons"]
+  static targets = ['chart', 'summary', 'summaryButtons', 'chartButtons']
 
-  connect() {
+  connect () {
     this.addYearNav()
     this.addChartsNav()
   }
 
-  chartGenerator(name) {
-    return {"Saldos": InvestmentChart, "Más Información": BalanceChangeChart}[name]
+  chartGenerator (name) {
+    return { Saldos: InvestmentChart, 'Más Información': BalanceChangeChart }[name]
   }
 
-  changeYear(operator) {
+  changeYear (operator) {
     const buttons = this.summaryButtonsTarget
-    const yearButton = buttons.querySelector("a.year")
+    const yearButton = buttons.querySelector('a.year')
     const year = Number(yearButton.innerHTML) + Number(operator)
 
     yearButton.innerHTML = year
@@ -26,19 +26,19 @@ export default class extends Controller {
     this.addYearNav()
   }
 
-  currentYear() {
+  currentYear () {
     return this.summaryTarget.dataset.currentYear
   }
 
-  nextYear() {
+  nextYear () {
     this.changeYear(1)
   }
 
-  prevYear() {
+  prevYear () {
     this.changeYear(-1)
   }
 
-  updateSummary(event) {
+  updateSummary (event) {
     event.preventDefault()
 
     const buttons = this.summaryButtonsTarget
@@ -50,17 +50,17 @@ export default class extends Controller {
       .then(response => response.text())
       .then(html => {
         buttons
-          .querySelectorAll("a.active")
-          .forEach(d => d.classList.remove("active"))
+          .querySelectorAll('a.active')
+          .forEach(d => d.classList.remove('active'))
 
-        event.target.classList.add("active")
+        event.target.classList.add('active')
         summary.innerHTML = html
         summary.dataset.currentYear = year
         this.refreshChart()
       })
   }
 
-  updateChart(event) {
+  updateChart (event) {
     const buttons = this.chartButtonsTarget
     const chartContainer = this.chartTarget
     const chartGenerator = this.chartGenerator(event.target.textContent)
@@ -70,58 +70,58 @@ export default class extends Controller {
       .then(response => response.text())
       .then(raw => {
         buttons
-          .querySelectorAll("button.active")
-          .forEach(d => d.className = "")
-        event.target.className = "active"
+          .querySelectorAll('button.active')
+          .forEach(d => d.className = '')
+        event.target.className = 'active'
 
         chartContainer.innerHTML = ''
         new chartGenerator(this.chartTarget, JSON.parse(raw)).draw()
       })
   }
 
-  refreshChart() {
-    const activeButton = this.chartButtonsTarget.querySelector("button.active")
-    this.updateChart({target: activeButton})
+  refreshChart () {
+    const activeButton = this.chartButtonsTarget.querySelector('button.active')
+    this.updateChart({ target: activeButton })
   }
 
-  addYearNav() {
-    this.summaryButtonsTarget.querySelectorAll("button, a").forEach((e,i) => {
+  addYearNav () {
+    this.summaryButtonsTarget.querySelectorAll('button, a').forEach((e, i) => {
       if (i > 2) { e.remove() }
     })
 
     const createButton = (label) => {
-      const button = document.createElement("button")
+      const button = document.createElement('button')
       button.dataset.action = `click->investments#${label}Year`
-      button.innerHTML = (label == "prev") ? "&raquo;" : "&laquo;"
+      button.innerHTML = (label == 'prev') ? '&raquo;' : '&laquo;'
       return button
     }
 
-    const year = Number(this.summaryButtonsTarget.querySelector("a.year").innerHTML)
+    const year = Number(this.summaryButtonsTarget.querySelector('a.year').innerHTML)
 
     if (year !== new Date().getFullYear()) {
-      this.summaryButtonsTarget.append(createButton("next"))
+      this.summaryButtonsTarget.append(createButton('next'))
     }
 
     if (year !== Number(this.summaryTarget.dataset.earliestYear)) {
-      this.summaryButtonsTarget.append(createButton("prev"))
+      this.summaryButtonsTarget.append(createButton('prev'))
     }
   }
 
-  addChartsNav() {
+  addChartsNav () {
     if (this.chartButtonsTarget.children.length > 0) { return }
 
     const createButton = (label, url) => {
-      const button = document.createElement("button")
-      button.dataset.action = "click->investments#updateChart"
-      button.dataset.url = this.data.get("chart-url") + url
+      const button = document.createElement('button')
+      button.dataset.action = 'click->investments#updateChart'
+      button.dataset.url = this.data.get('chart-url') + url
       button.textContent = label
       return button
     }
 
-    const allBalancesButton = createButton("Saldos", "saldos")
-    const returnsButton = createButton("Más Información", "rendimientos")
+    const allBalancesButton = createButton('Saldos', 'saldos')
+    const returnsButton = createButton('Más Información', 'rendimientos')
 
     this.chartButtonsTarget.append(allBalancesButton, returnsButton)
-    this.updateChart({target: allBalancesButton})
+    this.updateChart({ target: allBalancesButton })
   }
 }

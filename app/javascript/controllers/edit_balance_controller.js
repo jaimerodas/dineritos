@@ -1,63 +1,64 @@
-import { Controller } from "@hotwired/stimulus"
+import { Controller } from '@hotwired/stimulus'
 
 export default class extends Controller {
-  static targets = ["amount", "transfers", "diff", "irr"]
-  connect() {
+  static targets = ['amount', 'transfers', 'diff', 'irr']
+  connect () {
     this.prevAmount = parseFloat(this.element.dataset.previousBalance)
     this.diffDays = parseInt(this.element.dataset.diffDays, 10)
     this.updateResults()
   }
 
-  updateResults() {
+  updateResults () {
     this.cleanAmounts()
     this.calculateDiff()
     this.calculateIRR()
   }
 
-  cleanAmounts() {
-    let regex = /[^-\d\.]/g
+  cleanAmounts () {
+    const regex = /[^-\d.]/g
     this.amountTarget.value = this.amountTarget.value.replace(regex, '')
     this.transfersTarget.value = this.transfersTarget.value.replace(regex, '')
   }
 
-  amount() {
+  amount () {
     return parseFloat(this.amountTarget.value)
   }
 
-  transfers() {
+  transfers () {
     return parseFloat(this.transfersTarget.value)
   }
 
-  calculateDiff() {
+  calculateDiff () {
     const amount = this.amount()
     const transfers = this.transfers()
 
-    if (amount === NaN || this.prevAmount === NaN || transfers === NaN) { return }
-    const result = (amount - this.prevAmount - transfers).toLocaleString("en-us", {
-      style: "decimal",
+    if (Number.isNaN(amount) || Number.isNaN(this.prevAmount) || Number.isNaN(transfers)) { return }
+    const result = (amount - this.prevAmount - transfers).toLocaleString('en-us', {
+      style: 'decimal',
       minimumFractionDigits: 2,
       maximumFractionDigits: 2
     })
     this.diffTarget.textContent = result
   }
 
-  calculateIRR() {
+  calculateIRR () {
     const amount = this.amount()
     const transfers = this.transfers()
 
-    if (amount === NaN || this.prevAmount === NaN || this.diffDays === NaN || transfers === NaN) {
-      this.irrTarget.textContent = "-"
+    if (Number.isNaN(amount) || Number.isNaN(this.prevAmount) ||
+        Number.isNaN(this.diffDays) || Number.isNaN(transfers)) {
+      this.irrTarget.textContent = '-'
       return
     }
 
     const dailyRate = (1 + ((amount - this.prevAmount - transfers) / this.prevAmount))
     const power = 365 / this.diffDays
-    let result = ((dailyRate ** power) - 1).toLocaleString("en-us", {
-      style: "percent",
+    let result = ((dailyRate ** power) - 1).toLocaleString('en-us', {
+      style: 'percent',
       maximumFractionDigits: 2
     })
 
-    if (result === "NaN%") { result = "-" }
+    if (result === 'NaN%') { result = '-' }
 
     this.irrTarget.textContent = result
   }
