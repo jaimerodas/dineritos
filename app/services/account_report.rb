@@ -23,6 +23,10 @@ class AccountReport
     @earliest_date ||= account.balances.earliest_date
   end
 
+  def earliest_year
+    @earliest_year ||= earliest_date.year
+  end
+
   # Financial Metrics
   def earnings
     @earnings ||= cents_to_decimal(summary.earnings)
