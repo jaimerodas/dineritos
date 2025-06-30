@@ -196,19 +196,48 @@ RSpec.describe AccountsController, type: :request do
           earnings: BigDecimal(25),
           irr: 0.1,
           monthly_irrs: "",
-          balances_in_period: ""
+          balances_in_period: "",
+          earliest_year: 2023,
+          monthly_pnl: [
+            {
+              month: "2023-12",
+              initial_balance: BigDecimal(100),
+              deposits: BigDecimal(50),
+              withdrawals: BigDecimal(0),
+              earnings: BigDecimal(10),
+              final_balance: BigDecimal(160)
+            }
+          ],
+          total_pnl: {
+            deposits: BigDecimal(50),
+            withdrawals: BigDecimal(0),
+            earnings: BigDecimal(10)
+          }
         )
       end
 
       before do
         allow(AccountReport).to receive(:new)
-          .with(user: user, account: account, currency: "default")
+          .with(user: user, account: account, currency: "default", period: "past_year")
           .and_return(report_double)
       end
 
       context "when account is new and empty" do
+        let(:empty_report_double) do
+          double(
+            account_name: account.name,
+            account: account,
+            earliest_year: Date.current.year,
+            monthly_pnl: [],
+            total_pnl: {}
+          )
+        end
+
         before do
           allow(account).to receive(:new_and_empty?).and_return(true)
+          allow(AccountReport).to receive(:new)
+            .with(user: user, account: account, currency: "default", period: "past_year")
+            .and_return(empty_report_double)
           get account_path(account)
         end
 
@@ -220,13 +249,15 @@ RSpec.describe AccountsController, type: :request do
           expect(response.body).to include("<h1>#{account.name}</h1>")
         end
 
-        it "shows the banner for new empty accounts" do
-          expect(response.body).to include("agregues un saldo")
+        it "shows the account header" do
+          expect(response.body).to include("Resumen")
         end
 
-        it "does not render the investment account section" do
-          expect(response.body).not_to include("Saldo Actual")
-          expect(response.body).not_to include("Transferencias Netas")
+        it "shows empty state with call to action" do
+          expect(response.body).to include("Aquí veras un detalle mensual de esta cuenta una vez que")
+          expect(response.body).to include("agregues un saldo inicial")
+          expect(response.body).not_to include("Saldo Inicial")
+          expect(response.body).not_to include("2023-12")
         end
       end
 
@@ -244,9 +275,10 @@ RSpec.describe AccountsController, type: :request do
           expect(response.body).to include("<h1>#{account.name}</h1>")
         end
 
-        it "renders the investment account section" do
-          expect(response.body).to include("Saldo Actual")
-          expect(response.body).to include("Transferencias Netas")
+        it "renders the profit and loss table with data" do
+          expect(response.body).to include("2023-12")
+          expect(response.body).to include("Saldo Inicial")
+          expect(response.body).to include("Depósitos")
         end
 
         it "does not show the banner for new empty accounts" do

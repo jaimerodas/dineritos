@@ -27,8 +27,8 @@ module AccountMovementsHelper
   def existing_account_nav(current: "Resumen")
     content_tag("ul", "data-account-header-target": "nav") {
       concat account_nav_link("Resumen", "account_path", current)
-      concat account_nav_link("Estado Mensual", "account_profit_and_loss_path", current)
-      concat account_nav_link("Saldos", "account_movements_path", current)
+      concat account_nav_link("Detalle", "account_movements_path", current)
+      concat account_nav_link("Estadísticas", "account_statistics_path", current)
       concat account_nav_link("Opciones", "edit_account_path", current)
     }
   end

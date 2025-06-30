@@ -7,9 +7,9 @@ RSpec.describe ProfitAndLossesHelper, type: :helper do
   before do
     helper.instance_variable_set(:@report, report)
     allow(helper).to receive(:params).and_return({})
-    allow(helper).to receive(:account_profit_and_loss_path) do |acc, options = {}|
+    allow(helper).to receive(:account_path) do |acc, options = {}|
       period = options[:period] || "past_year"
-      "/accounts/#{acc.id}/profit_and_loss?period=#{period}"
+      "/accounts/#{acc.id}?period=#{period}"
     end
   end
 
@@ -59,8 +59,8 @@ RSpec.describe ProfitAndLossesHelper, type: :helper do
         expect(html).to include(">ALL<")
         expect(html).to include("&laquo;")  # Previous year button
         expect(html).to include("&raquo;")  # Next year button
-        expect(html).to include('href="/accounts/1/profit_and_loss?period=2021"')  # Previous year link
-        expect(html).to include('href="/accounts/1/profit_and_loss?period=2023"')  # Next year link
+        expect(html).to include('href="/accounts/1?period=2021"')  # Previous year link
+        expect(html).to include('href="/accounts/1?period=2023"')  # Next year link
       end
 
       it "shows only next button when at earliest year" do
@@ -69,7 +69,7 @@ RSpec.describe ProfitAndLossesHelper, type: :helper do
         expect(html).to include(">2020<")
         expect(html).not_to include("&laquo;")  # No previous year button
         expect(html).to include("&raquo;")      # Next year button
-        expect(html).to include('href="/accounts/1/profit_and_loss?period=2021"')
+        expect(html).to include('href="/accounts/1?period=2021"')
       end
 
       it "shows only previous button when at current year" do
@@ -78,7 +78,7 @@ RSpec.describe ProfitAndLossesHelper, type: :helper do
         expect(html).to include(">2024<")
         expect(html).to include("&laquo;")      # Previous year button
         expect(html).not_to include("&raquo;")  # No next year button
-        expect(html).to include('href="/accounts/1/profit_and_loss?period=2023"')
+        expect(html).to include('href="/accounts/1?period=2023"')
       end
 
       it "defaults to current year when period is not a year" do
@@ -95,21 +95,21 @@ RSpec.describe ProfitAndLossesHelper, type: :helper do
     it "creates button for past_year period" do
       html = helper.pnl_period_button(period: "past_year")
       expect(html).to include(">1Y<")
-      expect(html).to include('href="/accounts/1/profit_and_loss?period=past_year"')
+      expect(html).to include('href="/accounts/1?period=past_year"')
       expect(html).to include('class="btn active"')
     end
 
     it "creates button for all period" do
       html = helper.pnl_period_button(period: "all")
       expect(html).to include(">ALL<")
-      expect(html).to include('href="/accounts/1/profit_and_loss?period=all"')
+      expect(html).to include('href="/accounts/1?period=all"')
       expect(html).to include('class="btn"')
     end
 
     it "creates button for year period" do
       html = helper.pnl_period_button(period: 2023)
       expect(html).to include(">2023<")
-      expect(html).to include('href="/accounts/1/profit_and_loss?period=2023"')
+      expect(html).to include('href="/accounts/1?period=2023"')
       expect(html).to include('class="btn year"')
     end
 
@@ -136,14 +136,14 @@ RSpec.describe ProfitAndLossesHelper, type: :helper do
     it "creates navigation button with symbol" do
       html = helper.nav_button(2023, "&laquo;")
       expect(html).to include("&laquo;")
-      expect(html).to include('href="/accounts/1/profit_and_loss?period=2023"')
+      expect(html).to include('href="/accounts/1?period=2023"')
       expect(html).to include('class="btn"')
     end
 
     it "creates navigation button with raquo symbol" do
       html = helper.nav_button(2025, "&raquo;")
       expect(html).to include("&raquo;")
-      expect(html).to include('href="/accounts/1/profit_and_loss?period=2025"')
+      expect(html).to include('href="/accounts/1?period=2025"')
     end
   end
 

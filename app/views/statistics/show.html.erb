@@ -1,0 +1,12 @@
+<% content_for(:title) { @report.account_name } %>
+<%= render "accounts/account_header", current: "Estadísticas" %>
+
+<% if @report.account.new_and_empty? %>
+  <div class="banner">
+    <p>
+      Aquí verás gráficas, estadísticas y todo el detalle de esta cuenta, una vez que&nbsp;<%= link_to "agregues un saldo inicial", new_account_account_balance_path(@report.account) %>.
+    </p>
+  </div>
+<% else %>
+  <%= render "accounts/investment_account" %>
+<% end %>

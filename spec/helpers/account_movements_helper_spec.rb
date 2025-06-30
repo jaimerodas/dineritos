@@ -15,7 +15,7 @@ RSpec.describe AccountMovementsHelper, type: :helper do
       "/accounts/#{acc.id}/movements?#{params.to_query}"
     end
     allow(helper).to receive(:account_path) { |acc| "/accounts/#{acc.id}" }
-    allow(helper).to receive(:account_profit_and_loss_path) { |acc| "/accounts/#{acc.id}/profit_and_loss" }
+    allow(helper).to receive(:account_statistics_path) { |acc| "/accounts/#{acc.id}/statistics" }
     allow(helper).to receive(:edit_account_path) { |acc| "/accounts/#{acc.id}/edit" }
     allow(helper).to receive(:l) { |date, format:| date.strftime("%Y-%m") }
   end
@@ -107,8 +107,8 @@ RSpec.describe AccountMovementsHelper, type: :helper do
         expect(html).to include('data-account-header-target="nav"')
         expect(html).to include("Resumen")
         expect(html).to include("Opciones")
-        expect(html).not_to include("Estado Mensual")
-        expect(html).not_to include("Saldos")
+        expect(html).not_to include("Detalle")
+        expect(html).not_to include("Estadísticas")
       end
 
       it "marks current page as active" do
@@ -135,13 +135,13 @@ RSpec.describe AccountMovementsHelper, type: :helper do
       html = helper.existing_account_nav(current: "Resumen")
       expect(html).to include('data-account-header-target="nav"')
       expect(html).to include("Resumen")
-      expect(html).to include("Estado Mensual")
-      expect(html).to include("Saldos")
+      expect(html).to include("Detalle")
+      expect(html).to include("Estadísticas")
       expect(html).to include("Opciones")
     end
 
     it "marks current page as active" do
-      html = helper.existing_account_nav(current: "Estado Mensual")
+      html = helper.existing_account_nav(current: "Detalle")
       expect(html).to include('class="active"')
     end
   end

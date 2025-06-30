@@ -52,7 +52,7 @@ module ProfitAndLossesHelper
 
     link_to(
       text,
-      account_profit_and_loss_path(@report.account, period: period),
+      account_path(@report.account, period: period),
       class: classes.join(" ")
     )
   end
@@ -64,7 +64,7 @@ module ProfitAndLossesHelper
   def nav_button(year, symbol)
     link_to(
       symbol.html_safe,
-      account_profit_and_loss_path(@report.account, period: year),
+      account_path(@report.account, period: year),
       class: "btn"
     )
   end
