@@ -198,6 +198,11 @@ RSpec.describe AccountsController, type: :request do
           monthly_irrs: "",
           balances_in_period: "",
           earliest_year: 2023,
+          period_text: "past_year",
+          starting_balance: BigDecimal(100),
+          deposits: BigDecimal(50),
+          withdrawals: BigDecimal(0),
+          final_balance: BigDecimal(160),
           monthly_pnl: [
             {
               month: "2023-12",
@@ -228,6 +233,12 @@ RSpec.describe AccountsController, type: :request do
             account_name: account.name,
             account: account,
             earliest_year: Date.current.year,
+            period_text: "past_year",
+            starting_balance: BigDecimal(0),
+            deposits: BigDecimal(0),
+            withdrawals: BigDecimal(0),
+            earnings: BigDecimal(0),
+            final_balance: BigDecimal(0),
             monthly_pnl: [],
             total_pnl: {}
           )

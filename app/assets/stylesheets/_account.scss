@@ -211,6 +211,32 @@ table.all-accounts {
   }
 }
 
+.account-summary {
+  display: flex;
+  margin: 0 0 1em;
+  align-items: center;
+
+  h2 {
+    font-size: 2em;
+    flex: 1;
+  }
+  table {
+    font-size: 0.875rem;
+    width: auto;
+    margin: 0 auto;
+    th {
+      font-size: 0.625rem;
+      text-align: right;
+    }
+    td {
+      font-weight: bold;
+      text-align: right;
+      padding: 0 0 0 1em;
+      min-width: 7em;
+    }
+  }
+}
+
 .summary {
   margin: 1em 0;
 }
@@ -279,9 +305,16 @@ svg .color-container {
 
 @media screen and (max-width: 33em) {
   table.balance-sheet {
-    border-top: 0.0625rem solid var(--mid-color);
+    margin-top: 0;
 
-    thead { display: none; }
+    thead {
+      tr { border-bottom: 0.0625rem solid var(--mid-color); }
+      th {
+        display: none;
+        border: none;
+      }
+      th.date { display: inherit; }
+    }
     tr {
       padding: 0.25em 0;
       position: relative;

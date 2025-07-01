@@ -1,4 +1,12 @@
 module AccountsHelper
+  def account_period_title
+    case @report.period_text
+    when "past_year" then "Último año"
+    when "all" then "#{@report.earliest_year}-#{Date.current.year}"
+    else @report.period_text
+    end
+  end
+
   def period_buttons
     content_tag(:div, class: "button-bar chart-toggle") do
       concat period_button("1W", "past_week")

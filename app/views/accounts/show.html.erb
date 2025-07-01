@@ -1,12 +1,41 @@
 <% content_for(:title) { @report.account_name } %>
 <%= render "accounts/account_header", current: "Resumen" %>
 <% if @report.monthly_pnl.any? %>
-<%= profit_and_loss_period_buttons %>
+<%= account_period_navigation %>
+
+<section class="account-summary">
+  <h2><%= account_period_title %></h2>
+
+  <table>
+    <tbody>
+      <tr>
+        <th>Saldo Inicial</th>
+        <td><%= currency @report.starting_balance, zero: true %></td>
+      </tr>
+      <tr>
+        <th>Depósitos</th>
+        <td><%= currency @report.deposits, zero: true %></td>
+      </tr>
+      <tr>
+        <th>Retiros</th>
+        <td><%= currency @report.withdrawals, zero: true %></td>
+      </tr>
+      <tr>
+        <th>Rendimientos</th>
+        <td><%= currency @report.earnings, zero: true %></td>
+      </tr>
+      <tr>
+        <th>Saldo Final</th>
+        <td><%= currency @report.final_balance, zero: true %></td>
+      </tr>
+    </tbody>
+  </table>
+</section>
 
 <table class="balance-sheet profit-and-loss">
   <thead>
     <tr>
-      <th>Mes</th>
+      <th class="date">Mes</th>
       <th>Saldo Inicial</th>
       <th>Depósitos</th>
       <th>Retiros</th>
@@ -26,12 +55,6 @@
       <td class="currency" data-name="Saldo Final"><%= currency row.fetch(:final_balance) %></td>
     </tr>
     <% end %>
-    <tr>
-      <td class="date" colspan="2">Total</td>
-      <td class="currency" data-name="Total Depositado"><%= currency @report.total_pnl.fetch(:deposits), diff: true %></td>
-      <td class="currency" data-name="Total Retirado"><%= currency @report.total_pnl.fetch(:withdrawals), diff: true %></td>
-      <td class="currency" data-name="Total Rendimientos"><%= currency @report.total_pnl.fetch(:earnings), diff: true %></td>
-      <td></td>
     </tr>
   </tbody>
 </table>

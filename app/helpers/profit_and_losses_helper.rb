@@ -1,18 +1,18 @@
 module ProfitAndLossesHelper
-  def profit_and_loss_period_buttons
-    return unless show_period_buttons?
+  def account_period_navigation
+    return unless @report.earliest_year < Date.current.year
 
     content_tag(
       :section,
       id: "profit-and-loss-nav",
       class: "chart-toggle"
     ) do
-      concat pnl_period_button(period: "past_year")
+      concat account_period_link(period: "past_year")
 
       if (Date.current.year - @report.earliest_year) <= 1
         # Show all years individually
         Date.current.year.downto(@report.earliest_year).each do |year|
-          concat pnl_period_button(period: year)
+          concat account_period_link(period: year)
         end
       else
         # Show current year with nav buttons
@@ -24,7 +24,7 @@ module ProfitAndLossesHelper
         end
 
         # Current year
-        concat pnl_period_button(period: current_year)
+        concat account_period_link(period: current_year)
 
         # Next year button
         if current_year < Date.current.year
@@ -32,11 +32,11 @@ module ProfitAndLossesHelper
         end
       end
 
-      concat pnl_period_button(period: "all")
+      concat account_period_link(period: "all")
     end
   end
 
-  def pnl_period_button(period: "past_year")
+  def account_period_link(period: "past_year")
     text = case period.to_s
     when "past_year"
       "1Y"
@@ -67,11 +67,5 @@ module ProfitAndLossesHelper
       account_path(@report.account, period: year),
       class: "btn"
     )
-  end
-
-  private
-
-  def show_period_buttons?
-    @report.earliest_year < Date.current.year
   end
 end

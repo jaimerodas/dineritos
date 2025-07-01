@@ -6,9 +6,10 @@ class AccountReport
     @account = account
     @period = calculate_period(period, earliest_date: earliest_date)
     @currency = (currency == "default") ? account.currency : "MXN"
+    @period_text = period
   end
 
-  attr_reader :account, :period, :currency
+  attr_reader :account, :period, :period_text, :currency
 
   # Basic account information
   def account_name
@@ -48,6 +49,14 @@ class AccountReport
     @irr ||= summary.irr
   end
 
+  def final_balance
+    @final_balance ||= cents_to_decimal(final_balance_cents)
+  end
+
+  def starting_balance
+    @starting_balance ||= final_balance - deposits + withdrawals - earnings
+  end
+
   # Chart data
   def monthly_irrs
     available_balances
@@ -73,15 +82,7 @@ class AccountReport
       .group("month")
       .order("month DESC")
 
-    final_balance = account.balances
-      .where("date <= ?", period.last)
-      .where(currency: currency)
-      .order(date: :desc)
-      .limit(1)
-      .first
-      .amount_cents
-
-    create_monthly_pnl_array(results, final_balance)
+    create_monthly_pnl_array(results, final_balance_cents)
   end
 
   def total_pnl
@@ -97,6 +98,14 @@ class AccountReport
   end
 
   private
+
+  def final_balance_cents
+    @final_balance_cents ||= available_balances
+      .order(date: :desc)
+      .limit(1)
+      .first
+      .amount_cents
+  end
 
   def cents_to_decimal(amount)
     amount ? amount / 100.0 : 0.0

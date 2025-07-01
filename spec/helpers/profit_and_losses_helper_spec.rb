@@ -13,7 +13,7 @@ RSpec.describe ProfitAndLossesHelper, type: :helper do
     end
   end
 
-  describe "#profit_and_loss_period_buttons" do
+  describe "#account_period_navigation" do
     context "when account is recent (current year)" do
       before do
         allow(Date).to receive(:current).and_return(Date.new(2024, 6, 15))
@@ -21,7 +21,7 @@ RSpec.describe ProfitAndLossesHelper, type: :helper do
       end
 
       it "returns nil (no buttons shown)" do
-        expect(helper.profit_and_loss_period_buttons).to be_nil
+        expect(helper.account_period_navigation).to be_nil
       end
     end
 
@@ -32,7 +32,7 @@ RSpec.describe ProfitAndLossesHelper, type: :helper do
       end
 
       it "shows all individual year buttons" do
-        html = helper.profit_and_loss_period_buttons
+        html = helper.account_period_navigation
         expect(html).to include('id="profit-and-loss-nav"')
         expect(html).to include('class="chart-toggle"')
         expect(html).to include(">1Y<")
@@ -52,7 +52,7 @@ RSpec.describe ProfitAndLossesHelper, type: :helper do
       end
 
       it "shows navigation buttons for year 2022" do
-        html = helper.profit_and_loss_period_buttons
+        html = helper.account_period_navigation
         expect(html).to include('id="profit-and-loss-nav"')
         expect(html).to include(">1Y<")
         expect(html).to include(">2022<")
@@ -65,7 +65,7 @@ RSpec.describe ProfitAndLossesHelper, type: :helper do
 
       it "shows only next button when at earliest year" do
         allow(helper).to receive(:params).and_return({period: "2020"})
-        html = helper.profit_and_loss_period_buttons
+        html = helper.account_period_navigation
         expect(html).to include(">2020<")
         expect(html).not_to include("&laquo;")  # No previous year button
         expect(html).to include("&raquo;")      # Next year button
@@ -74,7 +74,7 @@ RSpec.describe ProfitAndLossesHelper, type: :helper do
 
       it "shows only previous button when at current year" do
         allow(helper).to receive(:params).and_return({period: "2024"})
-        html = helper.profit_and_loss_period_buttons
+        html = helper.account_period_navigation
         expect(html).to include(">2024<")
         expect(html).to include("&laquo;")      # Previous year button
         expect(html).not_to include("&raquo;")  # No next year button
@@ -83,7 +83,7 @@ RSpec.describe ProfitAndLossesHelper, type: :helper do
 
       it "defaults to current year when period is not a year" do
         allow(helper).to receive(:params).and_return({period: "past_year"})
-        html = helper.profit_and_loss_period_buttons
+        html = helper.account_period_navigation
         expect(html).to include(">2024<")
         expect(html).to include("&laquo;")      # Previous year button
         expect(html).not_to include("&raquo;")  # No next year button
@@ -91,23 +91,23 @@ RSpec.describe ProfitAndLossesHelper, type: :helper do
     end
   end
 
-  describe "#pnl_period_button" do
+  describe "#account_period_link" do
     it "creates button for past_year period" do
-      html = helper.pnl_period_button(period: "past_year")
+      html = helper.account_period_link(period: "past_year")
       expect(html).to include(">1Y<")
       expect(html).to include('href="/accounts/1?period=past_year"')
       expect(html).to include('class="btn active"')
     end
 
     it "creates button for all period" do
-      html = helper.pnl_period_button(period: "all")
+      html = helper.account_period_link(period: "all")
       expect(html).to include(">ALL<")
       expect(html).to include('href="/accounts/1?period=all"')
       expect(html).to include('class="btn"')
     end
 
     it "creates button for year period" do
-      html = helper.pnl_period_button(period: 2023)
+      html = helper.account_period_link(period: 2023)
       expect(html).to include(">2023<")
       expect(html).to include('href="/accounts/1?period=2023"')
       expect(html).to include('class="btn year"')
@@ -115,7 +115,7 @@ RSpec.describe ProfitAndLossesHelper, type: :helper do
 
     it "marks current period as active" do
       allow(helper).to receive(:params).and_return({period: "2023"})
-      html = helper.pnl_period_button(period: 2023)
+      html = helper.account_period_link(period: 2023)
       expect(html).to include('class="btn active year"')
     end
   end
@@ -144,20 +144,6 @@ RSpec.describe ProfitAndLossesHelper, type: :helper do
       html = helper.nav_button(2025, "&raquo;")
       expect(html).to include("&raquo;")
       expect(html).to include('href="/accounts/1?period=2025"')
-    end
-  end
-
-  describe "#show_period_buttons?" do
-    it "returns false when account is from current year" do
-      allow(Date).to receive(:current).and_return(Date.new(2024, 6, 15))
-      allow(report).to receive(:earliest_year).and_return(2024)
-      expect(helper.send(:show_period_buttons?)).to be false
-    end
-
-    it "returns true when account is from previous years" do
-      allow(Date).to receive(:current).and_return(Date.new(2024, 6, 15))
-      allow(report).to receive(:earliest_year).and_return(2023)
-      expect(helper.send(:show_period_buttons?)).to be true
     end
   end
 end
