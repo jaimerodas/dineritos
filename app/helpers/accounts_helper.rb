@@ -33,7 +33,7 @@ module AccountsHelper
     current_currency_text = default_currency ? @report.account.currency : "MXN"
     content_tag(:section) do
       concat "Datos en #{current_currency_text}. "
-      concat link_to("Ver en #{currency_text}", account_path(@report.account, currency: currency))
+      concat link_to("Ver en #{currency_text}", account_statistics_path(@report.account, currency: currency))
     end
   end
 end

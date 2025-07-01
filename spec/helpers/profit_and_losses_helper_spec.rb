@@ -160,20 +160,4 @@ RSpec.describe ProfitAndLossesHelper, type: :helper do
       expect(helper.send(:show_period_buttons?)).to be true
     end
   end
-
-  describe "#total_button_count" do
-    before do
-      allow(Date).to receive(:current).and_return(Date.new(2024, 6, 15))
-    end
-
-    it "calculates correct count for 2 years" do
-      allow(report).to receive(:earliest_year).and_return(2023)
-      expect(helper.send(:total_button_count)).to eq(4) # 1Y + 2024 + 2023 + ALL
-    end
-
-    it "calculates correct count for 5 years" do
-      allow(report).to receive(:earliest_year).and_return(2020)
-      expect(helper.send(:total_button_count)).to eq(7) # 1Y + 2024,2023,2022,2021,2020 + ALL
-    end
-  end
 end

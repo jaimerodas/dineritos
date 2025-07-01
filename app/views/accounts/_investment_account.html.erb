@@ -1,25 +1,3 @@
-<section class="summary">
-  <div class="big-number">
-    <span>Saldo Actual</span>
-    <em><%= currency @report.latest_balance.amount, zero: true %></em>
-  </div>
-
-  <div class="big-number">
-    <span>Transferencias Netas</span>
-    <em><%= currency @report.net_transferred, zero: true %></em>
-  </div>
-
-  <div class="big-number">
-    <span>Rendimiento Total</span>
-    <em><%= currency @report.earnings, diff: true, zero: true %></em>
-  </div>
-
-  <div class="big-number">
-    <span>TIR</span>
-    <em><%= currency (@report.irr * 100), zero: true %>%</em>
-  </div>
-</section>
-
 <section id="charts" data-controller="show-account">
   <script type="text/javascript">
     var data = {
@@ -28,7 +6,12 @@
     }
 
   </script>
-  <div id="chart-container" data-show-account-target="chart"></div>
+
+  <h2>Saldos en el tiempo</h2>
+  <div class="chart-container" data-show-account-target="balanceChart"></div>
+
+  <h2>TIR en el tiempo</h2>
+  <div class="chart-container" data-show-account-target="irrChart"></div>
 </section>
 
 <%= account_currency_toggle %>

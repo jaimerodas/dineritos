@@ -25,9 +25,12 @@ export default class extends Controller {
     const computedStyle = window.getComputedStyle(this.navContainer)
     let width = 0
 
-    width = computedStyle.flexDirection === 'row'
-      ? width = this.navTarget.clientWidth + this.actionsTarget.clientWidth
-      : Array.from(this.navTarget.children).forEach(element => { width += element.clientWidth })
+    if (computedStyle.flexDirection === 'row') {
+      width = this.navTarget.clientWidth
+      if (this.hasActionsTarget) { width += this.actionsTarget.clientWidth }
+    } else {
+      width = Array.from(this.navTarget.children).forEach(e => { width += e.clientWidth })
+    }
 
     if (this.hasMoreButtonTarget && this.moreMenuTarget.children.length === 1) {
       width -= this.moreButtonTarget.clientWidth

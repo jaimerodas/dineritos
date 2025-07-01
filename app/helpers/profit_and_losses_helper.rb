@@ -3,13 +3,13 @@ module ProfitAndLossesHelper
     return unless show_period_buttons?
 
     content_tag(
-      :div,
+      :section,
       id: "profit-and-loss-nav",
       class: "chart-toggle"
     ) do
       concat pnl_period_button(period: "past_year")
 
-      if total_button_count <= 4
+      if (Date.current.year - @report.earliest_year) <= 1
         # Show all years individually
         Date.current.year.downto(@report.earliest_year).each do |year|
           concat pnl_period_button(period: year)
@@ -73,10 +73,5 @@ module ProfitAndLossesHelper
 
   def show_period_buttons?
     @report.earliest_year < Date.current.year
-  end
-
-  def total_button_count
-    # 1Y + years + ALL
-    2 + (Date.current.year - @report.earliest_year + 1)
   end
 end
