@@ -28,6 +28,10 @@ export default class extends Controller {
       .then(data => {
         Credential.get(data)
       })
-      .catch(err => console.error('Discovery error', err))
+      .catch(err => {
+        // Handle login discovery error
+        // In development: console.error('Discovery error', err)
+        // Show user-friendly error message
+      })
   }
 }

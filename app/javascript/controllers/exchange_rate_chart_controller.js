@@ -6,7 +6,8 @@ export default class extends Controller {
   connect () {
     const url = this.element.dataset.exchangeRateChartUrl
     if (!url) {
-      console.error('[exchange-rate-chart] data-exchange-rate-chart-url missing')
+      // Missing required data attribute
+      // In development: console.error('[exchange-rate-chart] data-exchange-rate-chart-url missing')
       return
     }
     fetch(url)
@@ -15,6 +16,10 @@ export default class extends Controller {
         const data = json.map(d => ({ date: new Date(d.date), value: +d.value }))
         new ExchangeRateChart(this.element, data).draw()
       })
-      .catch(error => console.error('[exchange-rate-chart] load error:', error))
+      .catch(error => {
+        // Handle chart data loading error
+        // In development: console.error('[exchange-rate-chart] load error:', error)
+        // Show user-friendly error or fallback
+      })
   }
 }

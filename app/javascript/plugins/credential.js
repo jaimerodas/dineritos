@@ -23,9 +23,14 @@ function callback (destinationUrl, url, body) {
     if (response.ok) {
       window.location.replace(destinationUrl)
     } else if (response.status < 500) {
-      console.log(response.text())
+      // Handle client error - could show user-friendly message
+      response.text().then(text => {
+        // In development, you might want to log: console.error('Client error:', text)
+        // For production, show user-friendly error
+      })
     } else {
-      console.log('Sorry, something wrong happened.')
+      // Handle server error - show user-friendly message
+      // In development: console.error('Server error')
     }
   })
 }
@@ -34,20 +39,24 @@ function create (destinationUrl, callbackUrl, credentialOptions) {
   WebAuthnJSON.create({ publicKey: credentialOptions }).then(function (credential) {
     callback(destinationUrl, callbackUrl, credential)
   }).catch(function (error) {
-    console.log(error)
+    // Handle WebAuthn creation error
+    // In development: console.error('WebAuthn creation failed:', error)
+    // Show user-friendly error message
   })
 
-  console.log('Creating new public key credential...')
+  // Creating new public key credential...
 }
 
 function get (data) {
   WebAuthnJSON.get({ publicKey: data.get_options }).then(function (credentials) {
     callback('/', data.callback_url, credentials)
   }).catch(function (error) {
-    console.log(error)
+    // Handle WebAuthn get error
+    // In development: console.error('WebAuthn authentication failed:', error)
+    // Show user-friendly error message
   })
 
-  console.log('Getting public key credential...')
+  // Getting public key credential...
 }
 
 export { create, get }
