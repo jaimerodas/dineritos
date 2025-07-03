@@ -109,47 +109,6 @@ header.account-header {
   }
 }
 
-nav.secondary-nav {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  h2 {
-    flex: 1;
-  }
-
-  ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-  }
-
-  a {
-    font-size: 0.875em;
-    text-decoration: none;
-    color: var(--fg-color);
-
-    display: block;
-    padding: 0.5em 0.75em;
-    margin-left: 0.25em;
-    border: 0.0625rem solid transparent;
-    border-radius: 0.5em;
-
-    &:hover {
-      border-color: var(--border-color);
-    }
-  }
-
-  span {
-    font-size: 0.875em;
-    color: var(--disabled-color);
-    display: block;
-    padding: 0.5em 0.75em;
-    border: 0.0625rem solid transparent;
-    margin-left: 0.25em;
-  }
-}
 
 table.balance-sheet {
   margin: 2em 0;
@@ -237,29 +196,6 @@ table.all-accounts {
   }
 }
 
-.summary {
-  margin: 1em 0;
-}
-
-.very-big-number, .big-number {
-  display: flex;
-  text-align: left;
-  align-items: center;
-
-  & > span {
-    flex: 1;
-    color: var(--mid-color);
-    font-size: 0.875em;
-  }
-  & > em {
-    flex: 1;
-    display: block;
-    text-align: right;
-    font-size: 1.75em;
-    font-style: normal;
-    font-weight: 900;
-  }
-}
 
 svg .axis .tick {
   color: var(--mid-color);
@@ -407,43 +343,6 @@ svg .color-container {
     }
   }
 
-  nav.secondary-nav {
-    flex-direction: row-reverse;
-  }
-
-  .summary {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-wrap: wrap;
-    row-gap: 1em;
-    column-gap: 1em;
-  }
-
-  .very-big-number, .big-number {
-    text-align: center;
-    display: block;
-
-    & > em {
-      font-size: 1.5em;
-      text-align: center;
-    }
-  }
 }
 
-@media screen and (min-width: 40em) {
-  .big-number > em, .very-big-number > em {
-    font-size: 1.75em;
-  }
-}
 
-@media screen and (min-width: 50em) {
-  .very-big-number {
-    & > span {
-      font-size: 1.2em;
-    }
-    & > em {
-      font-size: 3em;
-    }
-  }
-}

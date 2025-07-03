@@ -8,10 +8,18 @@ class AccountBalances
   attr_reader :account, :month
 
   def balances
-    account.balances
+    @balances ||= account.balances
       .where(currency: account.currency)
       .where("DATE_TRUNC('month', balances.date) = ?", parsed_date)
       .order(date: :desc)
+  end
+
+  def starting_balance
+    @starting_balance ||= balances.last.amount
+  end
+
+  def final_balance
+    @final_balance ||= balances.first.amount
   end
 
   def account_name

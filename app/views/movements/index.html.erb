@@ -1,32 +1,41 @@
 <% content_for(:title) { @report.account_name } %>
-
 <%= render "accounts/account_header", current: "Detalle" %>
 
-<nav class="secondary-nav">
-  <ul>
-    <li><%= prev_month_link %></li>
-    <li><%= next_month_link %></li>
-  </ul>
+<% if @report.balances.any? %>
+<section class="chart-toggle">
+  <%= prev_month_link %>
+  <%= next_month_link %>
+</section>
+<section class="account-summary">
   <h2><%= l(@report.parsed_date, format: :month).capitalize %></h2>
-</nav>
 
-<section class="summary">
-  <div class="big-number">
-    <span>Rendimientos</span>
-    <em><%= currency @report.earnings, diff: true, zero: true %></em>
-  </div>
-
-  <div class="big-number">
-    <span>Transferencias</span>
-    <em><%= currency @report.transfers, diff: true, zero: true %></em>
-  </div>
-
-  <div class="big-number">
-    <span>TIR</span>
-    <em><%= currency @report.irr * 100.0, zero: true %>%</em>
-  </div>
+  <table>
+    <tbody>
+      <tr>
+        <th>Saldo Inicial</th>
+        <td><%= currency @report.starting_balance, zero: true %></td>
+      </tr>
+      <tr>
+        <th>Transferencias</th>
+        <td><%= currency @report.transfers, diff: true, zero: true %></td>
+      </tr>
+      <tr>
+        <th>Rendimientos</th>
+        <td><%= currency @report.earnings, diff: true, zero: true %></td>
+      </tr>
+      <tr>
+        <th>Saldo Final</th>
+        <td><%= currency @report.final_balance, zero: true %></td>
+      </tr>
+      <tr>
+        <th>TIR</th>
+        <td><%= currency @report.irr * 100.0, zero: true %>%</td>
+      </tr>
+    </tbody>
+  </table>
 </section>
 
 <main>
   <%= render "accounts/balance_sheet" %>
 </main>
+<% end %>

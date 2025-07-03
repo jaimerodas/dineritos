@@ -1,16 +1,17 @@
 module AccountMovementsHelper
   def prev_month_link
-    month_link(@report.prev_month, "Anterior")
+    month_link(@report.prev_month)
   end
 
   def next_month_link
-    month_link(@report.next_month, "Siguiente")
+    month_link(@report.next_month)
   end
 
-  def month_link(date, title)
-    return tag.span(title) unless date
+  def month_link(date)
+    return unless date
     num_date = l(date, format: :numeric_month)
-    link_to(title, account_movements_path(@report.account, month: num_date))
+    txt_date = l(date, format: :month).capitalize
+    link_to(txt_date, account_movements_path(@report.account, month: num_date), class: "btn")
   end
 
   def account_main_nav(current: "Resumen")

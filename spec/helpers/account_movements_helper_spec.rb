@@ -17,7 +17,13 @@ RSpec.describe AccountMovementsHelper, type: :helper do
     allow(helper).to receive(:account_path) { |acc| "/accounts/#{acc.id}" }
     allow(helper).to receive(:account_statistics_path) { |acc| "/accounts/#{acc.id}/statistics" }
     allow(helper).to receive(:edit_account_path) { |acc| "/accounts/#{acc.id}/edit" }
-    allow(helper).to receive(:l) { |date, format:| date.strftime("%Y-%m") }
+    allow(helper).to receive(:l) do |date, format:|
+      case format
+      when :numeric_month then date.strftime("%Y-%m")
+      when :month then date.strftime("%B")
+      else date.to_s
+      end
+    end
   end
 
   describe "#prev_month_link" do
@@ -31,7 +37,8 @@ RSpec.describe AccountMovementsHelper, type: :helper do
       it "returns a link to the previous month" do
         html = helper.prev_month_link
         expect(html).to include('href="/accounts/1/movements?month=2023-01"')
-        expect(html).to include("Anterior")
+        expect(html).to include("January")
+        expect(html).to include('class="btn"')
       end
     end
 
@@ -40,10 +47,9 @@ RSpec.describe AccountMovementsHelper, type: :helper do
         allow(report).to receive(:prev_month).and_return(nil)
       end
 
-      it "returns a span with title" do
+      it "returns nil when no previous month" do
         html = helper.prev_month_link
-        expect(html).to include("<span>Anterior</span>")
-        expect(html).not_to include("<a")
+        expect(html).to be_nil
       end
     end
   end
@@ -59,7 +65,8 @@ RSpec.describe AccountMovementsHelper, type: :helper do
       it "returns a link to the next month" do
         html = helper.next_month_link
         expect(html).to include('href="/accounts/1/movements?month=2023-03"')
-        expect(html).to include("Siguiente")
+        expect(html).to include("March")
+        expect(html).to include('class="btn"')
       end
     end
 
@@ -68,10 +75,9 @@ RSpec.describe AccountMovementsHelper, type: :helper do
         allow(report).to receive(:next_month).and_return(nil)
       end
 
-      it "returns a span with title" do
+      it "returns nil when no next month" do
         html = helper.next_month_link
-        expect(html).to include("<span>Siguiente</span>")
-        expect(html).not_to include("<a")
+        expect(html).to be_nil
       end
     end
   end
@@ -81,17 +87,17 @@ RSpec.describe AccountMovementsHelper, type: :helper do
 
     context "when date is present" do
       it "returns a link with formatted date" do
-        html = helper.month_link(date, "Test Title")
+        html = helper.month_link(date)
         expect(html).to include('href="/accounts/1/movements?month=2023-02"')
-        expect(html).to include("Test Title")
+        expect(html).to include("February")
+        expect(html).to include('class="btn"')
       end
     end
 
     context "when date is nil" do
-      it "returns a span with title" do
-        html = helper.month_link(nil, "Test Title")
-        expect(html).to include("<span>Test Title</span>")
-        expect(html).not_to include("<a")
+      it "returns nil" do
+        html = helper.month_link(nil)
+        expect(html).to be_nil
       end
     end
   end
