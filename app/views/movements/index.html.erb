@@ -2,10 +2,7 @@
 <%= render "accounts/account_header", current: "Detalle" %>
 
 <% if @report.balances.any? %>
-<section class="chart-toggle">
-  <%= prev_month_link %>
-  <%= next_month_link %>
-</section>
+<%= account_month_navigation %>
 <section class="account-summary">
   <h2><%= l(@report.parsed_date, format: :month).capitalize %></h2>
 
