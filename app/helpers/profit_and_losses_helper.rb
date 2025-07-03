@@ -20,7 +20,7 @@ module ProfitAndLossesHelper
 
         # Previous year button
         if current_year > @report.earliest_year
-          concat nav_button(current_year - 1, "&laquo;")
+          concat nav_button(current_year - 1, "«")
         end
 
         # Current year
@@ -28,7 +28,7 @@ module ProfitAndLossesHelper
 
         # Next year button
         if current_year < Date.current.year
-          concat nav_button(current_year + 1, "&raquo;")
+          concat nav_button(current_year + 1, "»")
         end
       end
 
@@ -62,10 +62,6 @@ module ProfitAndLossesHelper
   end
 
   def nav_button(year, symbol)
-    link_to(
-      symbol.html_safe,
-      account_path(@report.account, period: year),
-      class: "btn"
-    )
+    link_to(symbol, account_path(@report.account, period: year), class: "btn")
   end
 end

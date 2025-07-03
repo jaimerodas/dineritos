@@ -46,9 +46,15 @@ class Account < ApplicationRecord
     can_be_updated? && updateable?
   end
 
+  # Whitelist of allowed platforms for security
+  ALLOWED_PLATFORMS = %w[Bitso Afluenta Apify].freeze
+
   def update_service
-    platform.camelize
-      .then { |name| "Updaters::#{name}".constantize }
+    platform_name = platform.camelize
+    unless ALLOWED_PLATFORMS.include?(platform_name)
+      raise ArgumentError, "Unknown or unauthorized platform: #{platform_name}"
+    end
+    "Updaters::#{platform_name}".constantize
   end
 
   def last_amount(use: currency)
