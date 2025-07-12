@@ -27,7 +27,12 @@ RSpec.describe AccountsController, type: :request do
         )
       end
       let(:fake_new_account) do
-        double(name: "New Account", new_and_empty?: true)
+        instance_double(Account, name: "New Account", new_and_empty?: true).tap do |account|
+          allow(account).to receive(:to_model).and_return(account)
+          allow(account).to receive(:model_name).and_return(Account.model_name)
+          allow(account).to receive(:to_param).and_return("999")
+          allow(account).to receive(:persisted?).and_return(true)
+        end
       end
       let(:fake_disabled_account) do
         double(name: "Disabled Account", active: false)

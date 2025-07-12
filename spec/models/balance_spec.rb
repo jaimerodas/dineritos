@@ -21,8 +21,8 @@ RSpec.describe Balance, type: :model do
       new_account = Account.create!(name: "B", currency: "MXN", user: user)
       new_balance = Balance.create!(account: new_account, date: Date.today, amount_cents: 2000, transfers_cents: 100, currency: "MXN")
 
-      expect(new_balance.diff_cents).to be_nil
-      expect(new_balance.diff_days).to be_nil
+      expect(new_balance.diff_cents).to eq(0)
+      expect(new_balance.diff_days).to eq(1)
     end
   end
 

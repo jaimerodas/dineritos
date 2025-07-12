@@ -71,7 +71,7 @@ class DailyReport
       .where("balances.date > ?", (date - period).to_date)
       .where("balances.date <= ?", date)
       .to_a.first.diff_cents
-      .then { |i| BigDecimal(i.to_s) / 100.0 }
+      .then { |i| i.present? ? BigDecimal(i.to_s) / 100.0 : BigDecimal(0) }
   end
 
   def balance_in_usd

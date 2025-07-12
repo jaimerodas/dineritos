@@ -32,8 +32,8 @@ class AccountsComparisonReport
   def totals
     accounts.reduce({balance: BigDecimal(0), earnings: BigDecimal(0), transfers: BigDecimal(0)}) do |result, account|
       {
-        balance: result[:balance] + BigDecimal(account.final_balance),
-        earnings: result[:earnings] + BigDecimal(account.total_earnings),
+        balance: result[:balance] + BigDecimal(account.final_balance || 0),
+        earnings: result[:earnings] + BigDecimal(account.total_earnings || 0),
         transfers: result[:transfers] + BigDecimal(account.total_transferred)
       }
     end
@@ -44,7 +44,7 @@ class AccountsComparisonReport
   def hidden_accounts
     @hidden_accounts ||= begin
       visible_account_ids = accounts.pluck(:id)
-      @user_accounts.where.not(id: visible_account_ids).order(name: :asc)
+      @user_accounts.where.not(id: visible_account_ids).order(created_at: :asc)
     end
   end
 

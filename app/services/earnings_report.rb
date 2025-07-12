@@ -46,7 +46,7 @@ class EarningsReport
       .where.not("balances.diff_cents": nil)
       .where("balances.date > ?", period.ago.to_date)
       .group("accounts.name").order("accounts.name": :asc)
-      .map { |balance| [balance.name, BigDecimal(balance.diff.to_s)] }.to_h
+      .map { |balance| [balance.name, BigDecimal(balance.diff_cents.to_s) / 100.0] }.to_h
   end
 
   def combine(reports)

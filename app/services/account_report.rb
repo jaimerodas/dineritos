@@ -52,6 +52,7 @@ class AccountReport
   end
 
   def final_balance
+    return 0 if account.new_and_empty?
     @final_balance ||= cents_to_decimal(final_balance_cents)
   end
 
@@ -78,6 +79,7 @@ class AccountReport
   end
 
   def monthly_pnl
+    return [] if account.new_and_empty?
     results = account.balances
       .where(date: period, currency: currency)
       .select(select_pnl)
@@ -102,7 +104,7 @@ class AccountReport
   private
 
   def final_balance_cents
-    @final_balance_cents ||= available_balances
+    available_balances
       .order(date: :desc)
       .limit(1)
       .first

@@ -64,8 +64,12 @@ class Balance < ApplicationRecord
 
   def calculate_diffs
     @prev = nil
-    return unless prev
-    self.diff_cents = amount_cents - transfers_cents - prev.amount_cents
-    self.diff_days = date - prev.date
+    if prev
+      self.diff_cents = amount_cents - transfers_cents - prev.amount_cents
+      self.diff_days = date - prev.date
+    else
+      self.diff_days = 1
+      self.diff_cents = 0
+    end
   end
 end

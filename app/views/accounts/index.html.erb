@@ -30,6 +30,19 @@
 <div class="info">Este reporte refleja las transferencias y rendimientos en el periodo seleccionado. Todas las cantidades están en MXN</div>
 <% end %>
 
+<% if @new_accounts.any? %>
+<section id="new-accounts">
+  <h2>Cuentas nuevas</h2>
+  <ul>
+    <% @new_accounts.each do |account| %>
+    <li>
+      <%= link_to account.name, account %>
+    </li>
+    <% end %>
+  </ul>
+</section>
+<% end %>
+
 <section class="actions">
   <%= link_to 'Agregar', new_account_path %>
 </section>

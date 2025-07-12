@@ -1,5 +1,5 @@
 <% if should_be_shown? account %>
-<tr class="<%= 'disabled' unless account.final_balance > 0 %>">
+<tr class="<%= 'disabled' unless (account.final_balance || 0) > 0 %>">
   <td>
     <%= link_to account.name, account_path(account) %>
   </td>

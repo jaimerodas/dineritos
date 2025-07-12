@@ -170,6 +170,17 @@ table.all-accounts {
   }
 }
 
+#new-accounts {
+  a {
+    color: inherit;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
 .account-summary {
   display: flex;
   margin: 0 0 1em;

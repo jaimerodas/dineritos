@@ -316,12 +316,21 @@ RSpec.describe EarningsReport do
 
         mxn_account = edge_user.accounts.create!(name: "MXN Account", currency: "MXN")
 
+        # Create initial balance (first balance, so diff_cents will be 0)
+        Balance.create!(
+          account: mxn_account,
+          date: Date.yesterday,
+          amount_cents: 950_00,
+          transfers_cents: 950_00,
+          currency: "MXN"
+        )
+
+        # Create today's balance with earnings
         Balance.create!(
           account: mxn_account,
           date: Date.today,
           amount_cents: 1_000_00,
-          transfers_cents: 950_00,
-          diff_cents: 50_00,
+          transfers_cents: 0,
           currency: "MXN"
         )
 

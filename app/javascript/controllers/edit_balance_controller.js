@@ -5,11 +5,13 @@ export default class extends Controller {
   connect () {
     this.prevAmount = parseFloat(this.element.dataset.previousBalance)
     this.diffDays = parseInt(this.element.dataset.diffDays, 10)
+    this.isFirst = (this.element.dataset.isFirst === 'true')
     this.updateResults()
   }
 
   updateResults () {
     this.cleanAmounts()
+    if (this.isFirst) { this.updateInitialTransfers() }
     this.calculateDiff()
     this.calculateIRR()
   }
@@ -26,6 +28,10 @@ export default class extends Controller {
 
   transfers () {
     return parseFloat(this.transfersTarget.value)
+  }
+
+  updateInitialTransfers() {
+    this.transfersTarget.value = this.amount()
   }
 
   calculateDiff () {

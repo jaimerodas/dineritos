@@ -2,7 +2,8 @@
   data: {
     controller: "edit-balance",
     "previous-balance": @balance.prev&.amount&.to_s || 0,
-    "diff-days": @balance.prev ? (@balance.date - @balance.prev_validated.date).to_i : 0
+    "diff-days": @balance.prev ? (@balance.date - @balance.prev_validated.date).to_i : 0,
+    "is-first": (!@balance.prev).to_s
   },
   url: url do |f| %>
 
@@ -27,6 +28,7 @@
 
 <%= amount_field_for f %>
 
+<% if @balance.prev %>
 <div class="field">
   <%= f.label :transfers %>
   <%= f.text_field(
@@ -39,6 +41,9 @@
     }
   ) %>
 </div>
+<% else %>
+<%= f.hidden_field(:transfers, data: {"edit-balance-target": "transfers"}) %>
+<% end %>
 
 <%= f.button 'Guardar' %>
 <% end %>
