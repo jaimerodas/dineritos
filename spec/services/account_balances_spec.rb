@@ -81,7 +81,7 @@ RSpec.describe AccountBalances do
       other = Object.new
       expect {
         described_class.new(user: other, account: account, month: "2021-01")
-      }.to raise_error(RuntimeError)
+      }.to raise_error(ActiveRecord::RecordNotFound, /Account not found for user/)
     end
   end
 

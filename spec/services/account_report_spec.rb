@@ -127,7 +127,7 @@ RSpec.describe AccountReport do
     it "validates that the account belongs to the user" do
       expect {
         described_class.new(user: unauthorized_user, account: account)
-      }.to raise_error(ArgumentError, /Unauthorized user for this account/)
+      }.to raise_error(ActiveRecord::RecordNotFound, /Account not found for user/)
     end
   end
 

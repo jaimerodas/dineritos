@@ -1,5 +1,7 @@
 class AccountReport
   include Reports::Helpers::PeriodHelper
+  include UserAuthorization
+  include CurrencyConversion
 
   def initialize(user:, account:, period: "all", currency: "default")
     validate_user_account!(user, account)
@@ -105,14 +107,6 @@ class AccountReport
       .limit(1)
       .first
       .amount_cents
-  end
-
-  def cents_to_decimal(amount)
-    amount ? amount / 100.0 : 0.0
-  end
-
-  def validate_user_account!(user, account)
-    raise ArgumentError, "Unauthorized user for this account" unless account.user == user
   end
 
   def available_balances

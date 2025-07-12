@@ -1,6 +1,8 @@
 class AccountBalances
+  include UserAuthorization
+
   def initialize(user:, account:, month:)
-    raise unless account.user == user
+    validate_user_account!(user, account)
     @account = account
     @month = month
   end
