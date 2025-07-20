@@ -14,7 +14,7 @@ vistas para ver la evolución a través del tiempo del total de saldos y de cada
 cuenta en particular.
 
 ## Instalación
-Esto es una app de Rails 8, corriendo sobre Ruby 3.4.3. Usamos PostgreSQL como
+Esto es una app de Rails 8, corriendo sobre Ruby 3.4.4. Usamos PostgreSQL como
 db. Si tienes Ruby ya instalado, puedes simplemente correr
 
 ```bash

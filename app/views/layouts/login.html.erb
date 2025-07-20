@@ -5,12 +5,12 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, viewport-fit=cover">
-    <%= stylesheet_link_tag 'login', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
     <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
     <%= javascript_importmap_tags %>
   </head>
 
-  <body>
+  <body id="login">
     <article>
       <%= yield %>
     </article>
