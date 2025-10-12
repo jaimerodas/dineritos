@@ -129,7 +129,7 @@ RSpec.describe LoginsController, type: :controller do
 
         it "returns an unknown credential error" do
           post :callback, params: {}, format: :json
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
           expect(response.body).to match(/Unknown credential/)
         end
       end
@@ -166,7 +166,7 @@ RSpec.describe LoginsController, type: :controller do
 
         it "returns a verification error" do
           post :callback, params: {}, format: :json
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
           expect(response.body).to match(/Verification failed: verification failed/)
           expect(session[:webauthn_discovery_challenge]).to be_nil
         end

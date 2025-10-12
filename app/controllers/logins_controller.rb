@@ -37,7 +37,7 @@ class LoginsController < ApplicationController
       external = Base64.strict_encode64(webauthn_credential.raw_id)
       passkey = Passkey.find_by(external_id: external)
       unless passkey
-        return render json: "Unknown credential", status: :unprocessable_entity
+        return render json: "Unknown credential", status: :unprocessable_content
       end
       webauthn_credential.verify(
         session.delete(:webauthn_discovery_challenge),
@@ -50,7 +50,7 @@ class LoginsController < ApplicationController
       render json: {status: "ok"}, status: :ok
     end
   rescue WebAuthn::Error => e
-    render json: "Verification failed: #{e.message}", status: :unprocessable_entity
+    render json: "Verification failed: #{e.message}", status: :unprocessable_content
   end
 
   private

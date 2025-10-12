@@ -36,10 +36,10 @@ class PasskeysController < ApplicationController
     if credential.save
       render json: {status: "ok"}, status: :ok
     else
-      render json: "Couldn't register your Security Key", status: :unprocessable_entity
+      render json: "Couldn't register your Security Key", status: :unprocessable_content
     end
   rescue WebAuthn::Error => e
-    render json: "Verification failed: #{e.message}", status: :unprocessable_entity
+    render json: "Verification failed: #{e.message}", status: :unprocessable_content
   ensure
     session.delete("create_challenge")
   end

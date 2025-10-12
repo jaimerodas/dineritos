@@ -107,7 +107,7 @@ RSpec.describe PasskeysController, type: :controller do
           expect {
             post :callback, params: {nickname: "MyKey"}, format: :json
           }.not_to change(Passkey, :count)
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
           expect(response.body).to match(/Verification failed: verification error/)
           expect(session[:create_challenge]).to be_nil
         end
