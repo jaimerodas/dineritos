@@ -6,7 +6,7 @@ Dineritos is a personal finance tracking application built with Rails 8 to monit
 **Primary Purpose**: Track investment account balances across multiple platforms (MXN/USD) with automatic currency conversion and performance analytics.
 
 ## Tech Stack
-- **Backend**: Ruby 3.4.4, Rails 8
+- **Backend**: Ruby 3.4.7, Rails 8.1
 - **Database**: PostgreSQL
 - **Frontend**: ERB templates, Stimulus, Turbo
 - **Styling**: Modern CSS with Propshaft asset pipeline
