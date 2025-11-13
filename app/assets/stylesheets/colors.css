@@ -14,6 +14,11 @@
     --negative-color: #ce3129;
 }
 
+/* Observable Plot Hack */
+.plot-d6a7b5 {
+  --plot-background: var(--bg-color);
+}
+
 .it-1 { background-color: #845EC2; }
 .it-2 { background-color: #D65DB1; }
 .it-3 { background-color: #FF6F91; }

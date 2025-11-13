@@ -62,6 +62,9 @@ export default class extends Controller {
       ]
     })
 
+    balancesChart.setAttribute("font-family", "inherit")
+    irrChart.setAttribute("font-family", "inherit")
+
     this.balanceChartTarget.appendChild(balancesChart)
     this.irrChartTarget.appendChild(irrChart)
   }
