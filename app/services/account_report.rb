@@ -60,22 +60,27 @@ class AccountReport
     @starting_balance ||= final_balance - deposits + withdrawals - earnings
   end
 
+  def chart_data
+    {
+      irrs: monthly_irrs,
+      balances: balances_in_period
+    }.to_json
+  end
+
   # Chart data
   def monthly_irrs
     available_balances
       .select("DATE(DATE_TRUNC('month', date)) AS month")
       .select(select_irr)
       .group("1").order("1 ASC")
-      .map { |balance| "{date: new Date(\"#{balance.month}\"), value: #{balance.irr}}" }
-      .join(",")
+      .map { |balance| {date: balance.month, value: balance.irr.round(4)} }
   end
 
   def balances_in_period
     available_balances
       .select(:date, :amount_cents)
       .order("1 ASC")
-      .map { |balance| "{date: new Date(\"#{balance.date}\"), value: #{balance.amount}}" }
-      .join(",")
+      .map { |balance| {date: balance.date, value: balance.amount.to_s} }
   end
 
   def monthly_pnl

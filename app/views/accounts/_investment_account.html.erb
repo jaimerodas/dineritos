@@ -1,10 +1,6 @@
 <section id="charts" data-controller="show-account">
   <script type="text/javascript">
-    var data = {
-      irrs: [<%= @report.monthly_irrs.html_safe %>],
-      balances: [<%= @report.balances_in_period.html_safe %>]
-    }
-
+    var data = <%= @report.chart_data.html_safe %>
   </script>
 
   <h2>Saldos en el tiempo</h2>

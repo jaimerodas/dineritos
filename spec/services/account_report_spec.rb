@@ -29,8 +29,8 @@ RSpec.describe AccountReport do
     Balance.create!(
       account: account,
       date: jan_1,
-      amount_cents: 10_000,
-      transfers_cents: 10_000,
+      amount_cents: 100_00,
+      transfers_cents: 100_00,
       currency: "MXN"
     )
 
@@ -38,7 +38,7 @@ RSpec.describe AccountReport do
     Balance.create!(
       account: account,
       date: jan_15,
-      amount_cents: 10_500,
+      amount_cents: 105_00,
       transfers_cents: 0,
       diff_cents: 500,
       diff_days: 14,
@@ -49,8 +49,8 @@ RSpec.describe AccountReport do
     Balance.create!(
       account: account,
       date: feb_1,
-      amount_cents: 15_800,
-      transfers_cents: 5_000,
+      amount_cents: 158_00,
+      transfers_cents: 50_00,
       diff_cents: 300,
       diff_days: 17,
       currency: "MXN"
@@ -60,8 +60,8 @@ RSpec.describe AccountReport do
     Balance.create!(
       account: account,
       date: feb_15,
-      amount_cents: 14_200,
-      transfers_cents: -2_000,
+      amount_cents: 142_00,
+      transfers_cents: -20_00,
       diff_cents: 400,
       diff_days: 14,
       currency: "MXN"
@@ -71,7 +71,7 @@ RSpec.describe AccountReport do
     Balance.create!(
       account: account,
       date: mar_1,
-      amount_cents: 15_000,
+      amount_cents: 150_00,
       transfers_cents: 0,
       diff_cents: 800,
       diff_days: 14,
@@ -152,7 +152,7 @@ RSpec.describe AccountReport do
 
   describe "financial calculations" do
     # Set a fixed period for consistent testing
-    let(:jan_feb_period) { jan_1..feb_15 }
+    let(:jan_feb_period) { jan_1...feb_15 }
 
     before { travel_to(feb_15) }
     after { travel_back }
@@ -187,33 +187,33 @@ RSpec.describe AccountReport do
   end
 
   describe "chart data generation" do
-    subject { described_class.new(user: user, account: account) }
+    subject { described_class.new(user: user, account: account, period: "all") }
 
     it "formats IRR data for monthly JavaScript charts" do
-      result = subject.monthly_irrs
+      result = subject.chart_data
 
       # Should include data for January, February, and March
-      expect(result).to include('new Date("2023-01-01")')
-      expect(result).to include('new Date("2023-02-01")')
-      expect(result).to include('new Date("2023-03-01")')
+      expect(result).to include("2023-01-01")
+      expect(result).to include("2023-02-01")
+      expect(result).to include("2023-03-01")
 
       # Should include the 'value' property with numeric IRR values
-      expect(result).to match(/value: [0-9.]+/)
+      expect(result).to include('"value":"2.278"')
     end
 
     it "formats balance data for JavaScript charts" do
-      result = subject.balances_in_period
+      result = subject.chart_data
 
       # Should include all dates with proper values
-      expect(result).to include('new Date("2023-01-01")')
-      expect(result).to include('new Date("2023-01-15")')
-      expect(result).to include('new Date("2023-02-01")')
-      expect(result).to include('new Date("2023-02-15")')
-      expect(result).to include('new Date("2023-03-01")')
+      expect(result).to include("2023-01-01")
+      expect(result).to include("2023-01-15")
+      expect(result).to include("2023-02-01")
+      expect(result).to include("2023-02-15")
+      expect(result).to include("2023-03-01")
 
       # Should include values for balances
-      expect(result).to include("value: 100.0") # Jan 1
-      expect(result).to include("value: 105.0") # Jan 15
+      expect(result).to include('"value":"100.00"') # Jan 1
+      expect(result).to include('"value":"105.00"') # Jan 15
       # Values are dividing by 100.0 to convert cents to dollars
     end
   end

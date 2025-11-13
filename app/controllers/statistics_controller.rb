@@ -5,7 +5,8 @@ class StatisticsController < ApplicationController
     @report = AccountReport.new(
       account: account,
       user: current_user,
-      currency: params[:currency].blank? ? "default" : params[:currency]
+      currency: params[:currency].blank? ? "default" : params[:currency],
+      period: params[:period].blank? ? "past_year" : params[:period]
     )
   end
 

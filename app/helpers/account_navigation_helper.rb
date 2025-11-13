@@ -1,7 +1,7 @@
 module AccountNavigationHelper
   # Period navigation (years/periods for account show pages)
 
-  def account_period_navigation
+  def account_period_navigation(path: "account_path")
     return unless @report.earliest_year < Date.current.year
 
     content_tag(
@@ -9,12 +9,12 @@ module AccountNavigationHelper
       id: "profit-and-loss-nav",
       class: "chart-toggle"
     ) do
-      concat account_period_link(period: "past_year")
+      concat account_period_link(period: "past_year", path: path)
 
       if (Date.current.year - @report.earliest_year) <= 1
         # Show all years individually
         Date.current.year.downto(@report.earliest_year).each do |year|
-          concat account_period_link(period: year)
+          concat account_period_link(period: year, path: path)
         end
       else
         # Show current year with nav buttons
@@ -22,23 +22,23 @@ module AccountNavigationHelper
 
         # Previous year button
         if current_year > @report.earliest_year
-          concat nav_button(current_year - 1, "«")
+          concat nav_button(current_year - 1, "«", path: path)
         end
 
         # Current year
-        concat account_period_link(period: current_year)
+        concat account_period_link(period: current_year, path: path)
 
         # Next year button
         if current_year < Date.current.year
-          concat nav_button(current_year + 1, "»")
+          concat nav_button(current_year + 1, "»", path: path)
         end
       end
 
-      concat account_period_link(period: "all")
+      concat account_period_link(period: "all", path: path)
     end
   end
 
-  def account_period_link(period: "past_year")
+  def account_period_link(period: "past_year", path: "account_path")
     text = case period.to_s
     when "past_year"
       "1Y"
@@ -54,7 +54,7 @@ module AccountNavigationHelper
 
     link_to(
       text,
-      account_path(@report.account, period: period),
+      public_send(path, @report.account, period: period),
       class: classes.join(" ")
     )
   end
@@ -63,8 +63,8 @@ module AccountNavigationHelper
     params[:period].blank? ? "past_year" : params[:period]
   end
 
-  def nav_button(year, symbol)
-    link_to(symbol, account_path(@report.account, period: year), class: "btn")
+  def nav_button(year, symbol, path: "account_path")
+    link_to(symbol, public_send(path, @report.account, period: year), class: "btn")
   end
 
   # Month navigation (for account movements pages)

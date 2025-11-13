@@ -16,7 +16,10 @@ class IRRChart {
     const height = 300
     const margin = { top: 20, right: 39, bottom: 30, left: 39 }
 
-    const data = this.data
+    const data = this.data.map(d => ({
+      date: d3.utcParse("%Y-%m-%d")(d.date),
+      value: parseFloat(d.value)
+    }))
 
     const svg = d3.select(this.container).append('svg')
       .attr('id', this.name)

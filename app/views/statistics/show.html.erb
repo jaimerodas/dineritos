@@ -8,5 +8,6 @@
     </p>
   </div>
 <% else %>
+  <%= account_period_navigation(path: "account_statistics_path") %>
   <%= render "accounts/investment_account" %>
 <% end %>
