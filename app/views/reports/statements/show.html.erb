@@ -1,0 +1,137 @@
+<% content_for(:title) { "Estado de Cuenta" } %>
+<% content_for :article do %>
+<article id="balance-statement">
+  <h1>Estado de Cuenta</h1>
+
+  <%= statement_period_buttons %>
+
+  <% @statement.currency_totals.each do |curr, totals| %>
+  <section>
+    <h2>Cuentas en <%= curr %></h2>
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th class="date">Cuenta</th>
+            <th>Saldo Inicial</th>
+            <th>Dep&oacute;sitos</th>
+            <th>Retiros</th>
+            <th>Rendimientos</th>
+            <th>Saldo Final</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @statement.account_lines.select { |l| l.currency == curr }.each do |line| %>
+          <tr>
+            <td><%= statement_account_link(line) %></td>
+            <td class="currency" data-name="Saldo Inicial"><%= currency line.starting_balance, zero: true %></td>
+            <td class="currency" data-name="Dep&oacute;sitos"><%= currency line.deposits, diff: true %></td>
+            <td class="currency" data-name="Retiros"><%= currency line.withdrawals, diff: true %></td>
+            <td class="currency" data-name="Rendimientos"><%= currency line.earnings, diff: true %></td>
+            <td class="currency" data-name="Saldo Final"><%= currency line.final_balance, zero: true %></td>
+          </tr>
+          <% end %>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td>Total <%= curr %></td>
+            <td class="currency"><%= currency totals[:starting_balance], zero: true %></td>
+            <td class="currency"><%= currency totals[:deposits], diff: true %></td>
+            <td class="currency"><%= currency totals[:withdrawals], diff: true %></td>
+            <td class="currency"><%= currency totals[:earnings], diff: true %></td>
+            <td class="currency"><%= currency totals[:final_balance], zero: true %></td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </section>
+  <% end %>
+
+  <% if @statement.multi_day_period? && @statement.exchange_rates.any? %>
+  <section>
+    <h2>Tipos de Cambio</h2>
+    <table>
+      <thead>
+        <tr>
+          <th class="date">Moneda</th>
+          <th>Inicio</th>
+          <th>Final</th>
+          <th>Cambio</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @statement.exchange_rates.each do |rate| %>
+        <tr>
+          <td class="date">MXN/<%= rate[:currency] %></td>
+          <td class="currency"><%= fx rate[:start_rate] %></td>
+          <td class="currency"><%= fx rate[:end_rate] %></td>
+          <td class="currency">
+            <% if rate[:start_rate] && rate[:end_rate] %>
+              <%= currency rate[:end_rate] - rate[:start_rate], diff: true, decimals: 4 %>
+            <% else %>
+              <span>-</span>
+            <% end %>
+          </td>
+        </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </section>
+  <% end %>
+
+  <section>
+    <h2>Resumen</h2>
+    <table class="balance-statement-summary">
+      <thead>
+        <tr>
+          <td>Saldo Inicial</td>
+          <td class="currency"><%= currency @statement.mxn_totals[:starting_balance], zero: true %></td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th colspan="2">MXN</td>
+        </tr>
+        <tr>
+          <td>Total Transferido</td>
+          <td class="currency"><%= currency @statement.mxn_breakdown[:transferred_mxn], diff: true %></td>
+        </tr>
+        <tr>
+          <td>Rendimientos</td>
+          <td class="currency"><%= currency @statement.mxn_breakdown[:earnings_mxn], diff: true %></td>
+        </tr>
+        <% if @statement.exchange_rates.any? %>
+        <tr>
+          <th colspan="2">USD</td>
+        </tr>
+        <tr>
+          <td>Total Transferido (en MXN)</td>
+          <td class="currency"><%= currency @statement.mxn_breakdown[:transferred_usd_mxn], diff: true %></td>
+        </tr>
+        <tr>
+          <td>Rendimientos (en MXN)</td>
+          <td class="currency"><%= currency @statement.mxn_breakdown[:earnings_usd_mxn], diff: true %></td>
+        </tr>
+        <tr>
+          <td>Ganancia/P&eacute;rdida cambiaria</td>
+          <td class="currency"><%= currency @statement.mxn_breakdown[:fx_gain_loss], diff: true %></td>
+        </tr>
+        <tr class="empty">
+          <td colspan="2">&nbsp;</td>
+        </tr>
+        <% end %>
+        <tr>
+          <td class="date">Cambio neto</td>
+          <td class="currency"><%= currency @statement.mxn_totals[:final_balance] - @statement.mxn_totals[:starting_balance], diff: true %></td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td class="date">Saldo Final</td>
+          <td class="currency"><%= currency @statement.mxn_totals[:final_balance], zero: true %></td>
+        </tr>
+      </tfoot>
+    </table>
+  </section>
+</article>
+<% end %>

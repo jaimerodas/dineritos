@@ -1,0 +1,38 @@
+#balance-statement {
+  h1 {
+    font-size: 2em;
+    text-align: center;
+    margin: 1em auto;
+  }
+
+  h2 {
+    margin: 1em 0 0;
+  }
+
+  table {
+    font-size: 1rem;
+    margin-bottom: 2em;
+
+    th {
+      font-size: 0.75em;
+    }
+    tr.empty {
+      font-size: 0.625em;
+    }
+
+    thead {
+      font-weight: bold;
+      border-bottom: 0.0625rem solid #ccc;
+    }
+    tfoot {
+      font-weight: bold;
+      border-top: 0.0625rem solid #ccc;
+    }
+  }
+  .balance-statement-summary {
+    th {
+      text-align: left;
+      padding: 1em 0 0;
+    }
+  }
+}

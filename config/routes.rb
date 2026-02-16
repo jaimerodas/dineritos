@@ -41,6 +41,7 @@ Rails.application.routes.draw do
 
     scope path: "reportes", module: "reports", as: "reports" do
       resource :dailies, path: "diarios", only: [:show]
+      resource :statements, path: "estados_de_cuenta", only: [:show]
     end
   end
 

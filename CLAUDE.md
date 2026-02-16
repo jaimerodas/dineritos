@@ -22,6 +22,7 @@ Dineritos is a personal finance tracking application built with Rails 8 to monit
 - Email notifications for updates
 - Passkey authentication
 - Chart visualizations with D3.js
+- Portfolio Statements (EDC) - cross-account reports by period
 
 ## Architecture & Important Concepts
 
@@ -38,9 +39,19 @@ Dineritos is a personal finance tracking application built with Rails 8 to monit
 - **AccountsComparisonReport**: Aggregates data across multiple accounts
 - **CurrencyConverter**: Handles MXN/USD conversions
 - **UpdateBalance**: Updates account balances from external sources
+- **Reports::PortfolioStatement**: Cross-account portfolio statements with per-currency breakdowns
 - **Updaters (Bitso, Afluenta, etc.)**: Platform-specific balance fetchers
 
-### Navigation Structure (Recently Updated)
+### Navigation Structure
+**Main navigation** (bottom bar):
+1. **Resumen** (`/`) - Investment summary dashboard
+2. **Cuentas** (`/cuentas`) - Account listing
+3. **Agregar** (`/saldos_faltantes`) - Add missing balances
+4. **EDC** (`/reportes/estados_de_cuenta`) - Portfolio Statements
+5. **Opciones** (`/opciones`) - User settings
+6. **Salir** - Logout
+
+**Account sub-navigation** (per-account pages):
 1. **Resumen** (`/cuentas/:id`) - Monthly P&L summary table
 2. **Detalle** (`/cuentas/:id/movimientos`) - Detailed movements and balances
 3. **Estadísticas** (`/cuentas/:id/estadisticas`) - Charts, graphs, and statistics
@@ -175,3 +186,4 @@ Required credentials (stored in `credentials.yml.enc`):
 - Removed duplicate ProfitAndLossesController
 - Updated helper methods to use account paths instead of removed profit_and_loss paths
 - All tests updated to reflect new structure
+- **Portfolio Statements**: Added EDC (Estado de Cuenta) feature — cross-account reports by period with per-currency breakdowns, exchange rates, and MXN-aggregated totals

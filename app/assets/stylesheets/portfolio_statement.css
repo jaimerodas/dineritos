@@ -1,0 +1,34 @@
+#portfolio-statement {
+  margin: 1em auto;
+
+  h1 {
+    font-size: 2em;
+    text-align: center;
+    margin-bottom: 0.5em;
+  }
+
+  h2 {
+    font-size: 0.75em;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--mid-color);
+    margin: 2em 0 0;
+    padding-bottom: 0.25em;
+    border-bottom: 0.0625rem solid var(--border-color);
+  }
+
+  .table-scroll {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  table.balance-sheet {
+    margin: 0.5em 0 1em;
+  }
+
+  tfoot td {
+    font-weight: 700;
+    border-top: 0.125rem solid var(--mid-color);
+    border-bottom: none;
+  }
+}
