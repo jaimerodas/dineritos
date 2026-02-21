@@ -65,7 +65,8 @@ class AccountsController < ApplicationController
   end
 
   def account_params
-    params.require(:account).permit(:name, :currency, :platform, settings: {})
+    params.require(:account).permit(:name, :currency, :platform,
+      settings: [:bitso_key, :bitso_secret, :username, :password, :token, :actor, :secret])
   end
 
   def account
