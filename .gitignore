@@ -54,3 +54,6 @@ yarn-debug.log*
 
 # Database dumps
 *.dump
+
+# Claude worktrees and settings
+.claude
