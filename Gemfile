@@ -28,8 +28,8 @@ gem "postmark-rails"
 gem "jbuilder", "~> 2"
 gem "will_paginate", "~> 3.3"
 
-# Testing & Browser Automation
-gem "watir"
+# Scheduling
+gem "whenever", require: false
 
 # System Dependencies
 gem "ostruct"
@@ -48,8 +48,6 @@ group :development do
   gem "pry"
   gem "web-console", ">= 3.3.0"
   gem "listen"
-  gem "spring"
-  gem "spring-watcher-listen", "~> 2.0.0"
   gem "mutex_m"
 end
 
