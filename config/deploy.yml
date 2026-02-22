@@ -1,6 +1,6 @@
 service: dineritos
 
-image: ghcr.io/jaimerodas/dineritos
+image: jaimerodas/dineritos
 
 servers:
   web:
@@ -45,8 +45,6 @@ accessories:
     directories:
       - data:/var/lib/postgresql/data
     cmd: postgres -c shared_preload_libraries=pg_stat_statements
-    options:
-      restart: always
 
 volumes:
   - "dineritos_storage:/rails/storage"
