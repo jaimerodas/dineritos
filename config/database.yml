@@ -83,3 +83,4 @@ production:
   database: dineritos_production
   username: dineritos
   password: <%= ENV['DINERITOS_DATABASE_PASSWORD'] %>
+  host: <%= ENV.fetch('DATABASE_HOST', 'localhost') %>
