@@ -5,7 +5,7 @@ image: ghcr.io/jaimerodas/dineritos
 servers:
   web:
     hosts:
-      - DROPLET_IP
+      - 161.35.236.224
 
 proxy:
   ssl: true
@@ -29,12 +29,12 @@ env:
     RAILS_LOG_LEVEL: info
   secret:
     - RAILS_MASTER_KEY
-    - DINERITOS_DATABASE_PASSWORD
+    - POSTGRES_PASSWORD
 
 accessories:
   db:
     image: postgres:16
-    host: DROPLET_IP
+    host: 161.35.236.224
     port: "127.0.0.1:5432:5432"
     env:
       clear:
