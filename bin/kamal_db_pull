@@ -7,6 +7,9 @@ DROPLET_IP=$(ruby -ryaml -e "puts YAML.safe_load_file('config/deploy.yml', alias
 echo "Creating database dump on production..."
 kamal db-dump
 
+echo "Copying dump from container to host..."
+ssh root@$DROPLET_IP "docker cp dineritos-db:/tmp/$DUMP_FILE /tmp/$DUMP_FILE"
+
 echo "Downloading dump..."
 scp root@$DROPLET_IP:/tmp/$DUMP_FILE ./$DUMP_FILE
 
@@ -17,5 +20,5 @@ set -e
 
 # Cleanup
 rm "$DUMP_FILE"
-ssh root@$DROPLET_IP "rm /tmp/$DUMP_FILE"
+ssh root@$DROPLET_IP "rm /tmp/$DUMP_FILE && docker exec dineritos-db rm /tmp/$DUMP_FILE"
 echo "Done!"
