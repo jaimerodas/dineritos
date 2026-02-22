@@ -1,0 +1,65 @@
+service: dineritos
+
+image: ghcr.io/jaimerodas/dineritos
+
+servers:
+  web:
+    hosts:
+      - DROPLET_IP
+
+proxy:
+  ssl: true
+  host: dineritos.mx
+  app_port: 3000
+  healthcheck:
+    path: /up
+    interval: 3
+
+registry:
+  server: ghcr.io
+  username: jaimerodas
+  password:
+    - KAMAL_REGISTRY_PASSWORD
+
+env:
+  clear:
+    DATABASE_HOST: dineritos-db
+    RAILS_MAX_THREADS: 3
+    WEBAUTHN_HOST: "https://dineritos.mx"
+    RAILS_LOG_LEVEL: info
+  secret:
+    - RAILS_MASTER_KEY
+    - DINERITOS_DATABASE_PASSWORD
+
+accessories:
+  db:
+    image: postgres:16
+    host: DROPLET_IP
+    port: "127.0.0.1:5432:5432"
+    env:
+      clear:
+        POSTGRES_DB: dineritos_production
+        POSTGRES_USER: dineritos
+      secret:
+        - POSTGRES_PASSWORD
+    directories:
+      - data:/var/lib/postgresql/data
+    cmd: postgres -c shared_preload_libraries=pg_stat_statements
+    options:
+      restart: always
+
+volumes:
+  - "dineritos_storage:/rails/storage"
+
+asset_path: /rails/public/assets
+
+aliases:
+  console: app exec --interactive --reuse "bin/rails console"
+  shell: app exec --interactive --reuse "bash"
+  logs: app logs -f
+  db-console: accessory exec db --interactive --reuse "psql -U dineritos -d dineritos_production"
+  db-dump: accessory exec db "bash -c 'pg_dump -Fc -U dineritos dineritos_production > /tmp/latest.dump'"
+  db-bash: accessory exec db --interactive --reuse "bash"
+
+builder:
+  arch: amd64
