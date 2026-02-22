@@ -57,7 +57,7 @@ aliases:
   shell: app exec --interactive --reuse "bash"
   logs: app logs -f
   db-console: accessory exec db --interactive --reuse "psql -U dineritos -d dineritos_production"
-  db-dump: accessory exec db "bash -c 'pg_dump -Fc -U dineritos dineritos_production > /tmp/latest.dump'"
+  db-dump: accessory exec --reuse db "bash -c 'pg_dump -Fc -U dineritos dineritos_production > /tmp/latest.dump'"
   db-bash: accessory exec db --interactive --reuse "bash"
 
 builder:
