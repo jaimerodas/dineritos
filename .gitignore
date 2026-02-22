@@ -48,3 +48,6 @@ yarn-debug.log*
 /coverage/
 
 **/.claude/settings.local.json
+
+# Kamal secrets (never commit)
+.kamal/secrets

@@ -8,11 +8,14 @@ Dineritos is a personal finance tracking application built with Rails 8 to monit
 ## Tech Stack
 - **Backend**: Ruby 3.4.7, Rails 8.1
 - **Database**: PostgreSQL
+- **Deployment**: Kamal 2 on DigitalOcean, Docker, ghcr.io
+- **CI/CD**: GitHub Actions (CI + auto-deploy on push to main)
 - **Frontend**: ERB templates, Stimulus, Turbo
 - **Styling**: Modern CSS with Propshaft asset pipeline
 - **Testing**: RSpec
 - **Authentication**: Custom session-based auth with Passkeys support
 - **External APIs**: fixer.io (currency rates), Postmark (emails)
+- **Scheduling**: `whenever` gem for cron tasks (balance updates, session cleanup)
 
 ## Key Features
 - Multi-currency account tracking (MXN/USD)
@@ -90,6 +93,25 @@ bin/dev                             # Development with assets
 - `rails db:setup` - Initial database setup
 - `rails db:migrate` - Run migrations
 - `bin/importmap` - Manage JS dependencies
+- `bin/kamal_db_pull` - Download production DB and restore locally
+
+### Deployment Commands
+```bash
+kamal deploy              # Deploy latest code to production
+kamal setup               # First-time server setup (installs Docker, starts PG, etc.)
+kamal console             # Rails console in production
+kamal logs                # Tail production logs
+kamal db-console          # psql to production database
+kamal db-dump             # Create pg_dump on the server (/tmp/latest.dump)
+```
+
+### Ruby Version Management
+Ruby versions are managed via `.tool-versions` and **mise**. If you encounter Ruby version
+mismatches when running commands, prefix them with `mise exec --`:
+```bash
+mise exec -- bundle install
+mise exec -- bundle exec rspec
+```
 
 ## Code Conventions
 
@@ -151,6 +173,31 @@ Required credentials (stored in `credentials.yml.enc`):
 - `fixer`: API key for currency exchange rates
 - `auth_secret`: Session validation secret
 - `postmark`: Email service API key
+- `lockbox_master_key`: Encryption key for sensitive data at rest
+
+### Production Environment Variables
+Set via Kamal secrets (`.kamal/secrets`, not committed):
+- `RAILS_MASTER_KEY` - Decrypts `credentials.yml.enc`
+- `DINERITOS_DATABASE_PASSWORD` - PostgreSQL password
+- `KAMAL_REGISTRY_PASSWORD` - GitHub PAT for ghcr.io
+- `DATABASE_HOST` - PostgreSQL host (set to `dineritos-db` in Kamal)
+- `WEBAUTHN_HOST` - WebAuthn allowed origin (`https://dineritos.mx`)
+
+### Scheduled Tasks
+Defined in `config/schedule.rb` using the `whenever` gem:
+- **Daily at 5:00 AM CST**: `get_latest_balances` — updates all account balances
+- **Monthly**: `remove_expired_sessions` — cleans up expired session records
+
+Tasks run via cron on the server, executing `docker exec` into the app container.
+Logs go to `/var/log/dineritos-cron.log` on the server.
+
+### Key Deployment Files
+- `config/deploy.yml` - Kamal deployment configuration
+- `config/schedule.rb` - Cron schedule (whenever gem)
+- `.kamal/secrets` - Secret references (NOT committed)
+- `.kamal/hooks/post-deploy` - Updates crontab after each deploy
+- `Dockerfile` - Production Docker image
+- `.github/workflows/deploy.yml` - Auto-deploy workflow
 
 ## Common Tasks
 
@@ -178,12 +225,15 @@ Required credentials (stored in `credentials.yml.enc`):
 - Cache currency rates to minimize external API calls
 - Background jobs for long-running balance updates (future consideration)
 
+### Database Scripts
+- `bin/update_db` - Downloads production DB from Heroku (transitional, will be removed)
+- `bin/kamal_db_pull` - Downloads production DB via Kamal and restores locally
+
 ## Recent Changes
+- **Kamal Migration**: Migrated deployment from Heroku to DigitalOcean with Kamal 2, Docker, and ghcr.io
+- **Scheduled Tasks**: Added `whenever` gem for cron-based balance updates and session cleanup
 - **Asset Pipeline Migration**: Migrated from Sprockets to Propshaft for Rails 8 compatibility
 - **Modern CSS**: Converted SCSS files to modern CSS, leveraging CSS custom properties and native features
-- **Ruby Version**: Updated to Ruby 3.4.4 with .tool-versions for asdf compatibility
+- **Ruby Version**: Updated to Ruby 3.4.7 with .tool-versions for mise compatibility
 - Navigation reorganization: moved P&L content from separate page to main account summary
-- Removed duplicate ProfitAndLossesController
-- Updated helper methods to use account paths instead of removed profit_and_loss paths
-- All tests updated to reflect new structure
 - **Portfolio Statements**: Added EDC (Estado de Cuenta) feature — cross-account reports by period with per-currency breakdowns, exchange rates, and MXN-aggregated totals

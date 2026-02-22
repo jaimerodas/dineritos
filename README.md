@@ -37,5 +37,37 @@ Cuando una cuenta la marcas en dólares, la app busca en [fixer.io][1] el tipo d
 cambio a pesos para ese día y convierte la moneda. Tú nunca tienes que meter
 tipos de cambio.
 
+## Deployment
+
+La app se deploya automáticamente a un droplet de DigitalOcean usando
+[Kamal 2](https://kamal-deploy.org). Al hacer push a `main` y pasar el CI, GitHub
+Actions construye la imagen Docker, la sube a ghcr.io, y ejecuta `kamal deploy`.
+
+### Aliases de Kamal
+```bash
+kamal console     # Rails console en producción
+kamal logs        # Logs en tiempo real
+kamal shell       # Bash en el container
+kamal db-console  # psql a la base de producción
+kamal db-dump     # Crear dump en /tmp/latest.dump en el server
+kamal db-bash     # Bash en el container de PostgreSQL
+```
+
+### Bajar la base de producción
+```bash
+bin/kamal_db_pull  # Dump + descarga + restore a dineritos_development
+```
+
+### Tareas programadas
+Las tareas cron se definen en `config/schedule.rb` usando la gema `whenever`:
+- **Diario a las 5am CST**: actualiza saldos de todas las cuentas
+- **Mensual**: limpia sesiones expiradas
+
+### Deploy manual
+```bash
+kamal deploy  # Deploy manual (requiere secrets en env vars)
+kamal setup   # Primer deploy (instala Docker, crea accessory de PG, etc.)
+```
+
 [1]: https://fixer.io
 [2]: https://postmarkapp.com

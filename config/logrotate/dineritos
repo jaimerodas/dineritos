@@ -1,0 +1,7 @@
+/var/log/dineritos-cron.log {
+  weekly
+  rotate 4
+  compress
+  missingok
+  notifempty
+}

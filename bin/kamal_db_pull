@@ -1,0 +1,21 @@
+#!/bin/bash
+set -e
+
+DUMP_FILE="latest.dump"
+DROPLET_IP="DROPLET_IP"
+
+echo "Creating database dump on production..."
+kamal db-dump
+
+echo "Downloading dump..."
+scp root@$DROPLET_IP:/tmp/$DUMP_FILE ./$DUMP_FILE
+
+echo "Restoring to local database..."
+set +e
+pg_restore --clean --no-owner --no-comments -h localhost -d dineritos_development "$DUMP_FILE"
+set -e
+
+# Cleanup
+rm "$DUMP_FILE"
+ssh root@$DROPLET_IP "rm /tmp/$DUMP_FILE"
+echo "Done!"
