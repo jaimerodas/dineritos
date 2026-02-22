@@ -55,11 +55,12 @@ kamal db-bash     # Bash en el container de PostgreSQL
 
 ### Bajar la base de producción
 ```bash
-bin/kamal_db_pull  # Dump + descarga + restore a dineritos_development
+bin/update_db  # Dump + descarga + restore a dineritos_development
 ```
 
 ### Tareas programadas
-Las tareas cron se definen en `config/schedule.rb` usando la gema `whenever`:
+Las tareas cron se configuran en `.kamal/hooks/post-deploy`, que actualiza el crontab
+del servidor después de cada deploy:
 - **Diario a las 5am CST**: actualiza saldos de todas las cuentas
 - **Mensual**: limpia sesiones expiradas
 

@@ -93,7 +93,7 @@ bin/dev                             # Development with assets
 - `rails db:setup` - Initial database setup
 - `rails db:migrate` - Run migrations
 - `bin/importmap` - Manage JS dependencies
-- `bin/kamal_db_pull` - Download production DB and restore locally
+- `bin/update_db` - Download production DB and restore locally
 
 ### Deployment Commands
 ```bash
@@ -225,14 +225,4 @@ Logs go to `/var/log/dineritos-cron.log` on the server.
 - Background jobs for long-running balance updates (future consideration)
 
 ### Database Scripts
-- `bin/update_db` - Downloads production DB from Heroku (transitional, will be removed)
-- `bin/kamal_db_pull` - Downloads production DB via Kamal and restores locally
-
-## Recent Changes
-- **Kamal Migration**: Migrated deployment from Heroku to DigitalOcean with Kamal 2, Docker, and ghcr.io
-- **Scheduled Tasks**: Replaced `whenever` gem with direct crontab management via Kamal post-deploy hook
-- **Asset Pipeline Migration**: Migrated from Sprockets to Propshaft for Rails 8 compatibility
-- **Modern CSS**: Converted SCSS files to modern CSS, leveraging CSS custom properties and native features
-- **Ruby Version**: Updated to Ruby 3.4.7 with .tool-versions for mise compatibility
-- Navigation reorganization: moved P&L content from separate page to main account summary
-- **Portfolio Statements**: Added EDC (Estado de Cuenta) feature — cross-account reports by period with per-currency breakdowns, exchange rates, and MXN-aggregated totals
+- `bin/update_db` - Downloads production DB via Kamal and restores locally
