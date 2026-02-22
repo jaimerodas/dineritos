@@ -4,5 +4,5 @@
 # stays in sync with config/schedule.rb
 for host in $KAMAL_HOSTS; do
   echo "Updating crontab on $host..."
-  ssh root@$host "docker exec dineritos-web bundle exec whenever --update-crontab dineritos"
+  ssh root@$host "docker exec \$(docker ps --filter label=service=dineritos --filter label=role=web --format '{{.Names}}' | head -1) bundle exec whenever --update-crontab dineritos"
 done
