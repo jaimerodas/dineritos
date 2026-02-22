@@ -45,6 +45,9 @@ Rails.application.routes.draw do
     end
   end
 
+  # Health check for Kamal / load balancer
+  get "up" => "rails/health#show", :as => :rails_health_check
+
   # Rutas directas
   get "/iniciar_sesion", to: "sessions#create", as: "create_session"
   get "/salir", to: "sessions#destroy", as: "logout"
