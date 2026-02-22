@@ -1,8 +1,20 @@
 #!/bin/bash
 
 # Update the crontab on the server after each deploy so the schedule
-# stays in sync with config/schedule.rb
+# stays in sync. We write the crontab directly since the Docker
+# container doesn't have crontab installed.
+
 for host in $KAMAL_HOSTS; do
   echo "Updating crontab on $host..."
-  ssh root@$host "docker exec \$(docker ps --filter label=service=dineritos --filter label=role=web --format '{{.Names}}' | head -1) bundle exec whenever --update-crontab dineritos"
+  ssh root@$host 'bash -s' <<'SCRIPT'
+    CONTAINER=$(docker ps --filter label=service=dineritos --filter label=role=web --format "{{.Names}}" | head -1)
+    crontab - <<CRON
+# Dineritos scheduled tasks (managed by Kamal post-deploy hook)
+# Update all account balances — daily at 5:00 AM CST (11:00 UTC)
+0 11 * * * docker exec $CONTAINER bundle exec rake get_latest_balances >> /var/log/dineritos-cron.log 2>&1
+# Clean up expired sessions — 1st of each month at 3:00 AM CST (9:00 UTC)
+0 9 1 * * docker exec $CONTAINER bundle exec rake remove_expired_sessions >> /var/log/dineritos-cron.log 2>&1
+CRON
+    echo "Crontab updated for container $CONTAINER"
+SCRIPT
 done

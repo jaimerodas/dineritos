@@ -9,13 +9,13 @@ Dineritos is a personal finance tracking application built with Rails 8 to monit
 - **Backend**: Ruby 3.4.7, Rails 8.1
 - **Database**: PostgreSQL
 - **Deployment**: Kamal 2 on DigitalOcean, Docker, ghcr.io
-- **CI/CD**: GitHub Actions (CI + auto-deploy on push to main)
+- **CI/CD**: GitHub Actions (CI on push to main)
 - **Frontend**: ERB templates, Stimulus, Turbo
 - **Styling**: Modern CSS with Propshaft asset pipeline
 - **Testing**: RSpec
 - **Authentication**: Custom session-based auth with Passkeys support
 - **External APIs**: fixer.io (currency rates), Postmark (emails)
-- **Scheduling**: `whenever` gem for cron tasks (balance updates, session cleanup)
+- **Scheduling**: Cron via Kamal post-deploy hook (balance updates, session cleanup)
 
 ## Key Features
 - Multi-currency account tracking (MXN/USD)
@@ -184,20 +184,19 @@ Set via Kamal secrets (`.kamal/secrets`, not committed):
 - `WEBAUTHN_HOST` - WebAuthn allowed origin (`https://dineritos.mx`)
 
 ### Scheduled Tasks
-Defined in `config/schedule.rb` using the `whenever` gem:
-- **Daily at 5:00 AM CST**: `get_latest_balances` — updates all account balances
-- **Monthly**: `remove_expired_sessions` — cleans up expired session records
+Managed via the `.kamal/hooks/post-deploy` script, which writes the crontab directly on the server after each deploy:
+- **Daily at 5:00 AM CST (11:00 UTC)**: `get_latest_balances` — updates all account balances
+- **1st of each month at 3:00 AM CST (9:00 UTC)**: `remove_expired_sessions` — cleans up expired session records
 
-Tasks run via cron on the server, executing `docker exec` into the app container.
+Tasks run via cron on the host, executing `docker exec` into the running app container.
 Logs go to `/var/log/dineritos-cron.log` on the server.
 
 ### Key Deployment Files
 - `config/deploy.yml` - Kamal deployment configuration
-- `config/schedule.rb` - Cron schedule (whenever gem)
 - `.kamal/secrets` - Secret references (NOT committed)
-- `.kamal/hooks/post-deploy` - Updates crontab after each deploy
+- `.kamal/hooks/post-deploy` - Updates server crontab after each deploy
 - `Dockerfile` - Production Docker image
-- `.github/workflows/deploy.yml` - Auto-deploy workflow
+- `.github/workflows/ci.yml` - CI workflow
 
 ## Common Tasks
 
@@ -231,7 +230,7 @@ Logs go to `/var/log/dineritos-cron.log` on the server.
 
 ## Recent Changes
 - **Kamal Migration**: Migrated deployment from Heroku to DigitalOcean with Kamal 2, Docker, and ghcr.io
-- **Scheduled Tasks**: Added `whenever` gem for cron-based balance updates and session cleanup
+- **Scheduled Tasks**: Replaced `whenever` gem with direct crontab management via Kamal post-deploy hook
 - **Asset Pipeline Migration**: Migrated from Sprockets to Propshaft for Rails 8 compatibility
 - **Modern CSS**: Converted SCSS files to modern CSS, leveraging CSS custom properties and native features
 - **Ruby Version**: Updated to Ruby 3.4.7 with .tool-versions for mise compatibility

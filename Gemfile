@@ -28,9 +28,6 @@ gem "postmark-rails"
 gem "jbuilder", "~> 2"
 gem "will_paginate", "~> 3.3"
 
-# Scheduling
-gem "whenever", require: false
-
 # System Dependencies
 gem "ostruct"
 
