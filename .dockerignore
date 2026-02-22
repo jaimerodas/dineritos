@@ -1,0 +1,45 @@
+# Git
+.git
+.gitignore
+
+# CI/CD
+.github/
+.claude/
+
+# Development
+.byebug_history
+.rspec
+.standard.yml
+.tool-versions
+.nova
+
+# Logs and temp
+log/*
+tmp/*
+!tmp/.keep
+
+# Test and coverage
+spec/
+coverage/
+
+# Storage (dev uploads)
+storage/*
+!storage/.keep
+
+# OS files
+.DS_Store
+**/.DS_Store
+
+# Node (legacy)
+node_modules/
+
+# Documentation
+README.md
+CLAUDE.md
+
+# Docker
+Dockerfile
+.dockerignore
+
+# Kamal
+.kamal/
