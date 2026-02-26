@@ -182,19 +182,26 @@ Set via Kamal secrets (`.kamal/secrets`, not committed):
 - `KAMAL_REGISTRY_PASSWORD` - GitHub PAT for ghcr.io
 - `DATABASE_HOST` - PostgreSQL host (set to `dineritos-db` in Kamal)
 - `WEBAUTHN_HOST` - WebAuthn allowed origin (`https://dineritos.mx`)
+- `B2_KEY_ID` - Backblaze B2 application key ID (for backups)
+- `B2_APPLICATION_KEY` - Backblaze B2 application key (for backups)
+- `B2_ENDPOINT` - Backblaze B2 S3-compatible endpoint URL
+- `B2_BUCKET` - Backblaze B2 bucket name
 
 ### Scheduled Tasks
 Managed via the `.kamal/hooks/post-deploy` script, which writes the crontab directly on the server after each deploy:
+- **Daily at 4:00 AM CST (10:00 UTC)**: `bin/backup_db` — backs up PostgreSQL to Backblaze B2
 - **Daily at 5:00 AM CST (11:00 UTC)**: `get_latest_balances` — updates all account balances
 - **1st of each month at 3:00 AM CST (9:00 UTC)**: `remove_expired_sessions` — cleans up expired session records
 
 Tasks run via cron on the host, executing `docker exec` into the running app container.
-Logs go to `/var/log/dineritos-cron.log` on the server.
+Logs go to `/var/log/dineritos-cron.log` (and `/var/log/dineritos-backup.log` for backups) on the server.
+Backups are retained for 365 days via B2 lifecycle rules.
 
 ### Key Deployment Files
 - `config/deploy.yml` - Kamal deployment configuration
 - `.kamal/secrets` - Secret references (NOT committed)
-- `.kamal/hooks/post-deploy` - Updates server crontab after each deploy
+- `.kamal/hooks/post-deploy` - Updates server crontab and backup infrastructure after each deploy
+- `bin/backup_db` - Database backup script (deployed to server by post-deploy hook)
 - `Dockerfile` - Production Docker image
 - `.github/workflows/ci.yml` - CI workflow
 
@@ -226,3 +233,4 @@ Logs go to `/var/log/dineritos-cron.log` on the server.
 
 ### Database Scripts
 - `bin/update_db` - Downloads production DB via Kamal and restores locally
+- `bin/backup_db` - Automated daily backup to Backblaze B2 (runs on server via cron)
