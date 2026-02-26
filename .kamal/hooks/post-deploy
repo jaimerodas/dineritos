@@ -1,11 +1,34 @@
 #!/bin/bash
 
-# Update the crontab on the server after each deploy so the schedule
-# stays in sync. We write the crontab directly since the Docker
-# container doesn't have crontab installed.
+# Update the crontab and backup infrastructure on the server after each
+# deploy so the schedule stays in sync. We write the crontab directly
+# since the Docker container doesn't have crontab installed.
+
+source .kamal/secrets 2>/dev/null || true
 
 for host in $KAMAL_HOSTS; do
   echo "Updating crontab on $host..."
+
+  # Deploy backup script
+  scp bin/backup_db root@$host:/usr/local/bin/dineritos-backup
+  ssh root@$host 'chmod +x /usr/local/bin/dineritos-backup'
+
+  # Install AWS CLI + write B2 credentials env file
+  ssh root@$host "bash -s" <<SETUP
+    if ! command -v aws &> /dev/null; then
+      echo "Installing AWS CLI..."
+      apt-get update -qq && apt-get install -y -qq awscli > /dev/null
+    fi
+    cat > /etc/dineritos-backup.env <<EOF
+AWS_ACCESS_KEY_ID=${B2_KEY_ID}
+AWS_SECRET_ACCESS_KEY=${B2_APPLICATION_KEY}
+AWS_ENDPOINT_URL=${B2_ENDPOINT}
+B2_BUCKET=${B2_BUCKET}
+EOF
+    chmod 600 /etc/dineritos-backup.env
+SETUP
+
+  # Update crontab
   ssh root@$host 'bash -s' <<'SCRIPT'
     CONTAINER=$(docker ps --filter label=service=dineritos --filter label=role=web --format "{{.Names}}" | head -1)
     crontab - <<CRON
@@ -14,6 +37,8 @@ for host in $KAMAL_HOSTS; do
 0 11 * * * docker exec $CONTAINER bundle exec rake get_latest_balances >> /var/log/dineritos-cron.log 2>&1
 # Clean up expired sessions — 1st of each month at 3:00 AM CST (9:00 UTC)
 0 9 1 * * docker exec $CONTAINER bundle exec rake remove_expired_sessions >> /var/log/dineritos-cron.log 2>&1
+# Database backup to Backblaze B2 — daily at 4:00 AM CST (10:00 UTC)
+0 10 * * * /usr/local/bin/dineritos-backup >> /var/log/dineritos-backup.log 2>&1
 CRON
     echo "Crontab updated for container $CONTAINER"
 SCRIPT
