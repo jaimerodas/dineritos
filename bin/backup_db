@@ -1,7 +1,9 @@
 #!/bin/bash
 set -euo pipefail
 
+set -a
 source /etc/dineritos-backup.env
+set +a
 
 TIMESTAMP=$(date +%Y-%m-%d_%H%M)
 DUMP_FILE="dineritos-${TIMESTAMP}.dump"
