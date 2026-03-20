@@ -35,11 +35,11 @@
         <tfoot>
           <tr>
             <td>Total <%= curr %></td>
-            <td class="currency"><%= currency totals[:starting_balance], zero: true %></td>
-            <td class="currency"><%= currency totals[:deposits], diff: true %></td>
-            <td class="currency"><%= currency totals[:withdrawals], diff: true %></td>
-            <td class="currency"><%= currency totals[:earnings], diff: true %></td>
-            <td class="currency"><%= currency totals[:final_balance], zero: true %></td>
+            <td class="currency" data-name="Saldo Inicial"><%= currency totals[:starting_balance], zero: true %></td>
+            <td class="currency" data-name="Dep&oacute;sitos"><%= currency totals[:deposits], diff: true %></td>
+            <td class="currency" data-name="Retiros"><%= currency totals[:withdrawals], diff: true %></td>
+            <td class="currency" data-name="Rendimientos"><%= currency totals[:earnings], diff: true %></td>
+            <td class="currency" data-name="Saldo Final"><%= currency totals[:final_balance], zero: true %></td>
           </tr>
         </tfoot>
       </table>
