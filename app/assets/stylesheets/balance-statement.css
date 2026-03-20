@@ -36,3 +36,66 @@
     }
   }
 }
+
+@media screen and (max-width: 33em) {
+  #balance-statement {
+    .table-scroll {
+      overflow-x: visible;
+    }
+
+    .table-scroll table {
+      thead {
+        display: none;
+      }
+
+      tbody, tfoot {
+        tr {
+          display: grid;
+          grid-template-columns: 2fr 3fr;
+          grid-gap: 0.25em;
+          padding: 0.5em 0;
+          border-bottom: 0.0625rem solid var(--border-color);
+        }
+      }
+
+      td {
+        border: none;
+        padding: 0;
+      }
+
+      td:first-child {
+        grid-column: 1;
+        grid-row: 1 / span 5;
+        display: flex;
+        align-items: center;
+        font-weight: 700;
+      }
+
+      td.currency {
+        grid-column: 2;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        min-width: 0;
+      }
+
+      td.currency:nth-child(2) { grid-row: 1; }
+      td.currency:nth-child(3) { grid-row: 2; }
+      td.currency:nth-child(4) { grid-row: 3; }
+      td.currency:nth-child(5) { grid-row: 4; }
+      td.currency:nth-child(6) { grid-row: 5; }
+
+      td.currency::before {
+        content: attr(data-name);
+        color: var(--mid-color);
+        font-size: 0.625em;
+        font-weight: 400;
+        text-transform: uppercase;
+      }
+
+      tfoot tr {
+        border-top: 0.125rem solid #ccc;
+      }
+    }
+  }
+}
