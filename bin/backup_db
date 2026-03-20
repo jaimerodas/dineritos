@@ -14,6 +14,6 @@ echo "[$(date)] Starting backup..."
 
 docker exec dineritos-db pg_dump -Fc -U dineritos dineritos_production > "/tmp/${DUMP_FILE}"
 
-aws s3 cp "/tmp/${DUMP_FILE}" "s3://${B2_BUCKET}/daily/${DUMP_FILE}"
+aws s3 cp "/tmp/${DUMP_FILE}" "s3://${B2_BUCKET}/dineritos/daily/${DUMP_FILE}"
 
 echo "[$(date)] Backup complete: ${DUMP_FILE}"
