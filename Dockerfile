@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1
 
 # --- Base stage ---
-ARG RUBY_VERSION=3.4.7
+ARG RUBY_VERSION=4.0.2
 FROM docker.io/library/ruby:$RUBY_VERSION-slim AS base
 
 WORKDIR /rails
