@@ -97,6 +97,22 @@ RSpec.describe PasskeysController, type: :controller do
         end
       end
 
+      context "when the credential cannot be saved" do
+        before do
+          allow(WebAuthn::Credential).to receive(:from_create).and_return(web_credential)
+          allow(web_credential).to receive(:verify).with("fake_challenge")
+        end
+
+        it "returns a registration error" do
+          expect {
+            post :callback, params: {nickname: ""}, format: :json
+          }.not_to change(Passkey, :count)
+          expect(response).to have_http_status(:unprocessable_content)
+          expect(response.body).to match(/Couldn't register your Security Key/)
+          expect(session[:create_challenge]).to be_nil
+        end
+      end
+
       context "when verification fails" do
         before do
           allow(WebAuthn::Credential).to receive(:from_create).and_return(web_credential)

@@ -32,6 +32,11 @@ RSpec.describe LoginsController, type: :controller do
           email_login_path(session: {email: user.email.downcase})
         )
       end
+
+      it "redirects with a blank email when none was submitted" do
+        post :create, params: {session: {other: "ignored"}}
+        expect(response).to redirect_to(email_login_path(session: {email: nil}))
+      end
     end
 
     context "when logged in" do
@@ -118,6 +123,15 @@ RSpec.describe LoginsController, type: :controller do
     let(:raw_id) { "\x01\x02" }
     let(:external_id) { Base64.strict_encode64(raw_id) }
     let(:web_credential) { double("WebAuthnCredential", raw_id: raw_id, public_key: "new_key", sign_count: 5) }
+
+    context "when no discovery challenge is in the session" do
+      it "does nothing and never inspects the credential" do
+        expect(WebAuthn::Credential).not_to receive(:from_get)
+        post :callback, params: {}, format: :json
+        expect(response).to have_http_status(:no_content)
+        expect(session[:user_id]).to be_nil
+      end
+    end
 
     context "when not logged in" do
       before { session[:webauthn_discovery_challenge] = "fake_challenge" }

@@ -28,5 +28,17 @@ RSpec.describe Investments::SummariesController, type: :request do
         expect(response.body).to include('<dl class="investment-summary">')
       end
     end
+
+    context "with an explicit period" do
+      stub_current_user { user }
+
+      it "passes it through instead of the default" do
+        allow(InvestmentSummary).to receive(:for).and_call_original
+        get investments_summary_path, params: {period: "past_month"}
+        expect(response).to have_http_status(:success)
+        expect(InvestmentSummary).to have_received(:for)
+          .with(user: user, period: "past_month")
+      end
+    end
   end
 end

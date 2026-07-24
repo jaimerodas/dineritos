@@ -33,6 +33,26 @@ RSpec.describe UpdatesController, type: :request do
         end
       end
 
+      context "and the account was already updated today" do
+        before do
+          Balance.create!(
+            account: updateable_account,
+            date: Date.current,
+            currency: "MXN",
+            amount_cents: 100_00,
+            validated: true
+          )
+        end
+
+        it "redirects back without fetching a new balance" do
+          expect(Updaters::Bitso).not_to receive(:current_balance_for)
+          expect {
+            get account_update_path(updateable_account, format: :json)
+          }.not_to change { Balance.where(account: updateable_account).count }
+          expect(response).to redirect_to(account_path(updateable_account))
+        end
+      end
+
       context "and the account is updateable" do
         before do
           # stub external balance fetch

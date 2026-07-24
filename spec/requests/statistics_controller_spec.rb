@@ -26,6 +26,21 @@ RSpec.describe StatisticsController, type: :request do
         get account_statistics_path(account)
         expect(response.content_type).to include("text/html")
       end
+
+      it "builds the report with the defaults when no params are given" do
+        allow(AccountReport).to receive(:new).and_call_original
+        get account_statistics_path(account)
+        expect(AccountReport).to have_received(:new)
+          .with(user: user, account: account, currency: "default", period: "past_year")
+      end
+
+      it "passes explicit currency and period through to the report" do
+        allow(AccountReport).to receive(:new).and_call_original
+        get account_statistics_path(account), params: {currency: "mxn", period: "2023"}
+        expect(response).to have_http_status(:success)
+        expect(AccountReport).to have_received(:new)
+          .with(user: user, account: account, currency: "mxn", period: "2023")
+      end
     end
   end
 end

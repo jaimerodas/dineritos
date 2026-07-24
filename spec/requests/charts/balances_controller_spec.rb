@@ -21,6 +21,14 @@ RSpec.describe Charts::BalancesController, type: :request do
         expect(response).to have_http_status(:success)
         expect(response.content_type).to include("application/json")
       end
+
+      it "passes an explicit period through instead of the default" do
+        allow(HistoricInvestmentData).to receive(:for).and_call_original
+        get chart_data_balances_path, params: {period: "past_month"}
+        expect(response).to have_http_status(:success)
+        expect(HistoricInvestmentData).to have_received(:for)
+          .with(user, period: "past_month")
+      end
     end
   end
 end

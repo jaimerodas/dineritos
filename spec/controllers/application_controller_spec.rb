@@ -59,6 +59,19 @@ RSpec.describe ApplicationController, type: :controller do
       end
     end
 
+    context "when cookies.signed[:session_id] points at a session that no longer exists" do
+      before do
+        cookies.signed[:session_id] = 999_999
+        cookies[:remember_token] = "some_token"
+      end
+
+      it "does not authenticate and returns nil" do
+        get :index
+        expect(response.body).to eq("none")
+        expect(session[:user_id]).to be_nil
+      end
+    end
+
     context "when cookies.signed[:session_id] is present but remember_token is invalid" do
       let!(:session_record) do
         s = user.sessions.create!

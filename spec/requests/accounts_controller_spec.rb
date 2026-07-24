@@ -72,6 +72,14 @@ RSpec.describe AccountsController, type: :request do
         expect(fake_report).to receive(:disabled_accounts).and_return([fake_disabled_account])
         get accounts_path
       end
+
+      it "passes an explicit period through to the report" do
+        expect(AccountsComparisonReport).to receive(:new)
+          .with(user: user, period: "past_month")
+          .and_return(fake_report)
+        get accounts_path, params: {period: "past_month"}
+        expect(response).to have_http_status(:success)
+      end
     end
   end
 
@@ -301,6 +309,22 @@ RSpec.describe AccountsController, type: :request do
           expect(response.body).not_to include("¡Agrega tu primer saldo para ver información!")
         end
       end
+
+      context "with explicit currency and period params" do
+        before do
+          allow(account).to receive(:new_and_empty?).and_return(false)
+          allow(AccountReport).to receive(:new)
+            .with(user: user, account: account, currency: "mxn", period: "2023")
+            .and_return(report_double)
+        end
+
+        it "passes them through to the report instead of the defaults" do
+          get account_path(account), params: {currency: "mxn", period: "2023"}
+          expect(response).to have_http_status(:success)
+          expect(AccountReport).to have_received(:new)
+            .with(user: user, account: account, currency: "mxn", period: "2023")
+        end
+      end
     end
   end
 
@@ -345,6 +369,22 @@ RSpec.describe AccountsController, type: :request do
           get account_reset_path(account_to_reset)
           expect(ServicesMailer).not_to have_received(:new_daily_update)
         end
+      end
+    end
+
+    context "when the reset does not go through" do
+      stub_current_user { user }
+
+      before do
+        allow_any_instance_of(Account).to receive(:reset!).and_return(false)
+        user.update!(settings: {"send_email_after_update" => true})
+        allow(ServicesMailer).to receive(:new_daily_update)
+      end
+
+      it "still redirects but sends no email" do
+        get account_reset_path(account_to_reset)
+        expect(response).to redirect_to(account_movements_path(account_to_reset))
+        expect(ServicesMailer).not_to have_received(:new_daily_update)
       end
     end
   end
