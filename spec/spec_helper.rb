@@ -18,7 +18,7 @@ require "active_support/testing/time_helpers"
 
 SimpleCov.start "rails" do
   enable_coverage :branch
-  add_group "Services", "app/services"
+  group "Services", "app/services"
   formatter SimpleCov::Formatter::MultiFormatter.new([
     SimpleCov::Formatter::CoberturaFormatter,
     SimpleCov::Formatter::HTMLFormatter
