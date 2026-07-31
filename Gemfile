@@ -18,15 +18,14 @@ gem "webauthn"
 gem "puma"
 gem "propshaft"
 gem "stimulus-rails"
-gem "importmap-rails", "~> 1.1"
+gem "importmap-rails", "~> 2.2"
 
 # API & HTTP
 gem "httparty"
 gem "postmark-rails"
 
-# UI & Pagination
+# UI
 gem "jbuilder", "~> 2"
-gem "will_paginate", "~> 3.3"
 
 # System Dependencies
 gem "ostruct"

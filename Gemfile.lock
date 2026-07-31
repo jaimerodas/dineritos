@@ -121,7 +121,7 @@ GEM
       multi_xml (>= 0.5.2)
     i18n (1.15.2)
       concurrent-ruby (~> 1.0)
-    importmap-rails (1.2.3)
+    importmap-rails (2.2.3)
       actionpack (>= 6.0.0)
       activesupport (>= 6.0.0)
       railties (>= 6.0.0)
@@ -387,7 +387,6 @@ GEM
       base64
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
-    will_paginate (3.3.1)
     zeitwerk (2.8.2)
 
 PLATFORMS
@@ -405,7 +404,7 @@ DEPENDENCIES
   bootsnap (>= 1.4.2)
   byebug
   httparty
-  importmap-rails (~> 1.1)
+  importmap-rails (~> 2.2)
   jbuilder (~> 2)
   letter_opener
   listen
@@ -427,7 +426,6 @@ DEPENDENCIES
   tzinfo-data
   web-console (>= 3.3.0)
   webauthn
-  will_paginate (~> 3.3)
 
 RUBY VERSION
   ruby 4.0.6p0
