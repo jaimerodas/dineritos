@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     services:
       postgres:
-        image: postgres:12.7
+        image: postgres:17
         env:
           POSTGRES_DB: rails_test
           POSTGRES_USER: rails
@@ -25,6 +25,10 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
+      - name: Lint with standardrb
+        run: bundle exec standardrb
+      - name: Importmap vulnerability audit
+        run: bin/importmap audit
       - name: Setup DB
         run: bin/rails db:schema:load
       - name: Run specs
