@@ -34,7 +34,7 @@ env:
 
 accessories:
   db:
-    image: postgres:17
+    image: postgres:18
     host: *server_ip
     port: "127.0.0.1:5432:5432"
     env:
@@ -44,7 +44,7 @@ accessories:
       secret:
         - POSTGRES_PASSWORD
     directories:
-      - data:/var/lib/postgresql/data
+      - pgdata:/var/lib/postgresql
     cmd: postgres -c shared_preload_libraries=pg_stat_statements
 
 volumes:
