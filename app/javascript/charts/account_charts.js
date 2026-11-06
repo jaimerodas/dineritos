@@ -161,26 +161,4 @@ class IRRChart {
   }
 }
 
-class BalanceChart extends IRRChart {
-  name () {
-    return 'balance-chart'
-  }
-
-  curve () {
-    return d3.curveStepAfter
-  }
-
-  axisFormatter () {
-    return d3.format('.3~s')
-  }
-
-  valueFormatter (value) {
-    return d3.format(',.2f')(value)
-  }
-
-  dateFormatter (value) {
-    return d3.utcFormat('%Y-%m-%d')(value)
-  }
-}
-
-export { IRRChart, BalanceChart }
+export { IRRChart }

@@ -13,10 +13,5 @@ export default class extends Controller {
     fetch(url)
       .then(response => response.json())
       .then(json => new ExchangeRateChart(this.element, json).draw())
-      .catch(error => {
-        // Handle chart data loading error
-        // In development: console.error('[exchange-rate-chart] load error:', error)
-        // Show user-friendly error or fallback
-      })
   }
 }
